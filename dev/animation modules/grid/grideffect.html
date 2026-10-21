@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+
+      body
+      {
+          margin-left: 0px;
+          margin-right: 0px;
+          margin-top: 0px;
+          margin-bottom: 0px;
+          overflow-x: hidden;
+          overflow-y: hidden;
+          background-color: #132322;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="masterGrid">
+    </div>
+
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script type="text/javascript">
+
+    var gridArray = new Array();
+    var zIndexCounter = 0;
+
+    //create a single grid square
+    function createNewGridSquare(xPosition, yPosition, id)
+    {
+        var squareDiv = document.createElement("div");
+            squareDiv.id = "gridSquare" + id;
+            //squareDiv.innerHTML = id; //for debugging only
+            //squareDiv.style.fontSize = "8pt"; //for debugging only
+            //squareDiv.style.color = "white"; //for debugging only
+            squareDiv.style.position = "absolute";
+            squareDiv.style.left = xPosition + "px";
+            squareDiv.style.top = yPosition + "px";
+            squareDiv.style.width = "25px";
+            squareDiv.style.height = "25px";
+            squareDiv.style.borderWidth = "1px";
+            squareDiv.style.borderStyle = "solid";
+            squareDiv.style.borderColor = "#141414";
+        document.getElementById("masterGrid").appendChild(squareDiv);
+
+        gridArray.push(squareDiv);
+    }
+
+    //create the entire grid
+    function createGrid()
+    {
+        var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
+        var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
+        var totalGridSquares = Math.round(numGridX * numGridY); //total number of squares
+        var heightRowCounter = 0;
+
+        for(var i=0;i<totalGridSquares;i++)
+        {
+            //for stop breakpoint debugging
+            /*
+            if(i == 73)
+            {
+               new Array();
+            }
+            */
+
+            if(i % numGridX == 0)
+            {
+                if(i !== 0)
+                {
+                    heightRowCounter++;
+                }
+            }
+
+            createNewGridSquare(((i % numGridX) * 26), heightRowCounter * 26, i);
+        }
+    }
+
+    //find out grid square's X and Y position based on its array position
+    function getGridSquareXYNum(numInArray)
+    {
+        return [0, 0]; //x, y
+    }
+
+    function getGridSquareNumber(x, y)
+    {
+        var numGridX = Math.ceil(window.innerWidth / 26); //how many squares can fit across the width of the screen
+
+        //get the grid square number in the array
+        return x + (numGridX * y);
+    }
+
+    //light up specific grid square
+    function lightupGridSquare(x, y)
+    {
+        var gridSquare = gridArray[getGridSquareNumber(x, y)];
+
+        zIndexCounter++; //ensures that zindex is always higher for every subsequent grid square in case it might get overlapped
+        gridSquare.style.zIndex = zIndexCounter;
+        gridSquare.style.borderColor = "yellow"; //for debugging only
+
+/*
+        gsap.to(gridSquare, {
+          borderColor: "white",
+          duration: 0.5,
+
+          onComplete: function(){
+
+            gsap.to(gridSquare, {
+              borderColor: "#141414",
+              duration: 1,
+            });
+          }
+        });
+*/
+
+    }
+
+    //on resize, re-render grid array
+    function onResizeGridArray()
+    {
+        //clear all and redraw grid
+    }
+
+    createGrid();
+
+  </script>
+
+</html>
