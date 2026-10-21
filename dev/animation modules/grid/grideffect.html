@@ -41,6 +41,8 @@
             //squareDiv.innerHTML = id; //for debugging only
             //squareDiv.style.fontSize = "8pt"; //for debugging only
             //squareDiv.style.color = "white"; //for debugging only
+            squareDiv.style.opacity = 0;
+            squareDiv.style.scale = 1.25;
             squareDiv.style.position = "absolute";
             squareDiv.style.left = xPosition + "px";
             squareDiv.style.top = yPosition + "px";
@@ -48,8 +50,17 @@
             squareDiv.style.height = "25px";
             squareDiv.style.borderWidth = "1px";
             squareDiv.style.borderStyle = "solid";
-            squareDiv.style.borderColor = "#141414";
+            squareDiv.style.borderColor = "#202020";
         document.getElementById("masterGrid").appendChild(squareDiv);
+
+        //animate grid in
+        gsap.to(squareDiv, {
+          borderColor: "#141414",
+          opacity: 1,
+          scale: 1,
+          duration: .5, //animate speed
+          delay: id / 1500, //animate speed, higher the number the faster
+        });
 
         gridArray.push(squareDiv);
     }
@@ -108,12 +119,14 @@
         //gridSquare.style.borderColor = "yellow"; //for debugging only
 
         gsap.to(gridSquare, {
-          borderColor: "white",
+          scale: 1.5,
+          borderColor: "#566464",
           duration: 0.5,
 
           onComplete: function(){
 
             gsap.to(gridSquare, {
+              scale: 1,
               borderColor: "#141414",
               duration: 1,
             });
@@ -128,6 +141,8 @@
             crossContainer.id = "crossContainer" + id;
             //crossContainer.style.width = 20 + "px";
             //crossContainer.style.height = 20 + "px";
+            crossContainer.style.opacity = 0;
+            crossContainer.style.scale = 3;
             crossContainer.style.left = x + "px";
             crossContainer.style.top = y + "px";
             crossContainer.style.position = "absolute";
@@ -151,10 +166,17 @@
         document.getElementById("masterGrid").appendChild(crossContainer);
         document.getElementById("crossContainer" + id).appendChild(crossVertical);
         document.getElementById("crossContainer" + id).appendChild(crossHorizontal);
+
+        //animate grid in
+        gsap.to(crossContainer, {
+          opacity: 1,
+          scale: 1,
+          duration: id * .05, //animate speed
+          delay: (id * 75) / 2500, //animate speed, higher the number the faster
+        });
     }
 
     //create crosses 8x8 across the grid
-
     function createCrossOnGrid()
     {
         var numCrossX = Math.ceil(window.innerWidth / 26 / 8); //how many crosses across screen
@@ -182,8 +204,7 @@
         //clear all and redraw grid
     }
 
-    //createGrid();
-
+    createGrid();
     createCrossOnGrid();
 
   </script>
