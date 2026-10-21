@@ -22,8 +22,9 @@
   </head>
   <body>
 
-    <div id="masterGrid">
-    </div>
+
+    <div id="masterGrid"></div>
+    <div id="masterCross"></div>
 
   </body>
 
@@ -31,7 +32,6 @@
   <script type="text/javascript">
 
     var gridArray = new Array();
-    var zIndexCounter = 0;
 
     //create a single grid square
     function createNewGridSquare(xPosition, yPosition, id)
@@ -97,13 +97,6 @@
         }
     }
 
-    //internal debugging function only for testing getGridSquareXYNum()
-    function findSquareGrid(gridNum)
-    {
-        var position = getGridSquareXYNum(gridNum);
-        lightupGridSquare(position[0], position[1]);
-    }
-
     //find out grid square's X and Y position based on its array number position
     function getGridSquareXYNum(numInArray)
     {
@@ -121,16 +114,21 @@
         return x + (numGridX * y);
     }
 
-    //light up specific grid square
+    //light up specific grid square based on gridArray[i] position
+    function findAndLightupSquareGrid(gridNum)
+    {
+        var position = getGridSquareXYNum(gridNum);
+        lightupGridSquare(position[0], position[1]);
+    }
+
+    //light up specific grid square based on x, y
     function lightupGridSquare(x, y)
     {
         var gridSquare = gridArray[getGridSquareNumber(x, y)];
-
-        zIndexCounter++; //ensures that zindex is always higher for every subsequent grid square in case it might get overlapped
-        gridSquare.style.zIndex = zIndexCounter;
         //gridSquare.style.borderColor = "yellow"; //for debugging only
 
         gsap.to(gridSquare, {
+          z: 0,
           scale: 1.5,
           borderColor: "#566464",
           duration: 0.25,
@@ -138,6 +136,7 @@
           onComplete: function(){
 
             gsap.to(gridSquare, {
+              z: 0,
               scale: 1,
               borderColor: "#141414",
               duration: .75,
@@ -175,19 +174,33 @@
             crossHorizontal.style.height = 1 + "px";
             crossHorizontal.style.backgroundColor = "#4E5959";
 
-        document.getElementById("masterGrid").appendChild(crossContainer);
+        document.getElementById("masterCross").appendChild(crossContainer);
         document.getElementById("crossContainer" + id).appendChild(crossVertical);
         document.getElementById("crossContainer" + id).appendChild(crossHorizontal);
 
-        //animate grid in
-        gsap.to(crossContainer, {
-          opacity: 1,
-          scale: 1,
-          duration: id * .05, //animate speed
-          delay: (id * 75) / 2500, //animate speed, higher the number the faster
-        });
-    }
 
+            //animate grid in
+            gsap.to(crossContainer, {
+              z: 0,
+              opacity: 1,
+              scale: 1,
+              duration: id * .05, //animate speed
+              delay: (id * 75) / 2500, //animate speed, higher the number the faster
+            });
+    }
+/*
+    //after a random grid animation, the crosses's zindex need to be updated to stay on top
+    function makeAllCrossesTopZIndex()
+    {
+        //clear all crosses
+        while(document.getElementById("masterCross").children.length > 0)
+        {
+            document.getElementById("masterCross").removeChild(document.getElementById("masterCross").children[0]);
+        }
+
+        createCrossOnGrid();
+    }
+*/
     //create crosses 8x8 across the grid
     function createCrossOnGrid()
     {
@@ -219,9 +232,15 @@
 
         for(var i=0;i<totalGridSquares;i++)
         {
-            //if()
+            //left and right range limits
+            if(getGridSquareXYNum(i)[0] > 15
+            && getGridSquareXYNum(i)[0] < 30 )
             {
-
+                //25% chance of randomly lighting up
+                if(Math.round(Math.random() * 4) == 1)
+                {
+                    findAndLightupSquareGrid(i);
+                }
             }
         }
     }
@@ -233,8 +252,10 @@
     }
 
     createGrid();
-    createCrossOnGrid();
-    animateBackgroundGrid();
+    setTimeout(createCrossOnGrid, 1000);
+
+
+
 
   </script>
 
