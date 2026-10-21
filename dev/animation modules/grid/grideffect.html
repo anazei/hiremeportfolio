@@ -90,11 +90,11 @@
         return [0, 0]; //x, y
     }
 
+    //get the grid square number in the array
     function getGridSquareNumber(x, y)
     {
         var numGridX = Math.ceil(window.innerWidth / 26); //how many squares can fit across the width of the screen
 
-        //get the grid square number in the array
         return x + (numGridX * y);
     }
 
@@ -105,9 +105,8 @@
 
         zIndexCounter++; //ensures that zindex is always higher for every subsequent grid square in case it might get overlapped
         gridSquare.style.zIndex = zIndexCounter;
-        gridSquare.style.borderColor = "yellow"; //for debugging only
+        //gridSquare.style.borderColor = "yellow"; //for debugging only
 
-/*
         gsap.to(gridSquare, {
           borderColor: "white",
           duration: 0.5,
@@ -120,8 +119,61 @@
             });
           }
         });
-*/
+    }
 
+    //creates a single white cross at specific x, y position
+    function createCross(x, y, id)
+    {
+        var crossContainer = document.createElement("div");
+            crossContainer.id = "crossContainer" + id;
+            //crossContainer.style.width = 20 + "px";
+            //crossContainer.style.height = 20 + "px";
+            crossContainer.style.left = x + "px";
+            crossContainer.style.top = y + "px";
+            crossContainer.style.position = "absolute";
+
+        var crossVertical = document.createElement("div");
+            crossVertical.style.position = "absolute";
+            crossVertical.style.left = 0 + "px";
+            crossVertical.style.top = -10 + "px";
+            crossVertical.style.width = 1 + "px";
+            crossVertical.style.height = 20 + "px";
+            crossVertical.style.backgroundColor = "#4E5959";
+
+        var crossHorizontal = document.createElement("div");
+            crossHorizontal.style.position = "absolute";
+            crossHorizontal.style.left = -10 + "px";
+            crossHorizontal.style.top = 0 + "px";
+            crossHorizontal.style.width = 20 + "px";
+            crossHorizontal.style.height = 1 + "px";
+            crossHorizontal.style.backgroundColor = "#4E5959";
+
+        document.getElementById("masterGrid").appendChild(crossContainer);
+        document.getElementById("crossContainer" + id).appendChild(crossVertical);
+        document.getElementById("crossContainer" + id).appendChild(crossHorizontal);
+    }
+
+    //create crosses 8x8 across the grid
+
+    function createCrossOnGrid()
+    {
+        var numCrossX = Math.ceil(window.innerWidth / 26 / 8); //how many crosses across screen
+        var numCrossY = Math.ceil(window.innerHeight / 26 / 8); //how many crosses down across screen
+        var totalCrossSquares = Math.round(numCrossX * numCrossY); //total number of crosses to display
+        var heightRowCounter = 0;
+
+        for(var i=0;i<totalCrossSquares;i++)
+        {
+            if(i % numCrossX == 0)
+            {
+                if(i !== 0)
+                {
+                    heightRowCounter += 26 * 8; //increment y by 8 squares
+                }
+            }
+
+            createCross(i % numCrossX * 26 * 8, heightRowCounter, i);
+        }
     }
 
     //on resize, re-render grid array
@@ -130,7 +182,9 @@
         //clear all and redraw grid
     }
 
-    createGrid();
+    //createGrid();
+
+    createCrossOnGrid();
 
   </script>
 
