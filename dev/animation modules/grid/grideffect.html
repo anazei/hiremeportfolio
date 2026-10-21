@@ -52,7 +52,7 @@
             squareDiv.style.height = "25px";
             squareDiv.style.borderWidth = "1px";
             squareDiv.style.borderStyle = "solid";
-            squareDiv.style.borderColor = "#202020";
+            squareDiv.style.borderColor = "#808080";
         document.getElementById("masterGrid").appendChild(squareDiv);
 
         //animate grid in
@@ -60,7 +60,7 @@
           borderColor: "#141414",
           opacity: 1,
           scale: 1,
-          duration: .5, //animate speed
+          duration: Math.random() * 1, //animate speed
           delay: id / 1500, //animate speed, higher the number the faster
         });
 
@@ -125,13 +125,13 @@
     function lightupGridSquare(x, y)
     {
         var gridSquare = gridArray[getGridSquareNumber(x, y)];
-        //gridSquare.style.borderColor = "yellow"; //for debugging only
+            gridSquare.style.borderColor = "white";
 
         gsap.to(gridSquare, {
           z: 0,
           scale: 1.5,
           borderColor: "#566464",
-          duration: 0.25,
+          duration: Math.random() * 1,
 
           onComplete: function(){
 
@@ -139,7 +139,7 @@
               z: 0,
               scale: 1,
               borderColor: "#141414",
-              duration: .75,
+              duration: Math.random() * .5,
             });
           }
         });
@@ -178,29 +178,16 @@
         document.getElementById("crossContainer" + id).appendChild(crossVertical);
         document.getElementById("crossContainer" + id).appendChild(crossHorizontal);
 
-
-            //animate grid in
-            gsap.to(crossContainer, {
-              z: 0,
-              opacity: 1,
-              scale: 1,
-              duration: id * .05, //animate speed
-              delay: (id * 75) / 2500, //animate speed, higher the number the faster
-            });
+        //animate crosses in
+        gsap.to(crossContainer, {
+          z: 0,
+          opacity: 1,
+          scale: 1,
+          duration: id * .05, //animate speed
+          delay: (id * 75) / 2500, //animate speed, higher the number the faster
+        });
     }
-/*
-    //after a random grid animation, the crosses's zindex need to be updated to stay on top
-    function makeAllCrossesTopZIndex()
-    {
-        //clear all crosses
-        while(document.getElementById("masterCross").children.length > 0)
-        {
-            document.getElementById("masterCross").removeChild(document.getElementById("masterCross").children[0]);
-        }
 
-        createCrossOnGrid();
-    }
-*/
     //create crosses 8x8 across the grid
     function createCrossOnGrid()
     {
@@ -223,8 +210,8 @@
         }
     }
 
-    //create random background grid animation
-    function animateBackgroundGrid()
+    //create random scattered background grid animation - good for helping transitioning text in/out as background
+    function animateBackgroundGrid(minRange, maxRange)
     {
         var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
         var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
@@ -233,8 +220,8 @@
         for(var i=0;i<totalGridSquares;i++)
         {
             //left and right range limits
-            if(getGridSquareXYNum(i)[0] > 15
-            && getGridSquareXYNum(i)[0] < 30 )
+            if(getGridSquareXYNum(i)[0] > minRange
+            && getGridSquareXYNum(i)[0] < maxRange )
             {
                 //25% chance of randomly lighting up
                 if(Math.round(Math.random() * 4) == 1)
@@ -245,14 +232,53 @@
         }
     }
 
+    //create a rolling grid animation
+    function animateRollingGrid(minRange, maxRange)
+    {
+        var numColumns = Math.floor(window.innerWidth / 26); //how many squares across
+        var numRows = Math.floor(window.innerHeight / 26); //how many rows of squares there are
+        var counter = 0;
+
+        var delayer = setInterval(function(){
+
+            var xGrid = Math.min(Math.round(Math.random() * (maxRange - minRange)) + minRange, numColumns);
+            lightupGridSquare(xGrid, counter);
+
+            if(counter == numRows)
+            {
+                counter = 0;
+                clearInterval(delayer);
+            } else {
+                counter++;
+            }
+
+        }, 100);
+    }
+
+    /*
+        //after a random grid animation, the crosses's zindex need to be updated to stay on top
+        function makeAllCrossesTopZIndex()
+        {
+            //clear all crosses
+            while(document.getElementById("masterCross").children.length > 0)
+            {
+                document.getElementById("masterCross").removeChild(document.getElementById("masterCross").children[0]);
+            }
+
+            createCrossOnGrid();
+        }
+    */
+
     //on resize, re-render grid array
     function onResizeGridArray()
     {
-        //clear all and redraw grid
+        //clear all and redraw grid and crosses
     }
 
     createGrid();
-    setTimeout(createCrossOnGrid, 1000);
+    setTimeout(createCrossOnGrid, 750);
+    //animateBackgroundGrid(5, 15)
+    //animateRollingGrid(15, 20)
 
 
 
