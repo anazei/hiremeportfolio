@@ -38,9 +38,11 @@
     {
         var squareDiv = document.createElement("div");
             squareDiv.id = "gridSquare" + id;
+
             //squareDiv.innerHTML = id; //for debugging only
             //squareDiv.style.fontSize = "8pt"; //for debugging only
-            //squareDiv.style.color = "white"; //for debugging only
+            //squareDiv.style.color = "#000000"; //for debugging only
+
             squareDiv.style.opacity = 0;
             squareDiv.style.scale = 1.25;
             squareDiv.style.position = "absolute";
@@ -95,10 +97,20 @@
         }
     }
 
-    //find out grid square's X and Y position based on its array position
+    //internal debugging function only for testing getGridSquareXYNum()
+    function findSquareGrid(gridNum)
+    {
+        var position = getGridSquareXYNum(gridNum);
+        lightupGridSquare(position[0], position[1]);
+    }
+
+    //find out grid square's X and Y position based on its array number position
     function getGridSquareXYNum(numInArray)
     {
-        return [0, 0]; //x, y
+        var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
+        var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
+
+        return [numInArray % numGridX, Math.floor(numInArray / numGridX)]; //x, y
     }
 
     //get the grid square number in the array
@@ -121,14 +133,14 @@
         gsap.to(gridSquare, {
           scale: 1.5,
           borderColor: "#566464",
-          duration: 0.5,
+          duration: 0.25,
 
           onComplete: function(){
 
             gsap.to(gridSquare, {
               scale: 1,
               borderColor: "#141414",
-              duration: 1,
+              duration: .75,
             });
           }
         });
@@ -198,6 +210,22 @@
         }
     }
 
+    //create random background grid animation
+    function animateBackgroundGrid()
+    {
+        var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
+        var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
+        var totalGridSquares = Math.round(numGridX * numGridY); //total number of squares
+
+        for(var i=0;i<totalGridSquares;i++)
+        {
+            //if()
+            {
+
+            }
+        }
+    }
+
     //on resize, re-render grid array
     function onResizeGridArray()
     {
@@ -206,6 +234,7 @@
 
     createGrid();
     createCrossOnGrid();
+    animateBackgroundGrid();
 
   </script>
 
