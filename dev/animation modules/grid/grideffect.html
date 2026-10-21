@@ -22,7 +22,6 @@
   </head>
   <body>
 
-
     <div id="masterGrid"></div>
     <div id="masterCross"></div>
 
@@ -32,9 +31,10 @@
   <script type="text/javascript">
 
     var gridArray = new Array();
+    var crossArray = new Array();
 
     //create a single grid square
-    function createNewGridSquare(xPosition, yPosition, id)
+    function createNewGridSquare(xPosition, yPosition, id, animateIn=true)
     {
         var squareDiv = document.createElement("div");
             squareDiv.id = "gridSquare" + id;
@@ -55,20 +55,27 @@
             squareDiv.style.borderColor = "#808080";
         document.getElementById("masterGrid").appendChild(squareDiv);
 
-        //animate grid in
-        gsap.to(squareDiv, {
-          borderColor: "#141414",
-          opacity: 1,
-          scale: 1,
-          duration: Math.random() * 1, //animate speed
-          delay: id / 1500, //animate speed, higher the number the faster
-        });
+        if(animateIn == true)
+        {
+            //animate grid in
+            gsap.to(squareDiv, {
+              borderColor: "#141414",
+              opacity: 1,
+              scale: 1,
+              duration: Math.random() * 1, //animate speed
+              delay: id / 1500, //animate speed, higher the number the faster
+            });
+        } else {
+            squareDiv.style.opacity = 1;
+            squareDiv.style.scale = 1;
+            squareDiv.style.borderColor = "#141414";
+        }
 
         gridArray.push(squareDiv);
     }
 
     //create the entire grid
-    function createGrid()
+    function animateInGrid(animateIn=true)
     {
         var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
         var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
@@ -93,7 +100,7 @@
                 }
             }
 
-            createNewGridSquare(((i % numGridX) * 26), heightRowCounter * 26, i);
+            createNewGridSquare(((i % numGridX) * 26), heightRowCounter * 26, i, animateIn);
         }
     }
 
@@ -124,29 +131,38 @@
     //light up specific grid square based on x, y
     function lightupGridSquare(x, y)
     {
-        var gridSquare = gridArray[getGridSquareNumber(x, y)];
-            gridSquare.style.borderColor = "white";
+        var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
+        var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
 
-        gsap.to(gridSquare, {
-          z: 0,
-          scale: 1.5,
-          borderColor: "#566464",
-          duration: Math.random() * 1,
-
-          onComplete: function(){
+        if(x <= numGridX
+        && y <= numGridY)
+        {
+            var gridSquare = gridArray[getGridSquareNumber(x, y)];
+                gridSquare.style.borderColor = "white";
 
             gsap.to(gridSquare, {
               z: 0,
-              scale: 1,
-              borderColor: "#141414",
-              duration: Math.random() * .5,
+              scale: 1.5,
+              borderColor: "#566464",
+              duration: Math.random() * 1,
+
+              onComplete: function(){
+
+                gsap.to(gridSquare, {
+                  z: 0,
+                  scale: 1,
+                  borderColor: "#141414",
+                  duration: Math.random() * .5,
+                });
+              }
             });
-          }
-        });
+        } else {
+            console.log("error: grid square requested does not exist");
+        }
     }
 
     //creates a single white cross at specific x, y position
-    function createCross(x, y, id)
+    function createCross(x, y, id, animateIn=true)
     {
         var crossContainer = document.createElement("div");
             crossContainer.id = "crossContainer" + id;
@@ -178,18 +194,26 @@
         document.getElementById("crossContainer" + id).appendChild(crossVertical);
         document.getElementById("crossContainer" + id).appendChild(crossHorizontal);
 
-        //animate crosses in
-        gsap.to(crossContainer, {
-          z: 0,
-          opacity: 1,
-          scale: 1,
-          duration: id * .05, //animate speed
-          delay: (id * 75) / 2500, //animate speed, higher the number the faster
-        });
+        crossArray.push(crossContainer);
+
+        if(animateIn == true)
+        {
+            //animate crosses in
+            gsap.to(crossContainer, {
+              z: 0,
+              opacity: 1,
+              scale: 1,
+              duration: id * .05, //animate speed
+              delay: (id * 75) / 2500, //animate speed, higher the number the faster
+            });
+        } else {
+            crossContainer.style.opacity = 1;
+            crossContainer.style.scale = 1;
+        }
     }
 
     //create crosses 8x8 across the grid
-    function createCrossOnGrid()
+    function animateInCrossesOnGrid(animateIn=true)
     {
         var numCrossX = Math.ceil(window.innerWidth / 26 / 8); //how many crosses across screen
         var numCrossY = Math.ceil(window.innerHeight / 26 / 8); //how many crosses down across screen
@@ -206,7 +230,7 @@
                 }
             }
 
-            createCross(i % numCrossX * 26 * 8, heightRowCounter, i);
+            createCross(i % numCrossX * 26 * 8, heightRowCounter, i, animateIn);
         }
     }
 
@@ -255,31 +279,108 @@
         }, 100);
     }
 
-    /*
-        //after a random grid animation, the crosses's zindex need to be updated to stay on top
-        function makeAllCrossesTopZIndex()
-        {
-            //clear all crosses
-            while(document.getElementById("masterCross").children.length > 0)
-            {
-                document.getElementById("masterCross").removeChild(document.getElementById("masterCross").children[0]);
-            }
-
-            createCrossOnGrid();
-        }
-    */
-
-    //on resize, re-render grid array
-    function onResizeGridArray()
+    function circularGridAnimation()
     {
-        //clear all and redraw grid and crosses
+
     }
 
-    createGrid();
-    setTimeout(createCrossOnGrid, 750);
+    function removeGrid()
+    {
+        while(document.getElementById("masterGrid").children.length > 0)
+        {
+            document.getElementById("masterGrid").removeChild(document.getElementById("masterGrid").children[0]);
+        }
+    }
+
+    function removeCrosses()
+    {
+        while(document.getElementById("masterCross").children.length > 0)
+        {
+            document.getElementById("masterCross").removeChild(document.getElementById("masterCross").children[0]);
+        }
+    }
+
+    //shuffle an array
+    function randomizeArray(inputArray)
+    {
+        for(var i=0;i<inputArray.length;i++)
+        {
+            var randomPosition = Math.floor(Math.random() * inputArray.length);
+            var temp = inputArray[i];
+            inputArray[i] = inputArray[randomPosition];
+            inputArray[randomPosition] = temp;
+        }
+
+        return inputArray;
+    }
+
+    //transition off grid animation
+    function transitionOutGridAnimation()
+    {
+        gridArray.reverse();
+        //gridArray = randomizeArray(gridArray);
+
+        for(var i=0;i<gridArray.length;i++)
+        {
+            gsap.to(gridArray[i], {
+              z: 0,
+              scale: 1.25,
+              opacity: 0,
+              duration: Math.random(), //animate speed
+              delay: i / 2500, //animate speed, higher the number the faster
+            });
+        }
+
+        setTimeout(removeGrid, 2000);
+    }
+
+    //transition off cross animation
+    function transitionOutCrossAnimation()
+    {
+        crossArray.reverse();
+
+        for(var i=0;i<crossArray.length;i++)
+        {
+            gsap.to(crossArray[i], {
+              z: 0,
+              //scale: 1.25,
+              opacity: 0,
+              duration: 2, //animate speed
+              delay: i / 50, //animate speed, higher the number the faster
+            });
+        }
+
+        setTimeout(removeCrosses, 2000);
+    }
+
+    //transition out animation of grid and crosses
+    function animateOutGridCrossBackground()
+    {
+        transitionOutGridAnimation();
+        transitionOutCrossAnimation();
+    }
+
+    //in the event of an onResize event, instantly redraw all grid and crosses without animations
+    function instantRedraw()
+    {
+        removeGrid();
+        removeCrosses();
+        animateInGrid(false);
+        animateInCrossesOnGrid(false);
+    }
+
+    //on resize, re-render background grid and crosses
+    function onResizeGridArray()
+    {
+        instantRedraw();
+    }
+
+    animateInGrid();
+    setTimeout(animateInCrossesOnGrid, 750);
     //animateBackgroundGrid(5, 15)
     //animateRollingGrid(15, 20)
-
+    //animateOutGridCrossBackground()
+    //instantRedraw();
 
 
 
