@@ -13,12 +13,19 @@
 
       body
       {
-        background: #000000;
+          background: #000000;
+      }
+
+      #rotatingTextContainer
+      {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 50%;
       }
 
       #backgroundRotationText,
-      #mainRotationTextBuffer1,
-      #mainRotationTextBuffer2
+      #mainRotationText
       {
           color: white;
           font-family: 'Roboto Condensed', monospace;
@@ -34,12 +41,10 @@
   </head>
   <body>
 
-    <div id="mainRotationText">
-      <div id="mainRotationTextBuffer1"></div>
-      <div id="mainRotationTextBuffer2"></div>
+    <div id="rotatingTextContainer">
+      <div id="mainRotationText"></div>
+      <div id="backgroundRotationText"></div>
     </div>
-
-    <div id="backgroundRotationText"></div>
 
   </body>
 
@@ -51,6 +56,7 @@
     "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     var rotatingTextAnimationState = false; //starts as false
     var rotatingBackgroundTextInterval;
+    var foregroundRotatingMessageArray = new Array();
 
     //continuously random rotating background text
     function generateRotatingBackgroundText(textLength)
@@ -79,8 +85,8 @@
             }, 25);
 
             gsap.to(document.getElementById("backgroundRotationText"), {
-              opacity: 0.5,
-              duration: 2,
+              opacity: 0.25,
+              duration: 0.5,
             });
         }
     }
@@ -92,7 +98,7 @@
         {
             gsap.to(document.getElementById("backgroundRotationText"), {
               opacity: 0,
-              duration: 2,
+              duration: 0.5,
               onComplete: function(){
                 rotatingTextAnimationState = false;
                 clearInterval(rotatingBackgroundTextInterval);
@@ -116,26 +122,63 @@
     }
 
     //if no message, then fade in message with unblur effect
-    //if message already exists, then transition over to new message
+    //if message already exists, then transition out first and then transition in new message
     //dynamically create all the letters of the message string as individual divs
     function createRotatingMessageString(message)
     {
+        //fade in rotational background text animation
+        startAnimateBackgroundRotatingText(message.length);
+
+        var completeCounter = 0;
         message = message.toUpperCase();
 
-        var targetDiv;
-        var messageDivArray = new Array();
+        var targetDiv = document.getElementById("mainRotationText");
 
-        //foreground text will go into the free buffer div
-        if(document.getElementById("mainRotationTextBuffer1").innerHTML == "")
+        //if there's existing text already,
+        if(targetDiv.innerHTML.length > 0)
         {
-            //dynamically create all the letters of the message string as individual divs
-            targetDiv = document.getElementById("mainRotationTextBuffer1");
+            foregroundRotatingMessageArray = randomizeArray(foregroundRotatingMessageArray);
 
-        } else if(document.getElementById("mainRotationTextBuffer2").innerHTML == ""){
+            //fade out existing text first
+            for(var i=0;i<foregroundRotatingMessageArray.length;i++)
+            {
+                //gsap fade in each letter randomly
+                gsap.to(foregroundRotatingMessageArray[i], {
+                  opacity: 0,
+                  duration: 0.5,
+                  delay: i / 55,
+                  onComplete: function(){
 
-            targetDiv = document.getElementById("mainRotationTextBuffer2");
-        }
+                      completeCounter++;
 
+                      if(completeCounter == foregroundRotatingMessageArray.length)
+                      {
+                          foregroundRotatingMessageArray = [];
+
+                          while(targetDiv.children.length > 0)
+                          {
+                              targetDiv.removeChild(targetDiv.children[0]);
+                          }
+
+                          //then fade in next text message
+                          fadeInRotatingForegroundText(message, targetDiv);
+                      }
+                  }
+                });
+            }
+
+        } else {
+
+            //if no existing text, directly fade in message
+            fadeInRotatingForegroundText(message, targetDiv);
+          }
+    }
+
+    function fadeInRotatingForegroundText(message, targetDiv)
+    {
+        var completeCounter = 0;
+
+        //dynamically create all the letters of the message string as individual divs
         for(var i=0;i<message.length;i++)
         {
             var messageDiv = document.createElement("span");
@@ -145,28 +188,37 @@
                 messageDiv.style.opacity = 0;
                 targetDiv.style.opacity = 1;
 
-            messageDivArray.push(messageDiv);
+            foregroundRotatingMessageArray.push(messageDiv);
             targetDiv.appendChild(messageDiv);
         }
 
-        messageDivArray = randomizeArray(messageDivArray);
+        foregroundRotatingMessageArray = randomizeArray(foregroundRotatingMessageArray);
 
         for(var i=0;i<message.length;i++)
         {
             //gsap fade in each letter randomly
-            gsap.to(messageDivArray[i], {
+            gsap.to(foregroundRotatingMessageArray[i], {
               opacity: 1,
-              duration: 5,
-              delay: i / 2
+              duration: 0.5,
+              delay: i / 35,
+              onComplete: function()
+              {
+                  completeCounter++;
+
+                  if(completeCounter == foregroundRotatingMessageArray.length)
+                  {
+                      //stop rotational background text animation
+                      stopAnimateBackgroundRotatingText();
+                  }
+              }
             });
         }
-
     }
 
-    //rotational background text
-    startAnimateBackgroundRotatingText(10);
-    //stopAnimateBackgroundRotatingText()
-    createRotatingMessageString("hello world");
+    createRotatingMessageString("my name is kevin and this is my handcrafted portfolio");
+
+    setTimeout(function(){ createRotatingMessageString("click anywhere to launch my portfolio experience"); }, 5000);
+
 
   </script>
 
