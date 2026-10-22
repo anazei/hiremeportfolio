@@ -16,7 +16,9 @@
         background: #000000;
       }
 
-      #backgroundRotationText
+      #backgroundRotationText,
+      #mainRotationTextBuffer1,
+      #mainRotationTextBuffer2
       {
           color: white;
           font-family: 'Roboto Condensed', monospace;
@@ -32,7 +34,11 @@
   </head>
   <body>
 
-    <div id="mainRotationText"></div>
+    <div id="mainRotationText">
+      <div id="mainRotationTextBuffer1"></div>
+      <div id="mainRotationTextBuffer2"></div>
+    </div>
+
     <div id="backgroundRotationText"></div>
 
   </body>
@@ -60,7 +66,7 @@
     }
 
     //fade in rotational background text
-    function startAnimateBackgroundRotatingText()
+    function startAnimateBackgroundRotatingText(length)
     {
         if(rotatingTextAnimationState == false)
         {
@@ -68,12 +74,12 @@
 
             rotatingBackgroundTextInterval = setInterval(function(){
 
-                generateRotatingBackgroundText(35);
+                generateRotatingBackgroundText(length);
 
             }, 25);
 
             gsap.to(document.getElementById("backgroundRotationText"), {
-              opacity: 1,
+              opacity: 0.5,
               duration: 2,
             });
         }
@@ -95,9 +101,72 @@
         }
     }
 
+    //shuffle an array
+    function randomizeArray(inputArray)
+    {
+        for(var i=0;i<inputArray.length;i++)
+        {
+            var randomPosition = Math.floor(Math.random() * inputArray.length);
+            var temp = inputArray[i];
+            inputArray[i] = inputArray[randomPosition];
+            inputArray[randomPosition] = temp;
+        }
+
+        return inputArray;
+    }
+
+    //if no message, then fade in message with unblur effect
+    //if message already exists, then transition over to new message
+    //dynamically create all the letters of the message string as individual divs
+    function createRotatingMessageString(message)
+    {
+        message = message.toUpperCase();
+
+        var targetDiv;
+        var messageDivArray = new Array();
+
+        //foreground text will go into the free buffer div
+        if(document.getElementById("mainRotationTextBuffer1").innerHTML == "")
+        {
+            //dynamically create all the letters of the message string as individual divs
+            targetDiv = document.getElementById("mainRotationTextBuffer1");
+
+        } else if(document.getElementById("mainRotationTextBuffer2").innerHTML == ""){
+
+            targetDiv = document.getElementById("mainRotationTextBuffer2");
+        }
+
+        for(var i=0;i<message.length;i++)
+        {
+            var messageDiv = document.createElement("span");
+                messageDiv.innerHTML = message[i];
+                messageDiv.style.width = "5px";
+
+                messageDiv.style.opacity = 0;
+                targetDiv.style.opacity = 1;
+
+            messageDivArray.push(messageDiv);
+            targetDiv.appendChild(messageDiv);
+        }
+
+        messageDivArray = randomizeArray(messageDivArray);
+
+        for(var i=0;i<message.length;i++)
+        {
+            //gsap fade in each letter randomly
+            gsap.to(messageDivArray[i], {
+              opacity: 1,
+              duration: 5,
+              delay: i / 2
+            });
+        }
+
+    }
+
     //rotational background text
-    //startAnimateBackgroundRotatingText();
+    startAnimateBackgroundRotatingText(10);
     //stopAnimateBackgroundRotatingText()
+    createRotatingMessageString("hello world");
 
   </script>
 
