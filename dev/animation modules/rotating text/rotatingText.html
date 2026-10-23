@@ -14,7 +14,12 @@
       body
       {
           background: #000000;
+          overflow-x: hidden;
+          overflow-y: hidden;
       }
+
+
+
 
       #rotatingTextContainer
       {
@@ -24,7 +29,17 @@
           width: 50%;
       }
 
-      #backgroundRotationText,
+      #backgroundRotationText
+      {
+          color: white;
+          font-family: 'Roboto Condensed', monospace;
+          font-size: 15pt;
+          font-weight: 300;
+          letter-spacing: 3px;
+          position: absolute;
+          opacity: 0;
+      }
+
       #mainRotationText
       {
           color: white;
@@ -34,6 +49,8 @@
           letter-spacing: 3px;
           position: absolute;
           opacity: 0;
+          width: auto;
+          height: auto;
       }
 
     </style>
@@ -85,8 +102,9 @@
             }, 25);
 
             gsap.to(document.getElementById("backgroundRotationText"), {
+              z: 0,
               opacity: 0.25,
-              duration: 0.5,
+              duration: 0.35,
             });
         }
     }
@@ -97,8 +115,9 @@
         if(rotatingTextAnimationState == true)
         {
             gsap.to(document.getElementById("backgroundRotationText"), {
+              z: 0,
               opacity: 0,
-              duration: 0.5,
+              duration: 0.35,
               onComplete: function(){
                 rotatingTextAnimationState = false;
                 clearInterval(rotatingBackgroundTextInterval);
@@ -139,33 +158,39 @@
         {
             foregroundRotatingMessageArray = randomizeArray(foregroundRotatingMessageArray);
 
-            //fade out existing text first
-            for(var i=0;i<foregroundRotatingMessageArray.length;i++)
-            {
-                //gsap fade in each letter randomly
-                gsap.to(foregroundRotatingMessageArray[i], {
-                  opacity: 0,
-                  duration: 0.5,
-                  delay: i / 55,
-                  onComplete: function(){
+            //delay slightly before starting foreground text fade in
+            setTimeout(function(){
 
-                      completeCounter++;
+                //fade out existing text first
+                for(var i=0;i<foregroundRotatingMessageArray.length;i++)
+                {
+                    //gsap fade in each letter randomly
+                    gsap.to(foregroundRotatingMessageArray[i], {
+                      z: 0,
+                      opacity: 0,
+                      duration: 0.5,
+                      delay: i / 55,
+                      onComplete: function(){
 
-                      if(completeCounter == foregroundRotatingMessageArray.length)
-                      {
-                          foregroundRotatingMessageArray = [];
+                          completeCounter++;
 
-                          while(targetDiv.children.length > 0)
+                          if(completeCounter == foregroundRotatingMessageArray.length)
                           {
-                              targetDiv.removeChild(targetDiv.children[0]);
-                          }
+                              foregroundRotatingMessageArray = [];
 
-                          //then fade in next text message
-                          fadeInRotatingForegroundText(message, targetDiv);
+                              while(targetDiv.children.length > 0)
+                              {
+                                  targetDiv.removeChild(targetDiv.children[0]);
+                              }
+
+                              //then fade in next text message
+                              fadeInRotatingForegroundText(message, targetDiv);
+                          }
                       }
-                  }
-                });
-            }
+                    });
+                }
+
+            }, 750);
 
         } else {
 
@@ -183,7 +208,10 @@
         {
             var messageDiv = document.createElement("span");
                 messageDiv.innerHTML = message[i];
-                messageDiv.style.width = "5px";
+                messageDiv.style.marginRight = "4px";
+                messageDiv.style.filter = "blur(10px)";
+                messageDiv.style.scale = 6;
+                messageDiv.style.display = "inline-block";
 
                 messageDiv.style.opacity = 0;
                 targetDiv.style.opacity = 1;
@@ -198,9 +226,12 @@
         {
             //gsap fade in each letter randomly
             gsap.to(foregroundRotatingMessageArray[i], {
+              z: 0, //forces GPU to run matrix transforms to offload CPU rendering
+              filter: "blur(0px)",
+              scale: 1,
               opacity: 1,
-              duration: 0.5,
-              delay: i / 35,
+              duration: 1,
+              delay: i / 50,
               onComplete: function()
               {
                   completeCounter++;
@@ -215,10 +246,13 @@
         }
     }
 
-    createRotatingMessageString("my name is kevin and this is my handcrafted portfolio");
+    setTimeout(function(){ createRotatingMessageString("hello  giftagram,  my  name  is  kevin"); }, 1000);
 
-    setTimeout(function(){ createRotatingMessageString("click anywhere to launch my portfolio experience"); }, 5000);
+    setTimeout(function(){ createRotatingMessageString("i  am  applying  for  your  entry/mid  level  front  end  developer"); }, 6000);
 
+    setTimeout(function(){ createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience"); }, 12000);
+
+    setTimeout(function(){ createRotatingMessageString(""); }, 20000);
 
   </script>
 
