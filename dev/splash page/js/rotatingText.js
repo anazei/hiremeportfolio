@@ -207,7 +207,7 @@
             delay: i / 25,
             ease: "power2.in",
             z: Math.round(Math.sin((180 / foregroundRotatingMessageArray.length * i - 90) * (Math.PI/180)) * 3000),
-            x: Math.round(Math.cos((180 / foregroundRotatingMessageArray.length * i - 90) * (Math.PI/180)) * 50),
+            x: Math.round(Math.cos((180 / foregroundRotatingMessageArray.length * i - 90) * (Math.PI/180)) * 50) - 25,
           });
       }
   }
