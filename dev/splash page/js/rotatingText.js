@@ -4,6 +4,7 @@
   var rotatingTextAnimationState = false; //starts as false
   var rotatingBackgroundTextInterval;
   var foregroundRotatingMessageArray = new Array();
+  var backgroundRotationTextDiv = document.getElementById("backgroundRotationText")
 
   //continuously random rotating background text
   function generateRotatingBackgroundText(textLength)
@@ -15,7 +16,7 @@
           randomCharacters += characterArray[Math.floor(Math.random() * characterArray.length)];
       }
 
-      document.getElementById("backgroundRotationText").innerHTML = randomCharacters;
+      backgroundRotationTextDiv.innerHTML = randomCharacters;
   }
 
   //fade in rotational background text
@@ -31,10 +32,9 @@
 
           }, 25);
 
-          gsap.to(document.getElementById("backgroundRotationText"), {
-            z: 0,
-            opacity: 0.25,
-            duration: 0.35,
+          gsap.to(backgroundRotationTextDiv, {
+            opacity: 0.4,
+            duration: 0.5,
           });
       }
   }
@@ -44,10 +44,9 @@
   {
       if(rotatingTextAnimationState == true)
       {
-          gsap.to(document.getElementById("backgroundRotationText"), {
-            z: 0,
+          gsap.to(backgroundRotationTextDiv, {
             opacity: 0,
-            duration: 0.35,
+            duration: 0.5,
             onComplete: function(){
               rotatingTextAnimationState = false;
               clearInterval(rotatingBackgroundTextInterval);
@@ -76,7 +75,7 @@
   function createRotatingMessageString(message)
   {
       //fade in rotational background text animation
-      startAnimateBackgroundRotatingText(message.length);
+      //startAnimateBackgroundRotatingText(message.length);
 
       var completeCounter = 0;
       message = message.toUpperCase();
@@ -96,10 +95,9 @@
               {
                   //gsap fade in each letter randomly
                   gsap.to(foregroundRotatingMessageArray[i], {
-                    z: 0,
                     opacity: 0,
-                    duration: 0.5,
-                    delay: i / 55,
+                    duration: 1,
+                    delay: i / 45,
                     onComplete: function(){
 
                         completeCounter++;
@@ -156,7 +154,6 @@
       {
           //gsap fade in each letter randomly
           gsap.to(foregroundRotatingMessageArray[i], {
-            z: 0, //forces GPU to run matrix transforms to offload CPU rendering
             filter: "blur(0px)",
             scale: 1,
             opacity: 1,
@@ -169,7 +166,7 @@
                 if(completeCounter == foregroundRotatingMessageArray.length)
                 {
                     //stop rotational background text animation
-                    stopAnimateBackgroundRotatingText();
+                    //stopAnimateBackgroundRotatingText();
                 }
             }
           });

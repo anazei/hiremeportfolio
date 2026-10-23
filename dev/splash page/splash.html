@@ -24,7 +24,8 @@
       #masterCode
       {
           font-family: system-ui, sans-serif;
-          opacity: .15;
+          opacity: .20;
+          margin-left: 35px;
       }
 
       .code-line { display: block; white-space: pre; }
@@ -40,7 +41,7 @@
       #rotatingTextContainer
       {
           position: absolute;
-          left: 50%;
+          left: 40%;
           top: 50%;
           width: 50%;
       }
@@ -195,47 +196,134 @@
     //setTimeout(function(){ createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience"); }, 12000);
     //setTimeout(function(){ createRotatingMessageString(""); }, 20000);
 
-    var audio;
+    //startAnimateBackgroundRotatingText(length)
+    //stopAnimateBackgroundRotatingText()
 
-    window.addEventListener("click", function(){
+    var audio;
+    var alreadyClicked = false;
+
+    function startSplashPage()
+    {
         //play splash page background music
         audio = document.getElementById("music");
         audio.setAttribute('src', "audio/timeless.mp3");
         audio.play();
+
+        //start snow animation
+        requestAnimationFrame(animateSnow);
+
+        //keyframe
+        setTimeout(function(){
+
+            startAnimateBackgroundRotatingText(38);
+
+        }, 750);
+
+        //keyframe
+        setTimeout(function(){
+
+            //animate in rolling source code
+            animateInMasterSourceCode();
+
+        }, 1000);
+
+        //keyframe
+        setTimeout(function(){
+
+            createRotatingMessageString("hello  giftagram,  my  name  is  kevin");
+
+        }, 1250);
+
+        //keyframe
+        setTimeout(function(){
+
+            stopAnimateBackgroundRotatingText();
+
+        }, 3000);
+
+        //keyframe
+        setTimeout(function(){
+
+            startAnimateBackgroundRotatingText(67);
+
+        }, 6000);
+
+        //keyframe
+        setTimeout(function(){
+
+            createRotatingMessageString("i  am  applying  as  an  entry/mid  level  front  end  developer");
+
+        }, 6500);
+
+        //keyframe
+        setTimeout(function(){
+
+            //fade in background image
+            gsap.to(document.getElementById("backgroundImage"), {
+                duration: 5,
+                opacity: .6,
+                z: 0,
+            });
+
+        }, 9000);
+
+        //keyframe
+        setTimeout(function(){
+
+            stopAnimateBackgroundRotatingText();
+
+        }, 11500);
+
+        //keyframe
+        setTimeout(function(){
+
+            //animate out rolling source code
+            animateOutMasterSourceCode();
+
+        }, 15000);
+
+        //keyframe
+        setTimeout(function(){
+
+            createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience");
+
+        }, 14000);
+
+        //keyframe
+        setTimeout(function(){
+
+            startAnimateBackgroundRotatingText(67);
+
+        }, 15000);
+
+        //keyframe
+        setTimeout(function(){
+
+            //fade out background image
+            gsap.to(document.getElementById("backgroundImage"), {
+                duration: 2.5,
+                opacity: 0,
+                z: 0,
+            });
+
+        }, 17000);
+
+        //keyframe
+        setTimeout(function(){
+
+            stopAnimateBackgroundRotatingText();
+
+        }, 19000);
+    }
+
+    window.addEventListener("click", function(){
+
+        if(alreadyClicked == false)
+        {
+            alreadyClicked = true;
+            startSplashPage();
+        }
     });
-
-    //keyframe 1
-    setTimeout(function(){
-        createRotatingMessageString("hello  giftagram,  my  name  is  kevin");
-    }, 50);
-
-    //keyframe 2
-    setTimeout(function(){
-
-        //fade in background image
-        gsap.to(document.getElementById("backgroundImage"), {
-            duration: 5,
-            opacity: .35,
-            delay: 2
-        });
-
-    }, 2000);
-
-    //keyframe 3
-    setTimeout(function(){
-
-        //animate in rolling source code
-        animateInMasterSourceCode();
-
-    }, 4500);
-
-    //keyframe 4
-    setTimeout(function(){
-    }, 100);
-
-    //keyframe 5
-    setTimeout(function(){
-    }, 100);
 
 
   </script>

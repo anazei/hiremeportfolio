@@ -274,7 +274,7 @@ for (let i=0; i<config.snowAmount; i++) createSnow();
 chooseNewWind();
 scheduleForegroundBurst();
 let lastTime = performance.now();
-function animate(now) {
+function animateSnow(now) {
   const dt = Math.min((now-lastTime)/1000, 0.05);
   lastTime = now;
   updateWind(dt);
@@ -282,9 +282,9 @@ function animate(now) {
   updateForeground(dt);
   updateVisibility(dt);
   render();
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animateSnow);
 }
-requestAnimationFrame(animate);
+//requestAnimationFrame(animateSnow);
 
 document.getElementById('windMax')?.addEventListener('input', e => {
   config.windForceMax = Number(e.target.value);

@@ -23,10 +23,9 @@
 
             gsap.to(currentNode, {
               scale: 1,
-              delay: masterCodeCounter / 550,
-              duration: .35,
+              delay: masterCodeCounter / 15,
+              duration: 3,
               opacity: 1,
-              z: 0
             });
 
             masterCodeCounter++;
@@ -49,10 +48,9 @@
 
             gsap.to(currentNode, {
               scale: 0.99,
-              delay: masterCodeCounter / 1250,
-              duration: .25,
+              delay: masterCodeCounter / 35,
+              duration: 2,
               opacity: 0,
-              z: 0
             });
 
             masterCodeCounter++;
