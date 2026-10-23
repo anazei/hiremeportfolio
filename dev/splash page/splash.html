@@ -139,11 +139,24 @@
           text-align: center;
       }
 
+      #particleEmitter
+      {
+          position: absolute;
+          width: 5px;
+          height: 5px;
+          background-color: white;
+          border-radius: 50px;
+          opacity: 0;
+      }
+
     </style>
   </head>
   <body>
 
     <div id="entryGreetingText">Turn your screen to landscape<br>This presentation contains audio<br>Click anywhere to begin</div>
+
+    <div id="particleEmitter"></div>
+    <div id="particleShooters"></div>
 
     <!-- main background image -->
     <div id="backgroundImage"></div>
@@ -316,29 +329,9 @@
   <script src="js/sourcecodeanimation.js"></script>
   <script src="js/rotatingText.js"></script>
   <script src="js/giftagramlogo.js"></script>
+  <script src="js/particleshooter.js"></script>
 
   <script>
-
-    //snowfall control
-    //fadeInSnowfall(0.7);
-    //fadeOutSnowfall(0.7);
-
-    //source code control
-    //animateInMasterSourceCode();
-    //animateOutMasterSourceCode();
-
-    //rotating text control
-    //setTimeout(function(){ createRotatingMessageString("hello  giftagram,  my  name  is  kevin"); }, 1000);
-    //setTimeout(function(){ createRotatingMessageString("i  am  applying  for  your  entry/mid  level  front  end  developer"); }, 6000);
-    //setTimeout(function(){ createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience"); }, 12000);
-    //setTimeout(function(){ createRotatingMessageString(""); }, 20000);
-
-    //startAnimateBackgroundRotatingText(length)
-    //stopAnimateBackgroundRotatingText()
-
-    //giftagram logo
-    //animateInLogo();
-    //animateOutLogo()
 
     var audio;
     var alreadyClicked = false;
@@ -483,11 +476,13 @@
         animateOutLogo();
 
         explodeOutForegroundText();
+        startParticleEmitter(750, 490, 1550, 490);
 
         //keyframe
         setTimeout(function(){
 
             stopAnimateBackgroundRotatingText();
+            stopContinuousEmit();
 
         }, 3000);
     }

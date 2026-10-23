@@ -76,7 +76,7 @@
             y: Math.round(Math.sin((particleAngleCounter * Math.PI/180) - 90) * Math.round(Math.random() * 650)),
             duration: Math.round(Math.random() * 2) + 2,
             opacity: 0,
-            //ease: "power1.out",
+            ease: "power1.out",
             onComplete: function(){
                 document.getElementById("particleShooters").removeChild(newParticleDiv);
             }
@@ -88,8 +88,6 @@
     //begin emitting particles trigger
     function startContinousEmit()
     {
-        shootingParticleEmitState = "on";
-
         emitDelayer = setInterval(function(){
 
             emitParticles();
@@ -100,11 +98,16 @@
     //stop emitting particles trigger
     function stopContinuousEmit()
     {
-        shootingParticleEmitState = "off";
         clearInterval(emitDelayer);
+
+        gsap.to(shootingParticleEmitter,{
+          duration: .5,
+          opacity: 0,
+        });
     }
 
     startParticleEmitter(100, 300, 1000, 300);
+    //stopContinuousEmit();
 
   </script>
 
