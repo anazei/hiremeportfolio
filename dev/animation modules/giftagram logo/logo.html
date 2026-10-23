@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+
+      body
+      {
+          background-color: black;
+      }
+
+      #giftagramLogoContainer
+      {
+          position: absolute;
+          left: 25%;
+          top: 50%;
+          scale: 0.8;
+      }
+
+      #giftagramLogo
+      {
+          color: white;
+          font-family: 'Roboto', monospace;
+          font-size: 50pt;
+          font-weight: 400;
+          letter-spacing: 0px;
+      }
+
+      #giftagramLogoSubtitle
+      {
+          color: #FCBE5E;
+          font-family: 'Roboto', monospace;
+          font-size: 19pt;
+          font-weight: 300;
+          letter-spacing: 0px;
+      }
+
+      .giftagramLogoSpan
+      {
+          display: inline-block;
+          opacity: 0;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="giftagramLogoContainer">
+      <div id="giftagramLogo">
+        <span class="giftagramLogoSpan">H</span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">O </span>
+        <img class="giftagramLogoSpan" src="images/giftagramlogo.png"/>
+        <span class="giftagramLogoSpan">G</span>
+        <span class="giftagramLogoSpan">I</span>
+        <span class="giftagramLogoSpan">F</span>
+        <span class="giftagramLogoSpan">T</span>
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">G</span>
+        <span class="giftagramLogoSpan">R</span>
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">M</span>
+      </div>
+
+      <div id="giftagramLogoSubtitle">
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">c</span>
+        <span class="giftagramLogoSpan">a</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">f</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan">y</span>
+        <span class="giftagramLogoSpan">/</span>
+        <span class="giftagramLogoSpan">M</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">d</span>
+        <span class="giftagramLogoSpan">-</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">v</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">F</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">-</span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">d</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">D</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">v</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">r</span>
+
+      </div>
+    </div>
+
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script>
+
+      var mainGiftagramLogoArray = new Array();
+      var maingiftagramLogoSubtitleArray = new Array();
+      var mainGiftagramLogo = document.getElementById("giftagramLogo").children;
+      var mainGiftagramSubtitle = document.getElementById("giftagramLogoSubtitle").children;
+
+      function initGiftagramLogo()
+      {
+          for(var i=0;i<mainGiftagramLogo.length;i++)
+          {
+              mainGiftagramLogoArray.push(mainGiftagramLogo[i]);
+          }
+
+          for(var i=0;i<mainGiftagramSubtitle.length;i++)
+          {
+              maingiftagramLogoSubtitleArray.push(mainGiftagramSubtitle[i]);
+          }
+      }
+
+      //shuffle an array
+      function randomizeArray(inputArray)
+      {
+          for(var i=0;i<inputArray.length;i++)
+          {
+              var randomPosition = Math.floor(Math.random() * inputArray.length);
+              var temp = inputArray[i];
+              inputArray[i] = inputArray[randomPosition];
+              inputArray[randomPosition] = temp;
+          }
+
+          return inputArray;
+      }
+
+      function animateInLogo()
+      {
+          //mainGiftagramLogoArray.reverse();
+          maingiftagramLogoSubtitleArray.reverse();
+
+          for(var i=0;i<mainGiftagramLogoArray.length;i++)
+          {
+              gsap.to(mainGiftagramLogoArray[i], {
+                  opacity: 1,
+                  duration: 2,
+                  delay: i/15,
+              });
+          }
+
+          setTimeout(function(){
+
+              for(var i=0;i<maingiftagramLogoSubtitleArray.length;i++)
+              {
+                  maingiftagramLogoSubtitleArray[i].style.scale = 6;
+
+                  gsap.to(maingiftagramLogoSubtitleArray[i], {
+                      scale: 1,
+                      opacity: 1,
+                      duration: .75,
+                      delay: i/75,
+                  });
+              }
+
+          }, 1000);
+      }
+
+      function animateOutLogo()
+      {
+          maingiftagramLogoSubtitleArray.reverse();
+
+          for(var i=0;i<mainGiftagramLogoArray.length;i++)
+          {
+              gsap.to(mainGiftagramLogoArray[i], {
+                  opacity: 0,
+                  duration: 1,
+                  delay: i/55,
+              });
+          }
+
+          for(var i=0;i<maingiftagramLogoSubtitleArray.length;i++)
+          {
+              gsap.to(maingiftagramLogoSubtitleArray[i], {
+                  opacity: 0,
+                  duration: 1,
+                  delay: i/75,
+              });
+          }
+      }
+
+      initGiftagramLogo();
+      animateInLogo();
+      //animateOutLogo()
+
+  </script>
+
+</html>

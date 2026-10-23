@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Hello Giftagram!</title>
+
+    <!-- include this for Roboto font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com" rel="stylesheet">
+
     <style>
 
       html,body {
@@ -83,6 +89,38 @@
           opacity: 0;
       }
 
+      #giftagramLogoContainer
+      {
+          position: absolute;
+          right: 380px;
+          top: 350px;
+          scale: 0.8;
+      }
+
+      #giftagramLogo
+      {
+          color: white;
+          font-family: 'Roboto', monospace;
+          font-size: 50pt;
+          font-weight: 400;
+          letter-spacing: 0px;
+      }
+
+      #giftagramLogoSubtitle
+      {
+          color: #FCBE5E;
+          font-family: 'Roboto', monospace;
+          font-size: 19pt;
+          font-weight: 300;
+          letter-spacing: 0px;
+      }
+
+      .giftagramLogoSpan
+      {
+          display: inline-block;
+          opacity: 0;
+      }
+
     </style>
   </head>
   <body>
@@ -91,6 +129,81 @@
 
     <!-- snow fall animation canvas -->
     <canvas id="snow"></canvas>
+
+    <div id="giftagramLogoContainer">
+      <div id="giftagramLogo">
+        <span class="giftagramLogoSpan">H</span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">O </span>
+        <img class="giftagramLogoSpan" src="images/giftagramlogo.png"/>
+        <span class="giftagramLogoSpan">G</span>
+        <span class="giftagramLogoSpan">I</span>
+        <span class="giftagramLogoSpan">F</span>
+        <span class="giftagramLogoSpan">T</span>
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">G</span>
+        <span class="giftagramLogoSpan">R</span>
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">M</span>
+      </div>
+
+      <div id="giftagramLogoSubtitle">
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">c</span>
+        <span class="giftagramLogoSpan">a</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">f</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan">y</span>
+        <span class="giftagramLogoSpan">/</span>
+        <span class="giftagramLogoSpan">M</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">d</span>
+        <span class="giftagramLogoSpan">-</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">v</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">F</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">-</span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">d</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">D</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">v</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">r</span>
+
+      </div>
+    </div>
 
     <!-- begin source code animation HTML layout, tedious HTML effort generated with help from ChatGPT -->
     <!-- spaces are deliberate, do not alter spaces -->
@@ -179,6 +292,7 @@
   <script src="js/snow.js"></script>
   <script src="js/sourcecodeanimation.js"></script>
   <script src="js/rotatingText.js"></script>
+  <script src="js/giftagramlogo.js"></script>
 
   <script>
 
@@ -198,6 +312,10 @@
 
     //startAnimateBackgroundRotatingText(length)
     //stopAnimateBackgroundRotatingText()
+
+    //giftagram logo
+    //animateInLogo();
+    //animateOutLogo()
 
     var audio;
     var alreadyClicked = false;
@@ -277,14 +395,6 @@
         //keyframe
         setTimeout(function(){
 
-            //animate out rolling source code
-            animateOutMasterSourceCode();
-
-        }, 15000);
-
-        //keyframe
-        setTimeout(function(){
-
             createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience");
 
         }, 14000);
@@ -292,9 +402,19 @@
         //keyframe
         setTimeout(function(){
 
+            //animate out rolling source code
+            animateOutMasterSourceCode();
             startAnimateBackgroundRotatingText(67);
 
         }, 15000);
+
+        //keyframe
+        setTimeout(function(){
+
+            //animate in hello giftagram logo and subtitle
+            animateInLogo();
+
+        }, 16500);
 
         //keyframe
         setTimeout(function(){
@@ -324,7 +444,6 @@
             startSplashPage();
         }
     });
-
 
   </script>
 
