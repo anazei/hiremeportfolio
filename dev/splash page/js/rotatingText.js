@@ -98,6 +98,7 @@
                     opacity: 0,
                     duration: 1,
                     delay: i / 45,
+                    ease: "power2.inOut",
                     onComplete: function(){
 
                         completeCounter++;
@@ -169,6 +170,44 @@
                     //stopAnimateBackgroundRotatingText();
                 }
             }
+          });
+      }
+  }
+
+  //instead of a fade out, explode outwards towards the z axis
+  function explodeOutForegroundText()
+  {
+      //rebuild foregroundRotatingMessageArray so they're not scrambled
+      foregroundRotatingMessageArray = [];
+      var mainTextDiv = document.getElementById("mainRotationText")
+
+      for(var i=0;i<mainTextDiv.children.length;i++)
+      {
+          foregroundRotatingMessageArray.push(mainTextDiv.children[i]);
+      }
+
+      document.getElementById("rotatingTextContainer").style.perspective = "1000px";
+      document.getElementById("rotatingTextContainer").style.transformStyle = "preserve-3d";
+
+      gsap.set(foregroundRotatingMessageArray, {
+          transformPerspective: 1000
+      });
+
+      for(var i=0;i<foregroundRotatingMessageArray.length;i++)
+      {
+          foregroundRotatingMessageArray[i].style.display = "inline-block";
+          foregroundRotatingMessageArray[i].style.transformStyle = "preserve-3d";
+          foregroundRotatingMessageArray[i].style.willChange = "transform, opacity";
+
+          //gsap fade in each letter randomly
+          gsap.to(foregroundRotatingMessageArray[i], {
+            filter: "blur(4px)",
+            opacity: 0,
+            duration: 1.5,
+            delay: i / 25,
+            ease: "power2.in",
+            z: Math.round(Math.sin((180 / foregroundRotatingMessageArray.length * i - 90) * (Math.PI/180)) * 3000),
+            x: Math.round(Math.cos((180 / foregroundRotatingMessageArray.length * i - 90) * (Math.PI/180)) * 50),
           });
       }
   }
