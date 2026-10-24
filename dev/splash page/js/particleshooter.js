@@ -36,9 +36,10 @@
       document.getElementById("particleShooters").appendChild(newParticleDiv);
 
       gsap.to(newParticleDiv, {
+          filter: "blur(2px)",
           x: Math.round(Math.cos((particleAngleCounter * Math.PI/180) - 90) * Math.round(Math.random() * 650)),
           y: Math.round(Math.sin((particleAngleCounter * Math.PI/180) - 90) * Math.round(Math.random() * 650)),
-          duration: Math.round(Math.random() * 1) + 1,
+          duration: Math.round(Math.random() * 2) + .25,
           opacity: 0,
           ease: "power1.out",
           onComplete: function(){

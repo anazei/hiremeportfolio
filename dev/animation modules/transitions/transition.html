@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+
+      body {
+        margin: 0;
+        background-color: #000000;
+      }
+
+      #mainCanvas{
+        width: 1194px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="gallery" class="gallery">
+            <img id="background1" src="background.png" style="display:none">
+            <img id="background2" src="background2.png" style="display:none">
+            <img id="background3" src="background3.png" style="display:none">
+            <img id="background4" src="background4.png" style="display:none">
+            <img id="masktest" src="masktest.png" style="display:none">
+            <img id="masktest2" src="masktest2.png" style="display:none">
+          </div>
+
+          <canvas id="mainCanvas" class="mainCanvas" width="1194" height="571"></canvas>
+
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <script>
+
+    var mainCanvas = document.getElementById("mainCanvas");
+    var mainContext = mainCanvas.getContext("2d");
+
+
+
+    //masking animations will be drawn to this buffer canvas
+    var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
+    var maskContext = maskCanvas.getContext("2d");
+
+
+
+
+
+    // 1) mask is drawn first
+    maskContext.drawImage(document.getElementById("masktest"), 0, 0); //mask context draws out masktest.png
+
+    mainContext.drawImage(maskCanvas, 0, 0); //main canvas draws/copies buffer mask canvas first and sets "source in" composition
+
+            mainContext.globalCompositeOperation = "source-in";
+
+    // 2) then new incoming image will automatically get masked
+    mainContext.drawImage(document.getElementById("background1"), 0, 0);
+
+
+
+
+    // 3) original image gets drawn last with "destination-atop" set beforehand
+
+            mainContext.globalCompositeOperation = "destination-atop";
+
+    mainContext.drawImage(document.getElementById("background2"), 0, 0);
+
+
+
+
+
+    //creates invisible canvas for buffering
+    function createInvisibleCanvas(id, width, height)
+    {
+        var tempCanvas = document.createElement("canvas");
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            tempCanvas.id = id;
+            tempCanvas.style.display = "block";
+            document.body.appendChild(tempCanvas);
+        return tempCanvas;
+    }
+
+  </script>
+</html>

@@ -17,6 +17,7 @@
       }
 
       backgroundRotationTextDiv.innerHTML = randomCharacters;
+      backgroundRotationTextDiv.style.textShadow = "0px 0px 10px rgba(255, 255, 255, 1)";
   }
 
   //fade in rotational background text
@@ -98,7 +99,7 @@
                     opacity: 0,
                     duration: 1,
                     delay: i / 45,
-                    ease: "power2.inOut",
+                    //ease: "power2.inOut",
                     onComplete: function(){
 
                         completeCounter++;

@@ -351,7 +351,7 @@
         //play splash page background music
         audio = document.getElementById("music");
         audio.setAttribute('src', "audio/timeless.mp3");
-        audio.play();
+        //audio.play();
 
         //start snow animation
         requestAnimationFrame(animateSnow);
@@ -485,6 +485,13 @@
             stopContinuousEmit();
 
         }, 3000);
+
+        //keyframe
+        setTimeout(function(){
+
+            console.log("next page in");
+
+        }, 4000);
     }
 
     window.addEventListener("click", function(){
@@ -504,6 +511,7 @@
         {
             if(clickLock == "allowed")
             {
+                clickLock = "disallowed";
                 fadeOutSplashPage();
             }
         }
