@@ -24,15 +24,6 @@
   </head>
   <body>
 
-    <div id="gallery" class="gallery">
-    <img id="background1" src="background.png" style="display:none">
-    <img id="background2" src="background2.png" style="display:none">
-    <img id="background3" src="background3.png" style="display:none">
-    <img id="background4" src="background4.png" style="display:none">
-    <img id="masktest" src="masktest.png" style="display:none">
-    <img id="masktest2" src="masktest2.png" style="display:none">
-    </div>
-
     <canvas id="mainCanvas" class="mainCanvas" width="1194" height="571"></canvas>
 
   </body>
@@ -62,25 +53,33 @@
     var newImage = new Image(); //new incoming image
 
     //setup which ever mask is selected
-    function selectMask(mask, imageSrc)
+    async function selectMask(mask, imageSrc)
     {
         if(currentMask !== mask)
         {
             currentMask = mask;
 
             //setup mask
-            crossfade.setupMask(); //method to call mask object but only once at the start of every new transition
+            currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
         }
 
-        //set the new incoming image
-        var image = new Image();
-            image.src = imageSrc;
+        newImage = await setImage(imageSrc);
+        animateMask(mask);
+    }
 
-        image.onload = function()
-        {
-            newImage = image;
-            animateMask(mask);
-        }
+    async function setImage(imageSrc)
+    {
+        return new Promise(function(resolve){
+
+            //set the new incoming image
+            var image = new Image();
+                image.src = imageSrc;
+
+            image.onload = function()
+            {
+                resolve(image);
+            }
+        });
     }
 
     //main animation transition command
