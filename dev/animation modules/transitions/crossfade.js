@@ -24,23 +24,25 @@ var Crossfade = function(masterReference, mainCanvas)
     var xPosition = -1;
     var yPosition = -1;
 
+    var canvasHeight = Math.ceil(mainCanvas.height / 5);
+
     function setupMask()
     {
-        for(var i=0;i<300;i++)
+        for(var i=0;i<canvasHeight;i++)
         {
           xPosition++;
 
           var roundRect = new createjs.Shape();
-          roundRect.graphics.beginFill("red").drawRoundRect(0, 0, 1194, 5, 0, 0, 0, 0);
+          roundRect.graphics.beginFill("red").drawRoundRect(0, 0, mainCanvas.width, 5, 0, 0, 0, 0);
 
-          if(i % 2 == 0
+          if(i % 1 == 0
           && i !== 0)
           {
             xPosition = 0;
             yPosition += 5;
           }
 
-          roundRect.x = xPosition * 1194;
+          roundRect.x = xPosition * mainCanvas.width;
           roundRect.y = yPosition;
 
           roundRect.scaleX = roundRect.scaleY = 1;

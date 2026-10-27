@@ -1,10 +1,12 @@
 "use strict";
-var Spotlight = function()
+var Spotlight = function(masterReference, mainCanvas)
 {
     //public methods
     this.setupMask = setupMask;
     this.startAnimate = startAnimate;
     this.resetMaskState = resetMaskState;
+
+    var parentReference = masterReference;
 
     //masking animations will be drawn to this buffer canvas
     var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
