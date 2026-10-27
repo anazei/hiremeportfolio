@@ -46,9 +46,11 @@
     var mainCanvas = document.getElementById("mainCanvas");
     var mainContext = mainCanvas.getContext("2d");
 
-    var crossfade = new Crossfade(mainCanvas);
-    //var maskwall = new Maskwall(mainCanvas);
-    //var spotlight = new Spotlight(mainCanvas);
+    var crossfade = new Crossfade(this, mainCanvas);
+    //var maskwall = new Maskwall(this, mainCanvas);
+    //var spotlight = new Spotlight(this, mainCanvas);
+
+    var currentMask;
 
     var runOnMainLoop = false;
 
@@ -62,6 +64,14 @@
     //setup which ever mask is selected
     function selectMask(mask, imageSrc)
     {
+        if(currentMask !== mask)
+        {
+            currentMask = mask;
+
+            //setup mask
+            crossfade.setupMask(); //method to call mask object but only once at the start of every new transition
+        }
+
         //set the new incoming image
         var image = new Image();
             image.src = imageSrc;
@@ -108,26 +118,16 @@
 
         //run mask animation
         mask.startAnimate(); //method to call mask object
-
-        //after set amount of time, call onMaskComplete
-        setTimeout(function(){
-
-            onMaskComplete(mask); //this should really be a call back for mask object to call back to say maskComplete by providing "this" reference
-
-        }, 4000);
     }
 
     //when masking animation is complete, reset for next mask setup
-    function onMaskComplete(mask)
+    function onMaskComplete()
     {
         //stop on main loop when done
         runOnMainLoop = false;
 
         //set permanent image state
         originalImage = newImage; //current image on display
-
-        //reset mask state
-        mask.resetMaskState(); //method to call mask object
     }
 
     //creates invisible canvas for buffering
@@ -151,8 +151,6 @@
         return tempCanvas;
     }
 
-    //setup mask
-    crossfade.setupMask(); //method to call mask object but only once at the start of every new transition
     selectMask(crossfade, "background.png"); //maskwall, spotlight, crossfade
 
   </script>

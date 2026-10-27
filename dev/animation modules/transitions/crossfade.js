@@ -1,10 +1,12 @@
 "use strict";
-var Crossfade = function(mainCanvas)
+var Crossfade = function(masterReference, mainCanvas)
 {
     //public methods
     this.setupMask = setupMask;
     this.startAnimate = startAnimate;
     this.resetMaskState = resetMaskState;
+
+    var parentReference = masterReference;
 
     //masking animations will be drawn to this buffer canvas
     var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
@@ -54,12 +56,20 @@ var Crossfade = function(mainCanvas)
 
     function startAnimate()
     {
-        for(var i=0;i<crossFadeBoxArray.length;i++)
+        for(let i=0;i<crossFadeBoxArray.length;i++)
         {
             gsap.to(crossFadeBoxArray[i], {
               duration: 2,
               alpha: 0,
               delay: i / 200,
+              onComplete: function(){
+
+                  if(i == crossFadeBoxArray.length - 1)
+                  {
+                      parentReference.onMaskComplete();
+                      resetMaskState();
+                  }
+              }
             });
         }
     }
