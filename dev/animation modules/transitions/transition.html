@@ -50,12 +50,11 @@
     //var maskwall = new Maskwall(mainCanvas);
     //var spotlight = new Spotlight(mainCanvas);
 
-
     var runOnMainLoop = false;
 
     var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display
     var originalContext = originalImage.getContext("2d");
-        originalContext.fillStyle = "#FF0000";
+        originalContext.fillStyle = "#000000";
         originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
     var newImage = new Image(); //new incoming image
@@ -63,9 +62,6 @@
     //setup which ever mask is selected
     function selectMask(mask, imageSrc)
     {
-        //setup mask
-        mask.setupMask(); //method to call mask object
-
         //set the new incoming image
         var image = new Image();
             image.src = imageSrc;
@@ -88,12 +84,12 @@
         mainContext.globalCompositeOperation = "source-in";
 
         // 2) then newImage will automatically get masked
-        mainContext.drawImage(newImage, 0, 0); //draw out newImage
+        mainContext.drawImage(originalImage, 0, 0); //draw out originalImage
 
         mainContext.globalCompositeOperation = "destination-atop";
 
         // 3) originalImage gets drawn last with "destination-atop" set beforehand
-        mainContext.drawImage(originalImage, 0, 0); //draw out originalImage
+        mainContext.drawImage(newImage, 0, 0); //draw out newImage
 
         if(runOnMainLoop == true)
         {
@@ -118,7 +114,7 @@
 
             onMaskComplete(mask); //this should really be a call back for mask object to call back to say maskComplete by providing "this" reference
 
-        }, 3000);
+        }, 4000);
     }
 
     //when masking animation is complete, reset for next mask setup
@@ -155,6 +151,8 @@
         return tempCanvas;
     }
 
+    //setup mask
+    crossfade.setupMask(); //method to call mask object but only once at the start of every new transition
     selectMask(crossfade, "background.png"); //maskwall, spotlight, crossfade
 
   </script>

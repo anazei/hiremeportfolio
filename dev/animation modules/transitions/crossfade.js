@@ -24,7 +24,7 @@ var Crossfade = function(mainCanvas)
 
     function setupMask()
     {
-        for(var i=0;i<250;i++)
+        for(var i=0;i<300;i++)
         {
           xPosition++;
 
@@ -57,9 +57,9 @@ var Crossfade = function(mainCanvas)
         for(var i=0;i<crossFadeBoxArray.length;i++)
         {
             gsap.to(crossFadeBoxArray[i], {
-              duration: 1,
+              duration: 2,
               alpha: 0,
-              delay: i / 300,
+              delay: i / 200,
             });
         }
     }
@@ -83,7 +83,6 @@ var Crossfade = function(mainCanvas)
         {
             tempCanvas = document.getElementById(id);
         } else {
-
             tempCanvas = document.createElement("canvas");
             tempCanvas.width = width;
             tempCanvas.height = height;
