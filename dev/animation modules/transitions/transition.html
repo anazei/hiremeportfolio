@@ -24,6 +24,15 @@
   </head>
   <body>
 
+    <div id="gallery" class="gallery">
+    <img id="background1" src="background.png" style="display:none">
+    <img id="background2" src="background2.png" style="display:none">
+    <img id="background3" src="background3.png" style="display:none">
+    <img id="background4" src="background4.png" style="display:none">
+    <img id="masktest" src="masktest.png" style="display:none">
+    <img id="masktest2" src="masktest2.png" style="display:none">
+    </div>
+
     <canvas id="mainCanvas" class="mainCanvas" width="1194" height="571"></canvas>
 
   </body>
@@ -45,10 +54,11 @@
     var runOnMainLoop = false;
 
     var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display
-    var newImage = new Image(); //new incoming image
+    var originalContext = originalImage.getContext("2d");
+        originalContext.fillStyle = "#FF0000";
+        originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
-    var testCanvas = createInvisibleCanvas("testCanvas", mainCanvas.width, mainCanvas.height);
-    var testContext = maskCanvas.getContext("2d");
+    var newImage = new Image(); //new incoming image
 
     //setup which ever mask is selected
     function selectMask(mask, imageSrc)
@@ -75,15 +85,15 @@
         // 1) mask from mask canvas is drawn first
         mainContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
 
-        //mainContext.globalCompositeOperation = "source-in";
+        mainContext.globalCompositeOperation = "source-in";
 
         // 2) then newImage will automatically get masked
-        //mainContext.drawImage(newImage, 0, 0); //draw out new image
+        mainContext.drawImage(newImage, 0, 0); //draw out newImage
 
-        //mainContext.globalCompositeOperation = "destination-atop";
+        mainContext.globalCompositeOperation = "destination-atop";
 
         // 3) originalImage gets drawn last with "destination-atop" set beforehand
-        //mainContext.drawImage(originalImage, 0, 0); //draw out original image
+        mainContext.drawImage(originalImage, 0, 0); //draw out originalImage
 
         if(runOnMainLoop == true)
         {
@@ -119,7 +129,6 @@
 
         //set permanent image state
         originalImage = newImage; //current image on display
-        newImage = new Image(); //reset new incoming image
 
         //reset mask state
         mask.resetMaskState(); //method to call mask object
