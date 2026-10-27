@@ -37,29 +37,92 @@
   </body>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
   <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+  <script src="maskwall.js"></script>
+  <script src="spotlight.js"></script>
+  <script src="crossfade.js"></script>
   <script>
 
     var mainCanvas = document.getElementById("mainCanvas");
     var mainContext = mainCanvas.getContext("2d");
 
-    //masking animations will be drawn to this buffer canvas
-    var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
-    var maskContext = maskCanvas.getContext("2d");
+    var maskwall = new Maskwall(mainCanvas);
+    var spotlight = new Spotlight(mainCanvas);
+    var crossfade = new Crossfade(mainCanvas);
 
-    var originalCanvas = createInvisibleCanvas("originalCanvas", mainCanvas.width, mainCanvas.height);
-    var originalContext = maskCanvas.getContext("2d");
-
-    var newCanvas = createInvisibleCanvas("newCanvas", mainCanvas.width, mainCanvas.height);
-    var newContext = maskCanvas.getContext("2d");
+    var maskCanvas = document.getElementById("maskCanvas");
 
     var runOnMainLoop = false;
 
-    var originalImage = ""; //current image on display
-    var newImage = ""; //new incoming image
+    var originalImage = new Image(); //current image on display
+    var newImage = new Image(); //new incoming image
 
+    //main animation transition command
+    function onMainloop()
+    {
+        // 1) mask from mask canvas is drawn first
+        mainContext.drawImage(maskCanvas, 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
 
+        mainContext.globalCompositeOperation = "source-in";
 
+        // 2) then newImage will automatically get masked
+        mainContext.drawImage(newImage, 0, 0); //draw out new image
 
+        mainContext.globalCompositeOperation = "destination-atop";
+
+        // 3) originalImage gets drawn last with "destination-atop" set beforehand
+        mainContext.drawImage(originalImage, 0, 0); //draw out original image
+
+        if(runOnMainLoop == true)
+        {
+            requestAnimationFrame(onMainloop);
+        }
+    }
+
+    //setup which ever mask is selected
+    function selectMask(mask, image)
+    {
+        //setup mask
+        mask.setupMask(); //method to call mask object
+
+        //set the new incoming image
+        loadNewImage(image);
+
+        animateMask(mask);
+    }
+
+    //animate the specific mask
+    function animateMask(mask)
+    {
+        //allow main loop to run
+        runOnMainLoop = true;
+
+        //start on main loop
+        onMainloop();
+
+        //run mask animation
+        mask.startAnimate(); //method to call mask object
+
+        //after set amount of time, call onMaskComplete
+        setTimeout(function(){
+
+            onMaskComplete(mask); //this should really be a call back for mask object to call back to say maskComplete by providing "this" reference
+
+        }, 1000);
+    }
+
+    //when masking animation is complete, reset for next mask setup
+    function onMaskComplete(mask)
+    {
+        //stop on main loop when done
+        runOnMainLoop = false;
+
+        //set permanent image state
+        originalImage = newImage; //current image on display
+        newImage = new Image(); //reset new incoming image
+
+        //reset mask state
+        mask.resetMaskState(); //method to call mask object
+    }
 
     //load new image into newImage
     function loadNewImage(imageSrc)
@@ -73,90 +136,7 @@
         }
     }
 
-    //main animation transition command
-    function onMainloop()
-    {
-        // 1) mask is drawn first - choose mask
-        maskContext.drawImage(document.getElementById("masktest"), 0, 0); //mask context draws out masktest.png - in production, animate mask instead of loading masktest.png
-        //replace maskContext.drawImage(document.getElementById("masktest"), 0, 0); with animating mask instead
-
-        mainContext.drawImage(maskCanvas, 0, 0); //main canvas draws/copies buffer mask canvas first and sets "source in" composition
-
-                mainContext.globalCompositeOperation = "source-in";
-
-
-
-        // 2) then newImage will automatically get masked
-        mainContext.drawImage(document.getElementById("background1"), 0, 0); //draw out new image
-
-
-
-
-        // 3) originalImage gets drawn last with "destination-atop" set beforehand
-                mainContext.globalCompositeOperation = "destination-atop";
-        mainContext.drawImage(document.getElementById("background2"), 0, 0); //draw out original image
-
-        if(runOnMainLoop == true)
-        {
-            requestAnimationFrame(onMainloop);
-        }
-    }
-
-    //setup which ever mask is selected
-    function selectMask()
-    {
-        //setup mask
-        //mask.setupMask(); //method to call mask object
-
-        //set the new incoming image
-        loadNewImage("background.png");
-
-        animateMask();
-    }
-
-    //animate the specific mask
-    function animateMask()
-    {
-        //allow main loop to run
-        runOnMainLoop = true;
-
-        //start on main loop
-        onMainloop();
-
-        //run mask animation
-        //mask.startAnimate(); //method to call mask object
-
-        //after set amount of time, call onMaskComplete
-        setTimeout(onMaskComplete, 1000); //this should really be a call back for mask object to call back to say maskComplete
-    }
-
-    //when masking animation is complete, reset for next mask setup
-    function onMaskComplete()
-    {
-        //stop on main loop when done
-        runOnMainLoop = false;
-
-        //set permanent image state
-        originalImage = "new current image"; //current image on display
-        newImage = ""; //new incoming image
-
-        //reset mask state
-        //mask.resetMaskState(); //method to call mask object
-    }
-
-    //creates invisible canvas for buffering
-    function createInvisibleCanvas(id, width, height)
-    {
-        var tempCanvas = document.createElement("canvas");
-            tempCanvas.width = width;
-            tempCanvas.height = height;
-            tempCanvas.id = id;
-            tempCanvas.style.display = "block";
-            document.body.appendChild(tempCanvas);
-        return tempCanvas;
-    }
-
-    selectMask();
+    selectMask(crossfade, "background.png"); //maskwall, spotlight, crossfade
 
   </script>
 </html>
