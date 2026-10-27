@@ -103,12 +103,21 @@
     //creates invisible canvas for buffering
     function createInvisibleCanvas(id, width, height)
     {
-        var tempCanvas = document.createElement("canvas");
+        var tempCanvas;
+
+        if(document.getElementById(id) !== null)
+        {
+            tempCanvas = document.getElementById(id);
+        } else {
+
+            tempCanvas = document.createElement("canvas");
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCanvas.id = id;
             tempCanvas.style.display = "block";
             document.body.appendChild(tempCanvas);
+        }
+
         return tempCanvas;
     }
 

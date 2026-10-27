@@ -8,11 +8,12 @@
 
       body {
         margin: 0;
-        background-color: #000000;
+        background-color: #FFFFFF;
       }
 
       #mainCanvas{
         width: 1194px;
+        height: 571px;
         margin-left: auto;
         margin-right: auto;
         display: block;
@@ -23,16 +24,7 @@
   </head>
   <body>
 
-    <div id="gallery" class="gallery">
-            <img id="background1" src="background.png" style="display:none">
-            <img id="background2" src="background2.png" style="display:none">
-            <img id="background3" src="background3.png" style="display:none">
-            <img id="background4" src="background4.png" style="display:none">
-            <img id="masktest" src="masktest.png" style="display:none">
-            <img id="masktest2" src="masktest2.png" style="display:none">
-          </div>
-
-          <canvas id="mainCanvas" class="mainCanvas" width="1194" height="571"></canvas>
+    <canvas id="mainCanvas" class="mainCanvas" width="1194" height="571"></canvas>
 
   </body>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
@@ -45,49 +37,58 @@
     var mainCanvas = document.getElementById("mainCanvas");
     var mainContext = mainCanvas.getContext("2d");
 
-    var maskwall = new Maskwall(mainCanvas);
-    var spotlight = new Spotlight(mainCanvas);
     var crossfade = new Crossfade(mainCanvas);
+    //var maskwall = new Maskwall(mainCanvas);
+    //var spotlight = new Spotlight(mainCanvas);
 
-    var maskCanvas = document.getElementById("maskCanvas");
 
     var runOnMainLoop = false;
 
-    var originalImage = new Image(); //current image on display
+    var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display
     var newImage = new Image(); //new incoming image
 
-    //main animation transition command
-    function onMainloop()
-    {
-        // 1) mask from mask canvas is drawn first
-        mainContext.drawImage(maskCanvas, 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
-
-        mainContext.globalCompositeOperation = "source-in";
-
-        // 2) then newImage will automatically get masked
-        mainContext.drawImage(newImage, 0, 0); //draw out new image
-
-        mainContext.globalCompositeOperation = "destination-atop";
-
-        // 3) originalImage gets drawn last with "destination-atop" set beforehand
-        mainContext.drawImage(originalImage, 0, 0); //draw out original image
-
-        if(runOnMainLoop == true)
-        {
-            requestAnimationFrame(onMainloop);
-        }
-    }
+    var testCanvas = createInvisibleCanvas("testCanvas", mainCanvas.width, mainCanvas.height);
+    var testContext = maskCanvas.getContext("2d");
 
     //setup which ever mask is selected
-    function selectMask(mask, image)
+    function selectMask(mask, imageSrc)
     {
         //setup mask
         mask.setupMask(); //method to call mask object
 
         //set the new incoming image
-        loadNewImage(image);
+        var image = new Image();
+            image.src = imageSrc;
 
-        animateMask(mask);
+        image.onload = function()
+        {
+            newImage = image;
+            animateMask(mask);
+        }
+    }
+
+    //main animation transition command
+    function onMainloop()
+    {
+        mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        // 1) mask from mask canvas is drawn first
+        mainContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
+
+        //mainContext.globalCompositeOperation = "source-in";
+
+        // 2) then newImage will automatically get masked
+        //mainContext.drawImage(newImage, 0, 0); //draw out new image
+
+        //mainContext.globalCompositeOperation = "destination-atop";
+
+        // 3) originalImage gets drawn last with "destination-atop" set beforehand
+        //mainContext.drawImage(originalImage, 0, 0); //draw out original image
+
+        if(runOnMainLoop == true)
+        {
+            requestAnimationFrame(onMainloop);
+        }
     }
 
     //animate the specific mask
@@ -107,7 +108,7 @@
 
             onMaskComplete(mask); //this should really be a call back for mask object to call back to say maskComplete by providing "this" reference
 
-        }, 1000);
+        }, 3000);
     }
 
     //when masking animation is complete, reset for next mask setup
@@ -124,16 +125,25 @@
         mask.resetMaskState(); //method to call mask object
     }
 
-    //load new image into newImage
-    function loadNewImage(imageSrc)
+    //creates invisible canvas for buffering
+    function createInvisibleCanvas(id, width, height)
     {
-        var image = new Image();
-            image.src = imageSrc;
+        var tempCanvas;
 
-        image.onLoad = function()
+        if(document.getElementById(id) !== null)
         {
-            newImage = image;
+            tempCanvas = document.getElementById(id);
+        } else {
+
+            tempCanvas = document.createElement("canvas");
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            tempCanvas.id = id;
+            tempCanvas.style.display = "block";
+            document.body.appendChild(tempCanvas);
         }
+
+        return tempCanvas;
     }
 
     selectMask(crossfade, "background.png"); //maskwall, spotlight, crossfade
