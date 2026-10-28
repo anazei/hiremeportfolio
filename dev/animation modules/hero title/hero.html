@@ -235,7 +235,7 @@
             });
         }
 
-        setTimeout(animateOutHeroTitle, 350);
+        setTimeout(animateOutHeroTitle, 1000);
     }
 
     function animateOutHeroTitle()
@@ -281,10 +281,8 @@
 
                       gsap.to("#heroTitleMasterContainer",
                         {
-                          //width: 0,
-                          //height: 0,
-                          //scaleX: 0,
-                          //scaleY: 1,
+                          scaleX: 0,
+                          scaleY: 0,
                           alpha: 0,
                           duration: .35,
                           delay: .5,

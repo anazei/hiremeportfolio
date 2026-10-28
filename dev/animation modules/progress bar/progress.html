@@ -164,10 +164,37 @@
                 duration: .35,
                 alpha: 1
               });
-
           }
         });
+    }
 
+    function animateOutProgressBarContainer()
+    {
+        gsap.to("#progress", {
+          duration: .35,
+          alpha: 0
+        });
+
+        gsap.to("#progressBorder", {
+          duration: .35,
+          alpha: 0
+        });
+
+        gsap.to("#scrambleTextProgressBar", {
+          duration: .35,
+          alpha: 0
+        });
+
+        gsap.to("#progressBarContainer",
+        {
+            scaleX: 0,
+            scaleY: 0,
+            duration: .35,
+            delay: .35,
+            transformOrigin: "50% 50%",
+        });
+
+        setTimeout(stopProgressBarRotatingText, 2000);
     }
 
     animateInProgressBarContainer();
