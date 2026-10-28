@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- include this for Roboto font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com" rel="stylesheet">
+
+    <style>
+
+      body
+      {
+          margin-left: 0px;
+          margin-right: 0px;
+          margin-top: 0px;
+          margin-bottom: 0px;
+          overflow-x: hidden;
+          overflow-y: hidden;
+          background-color: #132322;
+          text-transform: uppercase;
+      }
+
+      #heroTitleMasterContainer
+      {
+          position: absolute;
+          left: 500px;
+          top: 300px;
+          font-family: 'Roboto', monospace;
+          font-size: 22pt;
+          font-weight: 300;
+          letter-spacing: 2px;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="heroTitleMasterContainer">
+      <div id="heroTitleContainer1">
+        <div id="heroTitle1"></div>
+        <div id="heroTitle2"></div>
+      </div>
+
+      <div id="heroTitleContainer2">
+        <div id="heroTitle1"></div>
+        <div id="heroTitle2"></div>
+      </div>
+    </div>
+
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script>
+
+    var heroTitleArray1 = new Array();
+    var heroTitleArray2 = new Array();
+
+    function createHeroTitle(message, divID)
+    {
+        for(var i=0;i<message.length;i++)
+        {
+            var messageDiv2 = document.createElement("span");
+                messageDiv2.innerHTML = message[i];
+                messageDiv2.style.marginRight = "4px";
+                messageDiv2.style.filter = "blur(" + parseInt(message.length - i) + "px)";
+                messageDiv2.style.textShadow = "0 0 " + parseInt(message.length - i) + "px rgba(255, 255, 255, 1)";
+                messageDiv2.style.scale = 1;
+                messageDiv2.style.display = "inline-block";
+                messageDiv2.style.opacity = 0;
+                messageDiv2.style.color = "white";
+                messageDiv2.style.position = "relative";
+                messageDiv2.style.top = "-35px";
+                messageDiv2.style.backgroundBlendMode = "screen";
+
+            heroTitleArray2.push(messageDiv2);
+
+            document.getElementById("heroTitle2").appendChild(messageDiv2);
+
+            var messageDiv = document.createElement("span");
+                messageDiv.innerHTML = message[i];
+                messageDiv.style.marginRight = "4px";
+                messageDiv.style.filter = "blur(15px)";
+                messageDiv.style.textShadow = "0 0 10px rgba(255, 255, 255, 1)";
+                messageDiv.style.scale = 1;
+                messageDiv.style.display = "inline-block";
+                messageDiv.style.opacity = 0;
+                messageDiv.style.color = "white";
+                messageDiv.style.position = "relative";
+                messageDiv.style.top = "0px";
+                messageDiv.style.left = "0px";
+                messageDiv.style.backgroundBlendMode = "color-dodge";
+
+            heroTitleArray1.push(messageDiv);
+
+            document.getElementById("heroTitle1").appendChild(messageDiv);
+
+            gsap.to(messageDiv2, {
+              scale: 1,
+              alpha: 1,
+              textShadow: "0 0 0px rgba(255, 255, 255, 1)",
+              filter: "blur(0px)",
+              duration: .75,
+              delay: i / 65,
+            });
+
+            gsap.to(messageDiv, {
+              alpha: 1,
+              textShadow: "0 0 10px rgba(255, 255, 255, 0)",
+              filter: "blur(10px)",
+              duration: 1,
+              delay: i / 100,
+            });
+
+        }
+
+    }
+
+    createHeroTitle("gift  giving  isn't  just  about  giving  things...", "heroTitle1");
+    //createHeroTitle("it's the thought that counts", "heroTitle2");
+
+  </script>
+
+</html>
