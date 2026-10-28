@@ -78,8 +78,6 @@ var Maskwall = function(masterReference, mainCanvas)
 
     function resetMaskState()
     {
-        console.log("rset mask state")
-
         parentReference.onMaskComplete();
 
         boxArray.reverse();
