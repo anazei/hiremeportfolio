@@ -1,0 +1,128 @@
+  var mainCanvas = document.getElementById("mainCanvas");
+  var mainContext = mainCanvas.getContext("2d");
+
+  var crossfade = new Crossfade(this, mainCanvas);
+  var maskwall = new Maskwall(this, mainCanvas);
+  var spotlight = new Spotlight(this, mainCanvas);
+
+  var currentMask;
+
+  var runOnMainLoop = false;
+
+  var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display at start
+  var originalContext = originalImage.getContext("2d");
+      originalContext.fillStyle = "#000000";
+      originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+  var newImage = new Image(); //new incoming image
+
+  //setup which ever mask is selected
+  async function selectMask(mask, imageSrc)
+  {
+      if(currentMask !== mask)
+      {
+          currentMask = mask;
+
+          //setup mask
+          currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
+      }
+
+      newImage = await setImage(imageSrc);
+      animateMask(mask);
+  }
+
+  async function setImage(imageSrc)
+  {
+      return new Promise(function(resolve){
+
+          //set the new incoming image
+          var image = new Image();
+              image.src = imageSrc;
+
+          image.onload = function()
+          {
+              resolve(image);
+          }
+      });
+  }
+
+  //main animation transition command
+  function onMainloop()
+  {
+      mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+      // 1) mask from mask canvas is drawn first
+      mainContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
+
+      mainContext.globalCompositeOperation = "source-in";
+
+      // 2) then newImage will automatically get masked
+      mainContext.drawImage(newImage, 0, 0); //draw out originalImage
+
+      mainContext.globalCompositeOperation = "destination-atop";
+
+      // 3) originalImage gets drawn last with "destination-atop" set beforehand
+      mainContext.drawImage(originalImage, 0, 0); //draw out newImage
+
+      if(runOnMainLoop == true)
+      {
+          requestAnimationFrame(onMainloop);
+      }
+  }
+
+  //animate the specific mask
+  function animateMask(mask)
+  {
+      //allow main loop to run
+      runOnMainLoop = true;
+
+      //start on main loop
+      onMainloop();
+
+      //run mask animation
+      mask.startAnimate(); //method to call mask object
+  }
+
+  //when masking animation is complete, reset for next mask setup
+  function onMaskComplete()
+  {
+      //stop on main loop when done
+      runOnMainLoop = false;
+
+      //set permanent image state
+      originalImage = newImage; //current image on display
+  }
+
+  //creates invisible canvas for buffering
+  function createInvisibleCanvas(id, width, height)
+  {
+      var tempCanvas;
+
+      if(document.getElementById(id) !== null)
+      {
+          tempCanvas = document.getElementById(id);
+      } else {
+
+          tempCanvas = document.createElement("canvas");
+          tempCanvas.width = width;
+          tempCanvas.height = height;
+          tempCanvas.id = id;
+          tempCanvas.style.display = "none";
+          document.body.appendChild(tempCanvas);
+      }
+
+      return tempCanvas;
+  }
+
+  function resizeCanvas()
+  {
+      mainCanvas.width = window.innerWidth;
+      mainCanvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+
+  //selectMask can run crossfade, spotlight or maskwall as inputs at any time to change transitions
+  //selectMask(crossfade, "background.png");
+  //selectMask(spotlight, "background.png");
+  //selectMask(maskwall, "background.png");

@@ -20,12 +20,12 @@
         user-select: none;
       }
 
-      canvas {
+      #snow {
         display:block;
         width:100%;
         height:100%;
         position: fixed;
-        z-index: 0;
+        z-index: 30;
       }
 
       #masterCode
@@ -34,6 +34,8 @@
           opacity: .20;
           margin-left: 35px;
           visibility: hidden;
+          position: absolute;
+          z-index: 20;
       }
 
       .code-line { display: block; white-space: pre; }
@@ -52,6 +54,7 @@
           left: 40%;
           top: 50%;
           width: 50%;
+          z-index: 20;
       }
 
       #backgroundRotationText
@@ -78,17 +81,17 @@
           height: auto;
       }
 
-      #backgroundImage
+      #mainCanvas
       {
-          background-image: url("images/splashbackground.jpg");
-          background-size: cover;
-          background-position: center center;
-          background-repeat: no-repeat;
-          background-attachment: fixed;
-          position: fixed;
-          width: 100%;
-          height: 100%;
-          opacity: 0;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        z-index: 10;
+        /* width: 100%;
+        height: 100%; */
+        /* margin-left: auto;
+        margin-right: auto; */
+        /* display: block; */
       }
 
       #giftagramLogoContainer
@@ -97,6 +100,7 @@
           right: 380px;
           top: 350px;
           scale: 0.8;
+          z-index: 20;
       }
 
       #giftagramLogo
@@ -149,17 +153,22 @@
           opacity: 0;
       }
 
+      #particleGroup
+      {
+          position: absolute;
+          z-index: 20;
+      }
+
     </style>
   </head>
   <body>
 
     <div id="entryGreetingText">Turn your screen to landscape<br>This presentation contains audio<br>Click anywhere to begin</div>
 
-    <div id="particleEmitter"></div>
-    <div id="particleShooters"></div>
-
-    <!-- main background image -->
-    <div id="backgroundImage"></div>
+    <div id="particleGroup">
+      <div id="particleEmitter"></div>
+      <div id="particleShooters"></div>
+    </div>
 
     <!-- snow fall animation canvas -->
     <canvas id="snow"></canvas>
@@ -319,17 +328,25 @@
     </div>
     <!-- end rotating text animation -->
 
+    <!-- main background image using zTransitions style effect to spotlight in -->
+    <canvas id="mainCanvas" class="mainCanvas" width="1920" height="1080"></canvas>
+
     <audio id="music">
       <source src="" type="audio/mpeg">
     </audio>
 
   </body>
   <script src="js/gsap.min.js"></script>
+  <script src="js/easeljs.min.js"></script>
   <script src="js/snow.js"></script>
   <script src="js/sourcecodeanimation.js"></script>
   <script src="js/rotatingText.js"></script>
   <script src="js/giftagramlogo.js"></script>
   <script src="js/particleshooter.js"></script>
+  <script src="js/maskwall.js"></script>
+  <script src="js/spotlight.js"></script>
+  <script src="js/crossfade.js"></script>
+  <script src="js/background.js"></script>
 
   <script>
 
@@ -402,14 +419,9 @@
         //keyframe
         setTimeout(function(){
 
-            //fade in background image
-            gsap.to(document.getElementById("backgroundImage"), {
-                duration: 5,
-                opacity: .6,
-                z: 0,
-            });
+            selectMask(spotlight, "images/splashbackground.jpg");
 
-        }, 9000);
+        }, 8000);
 
         //keyframe
         setTimeout(function(){
@@ -445,13 +457,16 @@
         //keyframe
         setTimeout(function(){
 
+            selectMask(crossfade, "images/blackbg.png");
+
+/*
             //fade out background image
             gsap.to(document.getElementById("backgroundImage"), {
                 duration: 2.5,
                 opacity: 0,
                 z: 0,
             });
-
+*/
         }, 17000);
 
         //keyframe
