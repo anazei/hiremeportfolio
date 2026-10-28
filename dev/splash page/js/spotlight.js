@@ -34,7 +34,7 @@ var Spotlight = function(masterReference, mainCanvas)
         );
 
         radial.addColorStop(0, "rgba(255, 0, 0, 1)");
-        radial.addColorStop(0.5, "rgba(255, 0, 0, 0.4)");
+        radial.addColorStop(0.5, "rgba(255, 0, 0, 0.2)");
         radial.addColorStop(1, "rgba(255, 0, 0, 0)");
 
         maskContext.fillStyle = radial;
