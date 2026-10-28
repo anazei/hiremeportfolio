@@ -1,0 +1,224 @@
+  var heroTitleArray1 = new Array();
+  var heroTitleArray2 = new Array();
+  var heroTitleArray3 = new Array();
+  var heroTitleArray4 = new Array();
+
+  function createHeroTitle1(message)
+  {
+      var messageDiv2;
+      var messageDiv;
+
+      for(var i=0;i<message.length;i++)
+      {
+          messageDiv2 = document.createElement("span");
+              messageDiv2.innerHTML = message[i];
+              messageDiv2.style.marginRight = "4px";
+              messageDiv2.style.filter = "blur(" + parseInt(message.length - i) + "px)";
+              messageDiv2.style.textShadow = "0 0 " + parseInt(message.length - i) + "px rgba(255, 255, 255, 1)";
+              messageDiv2.style.scale = 1;
+              messageDiv2.style.display = "inline-block";
+              messageDiv2.style.opacity = 0;
+              messageDiv2.style.color = "white";
+              messageDiv2.style.position = "relative";
+              messageDiv2.style.top = "-30px";
+              messageDiv2.style.backgroundBlendMode = "screen";
+
+          heroTitleArray2.push(messageDiv2);
+
+          document.getElementById("heroTitle2").appendChild(messageDiv2);
+
+          messageDiv = document.createElement("span");
+              messageDiv.innerHTML = message[i];
+              messageDiv.style.marginRight = "4px";
+              messageDiv.style.filter = "blur(15px)";
+              messageDiv.style.textShadow = "0 0 10px rgba(255, 255, 255, 1)";
+              messageDiv.style.scale = 1;
+              messageDiv.style.display = "inline-block";
+              messageDiv.style.opacity = 0;
+              messageDiv.style.color = "white";
+              messageDiv.style.position = "relative";
+              messageDiv.style.top = "0px";
+              messageDiv.style.left = "0px";
+              messageDiv.style.backgroundBlendMode = "color-dodge";
+
+          heroTitleArray1.push(messageDiv);
+
+          document.getElementById("heroTitle1").appendChild(messageDiv);
+      }
+
+      //hero window animates in
+      gsap.fromTo("#heroTitleMasterContainer",
+        {
+          width: 0,
+          height: 175,
+          scaleX: 1,
+          scaleY: 0,
+          alpha: 0,
+        },
+        {
+          width: 1050,
+          height: 175,
+          scaleX: 1,
+          scaleY: 1,
+          alpha: 1,
+          duration: .35,
+          transformOrigin: "50% 50%",
+        });
+
+        for(let i=0;i<heroTitleArray2.length;i++)
+        {
+            gsap.to(heroTitleArray2[i], {
+              alpha: 1,
+              textShadow: "0 0 0px rgba(255, 255, 255, 1)",
+              filter: "blur(0px)",
+              duration: .75,
+              delay: i / 90,
+            });
+
+            gsap.to(heroTitleArray1[i], {
+              alpha: 1,
+              textShadow: "0 0 5px rgba(255, 255, 255, 0)",
+              filter: "blur(5px)",
+              duration: .5,
+              delay: i / 100,
+            });
+        }
+
+        gsap.to("#heroTitleContainer1", {
+          x: 100,
+          duration: 5,
+        });
+
+        gsap.to("#heroTitleContainer2", {
+          x: -100,
+          duration: 7,
+        });
+
+        setTimeout(function(){
+            createHeroTitle2("it's  the  thought  that  counts");
+        }, 1000);
+  }
+
+  function createHeroTitle2(message)
+  {
+      var messageDiv2;
+      var messageDiv;
+
+      for(var i=0;i<message.length;i++)
+      {
+          messageDiv2 = document.createElement("span");
+              messageDiv2.innerHTML = message[i];
+              messageDiv2.style.marginRight = "4px";
+              messageDiv2.style.filter = "blur(" + parseInt(message.length - i) + "px)";
+              messageDiv2.style.textShadow = "0 0 " + parseInt(message.length - i) + "px rgba(255, 255, 255, 1)";
+              messageDiv2.style.display = "inline-block";
+              messageDiv2.style.opacity = 0;
+              messageDiv2.style.color = "white";
+              messageDiv2.style.position = "relative";
+              messageDiv2.style.top = "35px";
+              messageDiv2.style.backgroundBlendMode = "screen";
+
+          heroTitleArray3.push(messageDiv2);
+
+          document.getElementById("heroTitle3").appendChild(messageDiv2);
+
+          messageDiv = document.createElement("span");
+              messageDiv.innerHTML = message[i];
+              messageDiv.style.marginRight = "4px";
+              messageDiv.style.filter = "blur(15px)";
+              messageDiv.style.textShadow = "0 0 10px rgba(255, 255, 255, 1)";
+              messageDiv.style.display = "inline-block";
+              messageDiv.style.opacity = 0;
+              messageDiv.style.color = "white";
+              messageDiv.style.position = "relative";
+              messageDiv.style.top = "0px";
+              messageDiv.style.left = "0px";
+              messageDiv.style.backgroundBlendMode = "color-dodge";
+
+          heroTitleArray4.push(messageDiv);
+
+          document.getElementById("heroTitle4").appendChild(messageDiv);
+      }
+
+      heroTitleArray3.reverse();
+      heroTitleArray4.reverse();
+
+      for(let i=0;i<heroTitleArray3.length;i++)
+      {
+          gsap.to(heroTitleArray3[i], {
+            alpha: 1,
+            textShadow: "0 0 0px rgba(255, 255, 255, 1)",
+            filter: "blur(0px)",
+            duration: .5,
+            delay: i / 150,
+          });
+
+          gsap.to(heroTitleArray4[i], {
+            alpha: 1,
+            textShadow: "0 0 5px rgba(255, 255, 255, 0)",
+            filter: "blur(5px)",
+            duration: .75,
+            delay: i / 100,
+          });
+      }
+  }
+
+  function animateOutHeroTitle()
+  {
+      for(let j=0;j<heroTitleArray2.length;j++)
+      {
+          gsap.to(heroTitleArray2[j], {
+            alpha: 0,
+            textShadow: "0 0 15px rgba(255, 255, 255, 1)",
+            filter: "blur(15px)",
+            duration: .75,
+            delay: j / 100,
+          });
+
+          gsap.to(heroTitleArray1[j], {
+            alpha: 0,
+            textShadow: "0 0 15px rgba(255, 255, 255, 0)",
+            filter: "blur(15px)",
+            duration: 1,
+            delay: j / 100,
+          });
+      }
+
+      setTimeout(function(){
+
+          //animate out second hero title line
+          for(var i=0;i<heroTitleArray3.length;i++)
+          {
+              gsap.to(heroTitleArray3[i], {
+                alpha: 0,
+                textShadow: "0 0 15px rgba(255, 255, 255, 1)",
+                filter: "blur(15px)",
+                duration: .75,
+                delay: i / 50,
+              });
+
+              gsap.to(heroTitleArray4[i], {
+                alpha: 0,
+                textShadow: "0 0 15px rgba(255, 255, 255, 0)",
+                filter: "blur(15px)",
+                duration: 1,
+                delay: i / 100,
+              });
+          }
+
+          //close hero window
+          gsap.to("#heroTitleMasterContainer",
+          {
+            scaleX: 0,
+            scaleY: 0,
+            alpha: 0,
+            duration: .35,
+            delay: 1,
+            transformOrigin: "50% 50%",
+          });
+
+      }, 500);
+  }
+
+  //createHeroTitle1("gift  giving  isn't  just  about  giving  things . . .");
+  //animateOutHeroTitle()

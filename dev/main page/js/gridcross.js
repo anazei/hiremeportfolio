@@ -1,0 +1,490 @@
+  var gridArray = new Array();
+  var crossArray = new Array();
+  var numGridX = Math.ceil(window.innerWidth / 26); //how many squares across
+  var numGridY = Math.ceil(window.innerHeight / 26); //how many squares down
+
+  //any animations and resize instant redraw can only occur when background grid state is actively displayed
+  //if the background grid state is inactive, then don't let any animation or resize instant draw occur
+  var currentBackgroundGridState = "inactive"; //starts at inactive and becomes active via animateInGridCrossBackground()
+
+  //create a single grid square
+  function createNewGridSquare(xPosition, yPosition, id, animateIn=true)
+  {
+      var squareDiv = document.createElement("div");
+          squareDiv.id = "gridSquare" + id;
+
+          //squareDiv.innerHTML = id; //for debugging only
+          //squareDiv.style.fontSize = "8pt"; //for debugging only
+          //squareDiv.style.color = "#000000"; //for debugging only
+
+          squareDiv.style.opacity = 0;
+          squareDiv.style.position = "absolute";
+
+          squareDiv.style.scale = 1;
+          //squareDiv.style.left = xPosition + "px";
+          //squareDiv.style.top = yPosition + "px";
+
+          //squareDiv.style.willChange = "transform";
+          squareDiv.style.transform = "translate3d(" + xPosition + "px, " + yPosition + "px, 0px)";
+
+          squareDiv.style.width = "25px";
+          squareDiv.style.height = "25px";
+          squareDiv.style.borderWidth = "1px";
+          squareDiv.style.borderStyle = "solid";
+          squareDiv.style.borderColor = "#808080";
+      document.getElementById("masterGrid").appendChild(squareDiv);
+
+      if(animateIn == true)
+      {
+          //animate grid in
+          gsap.to(squareDiv, {
+            borderColor: "#141414",
+            opacity: 1,
+            //scale: 1,
+            duration: .35, //animate speed
+            delay: id / 1500, //animate speed, higher the number the faster
+          });
+      } else {
+          squareDiv.style.opacity = 1;
+          squareDiv.style.scale = 1;
+          squareDiv.style.borderColor = "#141414";
+      }
+
+      gridArray.push(squareDiv);
+  }
+
+  //create the entire grid
+  function animateInGrid(animateIn=true)
+  {
+      currentBackgroundGridState = "active";
+      var totalGridSquares = Math.round(numGridX * numGridY); //total number of squares
+      var heightRowCounter = 0;
+
+      for(var i=0;i<totalGridSquares;i++)
+      {
+          //for stop breakpoint debugging
+          /*
+          if(i == 73)
+          {
+             new Array();
+          }
+          */
+
+          if(i % numGridX == 0)
+          {
+              if(i !== 0)
+              {
+                  heightRowCounter++;
+              }
+          }
+
+          createNewGridSquare(((i % numGridX) * 26), heightRowCounter * 26, i, animateIn);
+      }
+  }
+
+  //find out grid square's X and Y position based on its array number position
+  function getGridSquareXYNum(numInArray)
+  {
+      return [numInArray % numGridX, Math.floor(numInArray / numGridX)]; //x, y
+  }
+
+  //get the grid square number in the array
+  function getGridSquareNumber(x, y)
+  {
+      if(x <= numGridX
+      && y <= numGridY)
+      {
+          return x + (numGridX * y); //valid grid square
+      } else {
+          return NaN; //error, grid square does not physically exist on screen
+      }
+  }
+
+  //light up specific grid square based on gridArray[i] position
+  function findAndLightupSquareGrid(gridNum)
+  {
+      var position = getGridSquareXYNum(gridNum);
+      lightupGridSquare(position[0], position[1]);
+  }
+
+  //light up specific grid square based on x, y, includes little random lightup animation
+  function lightupGridSquare(x, y, randomDuration=true)
+  {
+      var durationIn = 0;
+      var durationOut = 0;
+
+      if(randomDuration == true)
+      {
+          //regular rolling grid animation only
+          durationIn = Math.random();
+          durationOut = Math.random() * .35;
+      } else {
+          //these timings are for circulation grid animation only
+          durationIn = .1;
+          durationOut = .15;
+      }
+
+      var gridSquare = gridArray[getGridSquareNumber(x, y)];
+
+      if(gridSquare !== undefined)
+      {
+          gridSquare.style.borderColor = "#657575";
+
+          gsap.to(gridSquare, {
+            scale: 1.25,
+            borderColor: "#566464",
+            duration: durationIn,
+
+            onComplete: function(){
+
+              gsap.to(gridSquare, {
+                scale: 1,
+                borderColor: "#141414",
+                duration: durationOut,
+              });
+            }
+          });
+      } else {
+          //console.log("error: grid square requested does not exist");
+      }
+  }
+
+  //creates a single white cross at specific x, y position
+  function createCross(x, y, id, animateIn=true)
+  {
+      var crossContainer = document.createElement("div");
+          crossContainer.id = "crossContainer" + id;
+          crossContainer.style.opacity = 0;
+          crossContainer.style.scale = 3;
+          crossContainer.style.left = x + "px";
+          crossContainer.style.top = y + "px";
+          crossContainer.style.position = "absolute";
+
+      var crossVertical = document.createElement("div");
+          crossVertical.style.position = "absolute";
+          crossVertical.style.left = 0 + "px";
+          crossVertical.style.top = -10 + "px";
+          crossVertical.style.width = 1 + "px";
+          crossVertical.style.height = 20 + "px";
+          crossVertical.style.backgroundColor = "#4E5959";
+
+      var crossHorizontal = document.createElement("div");
+          crossHorizontal.style.position = "absolute";
+          crossHorizontal.style.left = -10 + "px";
+          crossHorizontal.style.top = 0 + "px";
+          crossHorizontal.style.width = 20 + "px";
+          crossHorizontal.style.height = 1 + "px";
+          crossHorizontal.style.backgroundColor = "#4E5959";
+
+      document.getElementById("masterCross").appendChild(crossContainer);
+      document.getElementById("crossContainer" + id).appendChild(crossVertical);
+      document.getElementById("crossContainer" + id).appendChild(crossHorizontal);
+
+      crossArray.push(crossContainer);
+
+      if(animateIn == true)
+      {
+          //animate crosses in
+          gsap.to(crossContainer, {
+            opacity: 1,
+            scale: 1,
+            duration: id * .05, //animate speed
+            delay: (id * 75) / 2500, //animate speed, higher the number the faster
+          });
+      } else {
+          crossContainer.style.opacity = 1;
+          crossContainer.style.scale = 1;
+      }
+  }
+
+  //create crosses 8x8 across the grid
+  function animateInCrossesOnGrid(animateIn=true)
+  {
+      var numCrossX = Math.ceil(window.innerWidth / 26 / 8); //how many crosses across screen
+      var numCrossY = Math.ceil(window.innerHeight / 26 / 8); //how many crosses down across screen
+      var totalCrossSquares = Math.round(numCrossX * numCrossY); //total number of crosses to display
+      var heightRowCounter = 0;
+
+      for(var i=0;i<totalCrossSquares;i++)
+      {
+          if(i % numCrossX == 0)
+          {
+              if(i !== 0)
+              {
+                  heightRowCounter += 26 * 8; //increment y by 8 squares
+              }
+          }
+
+          createCross(i % numCrossX * 26 * 8, heightRowCounter, i, animateIn);
+      }
+  }
+
+  //create random scattered background grid animation - good for helping transitioning text in/out as background
+  function animateBackgroundGrid(minRange, maxRange)
+  {
+      if(currentBackgroundGridState == "active")
+      {
+          var totalGridSquares = Math.round(numGridX * numGridY); //total number of squares
+
+          for(var i=0;i<totalGridSquares;i++)
+          {
+              //left and right range limits
+              if(getGridSquareXYNum(i)[0] > minRange
+              && getGridSquareXYNum(i)[0] < maxRange )
+              {
+                  //25% chance of randomly lighting up
+                  if(Math.round(Math.random() * 4) == 1)
+                  {
+                      findAndLightupSquareGrid(i);
+                  }
+              }
+          }
+      } else {
+          console.log("background grid cross state is not active");
+      }
+  }
+
+  //create a rolling grid animation
+  function animateRollingGrid(minRange, maxRange)
+  {
+      if(currentBackgroundGridState == "active")
+      {
+          var numColumns = Math.floor(window.innerWidth / 26); //how many squares across
+          var numRows = Math.floor(window.innerHeight / 26); //how many rows of squares there are
+          var counter = 0;
+
+          var delayer = setInterval(function(){
+
+              var xGrid = Math.min(Math.round(Math.random() * (maxRange - minRange)) + minRange, numColumns);
+              lightupGridSquare(xGrid, counter);
+
+              if(counter == numRows)
+              {
+                  counter = 0;
+                  clearInterval(delayer);
+              } else {
+                  counter++;
+              }
+
+          }, 25);
+      } else {
+          console.log("background grid cross state is not active");
+      }
+  }
+
+  //debugging to help find grid squares visually
+  function highlightGridSquareDebug(x, y)
+  {
+      var gridSquare = gridArray[getGridSquareNumber(x, y)];
+          gridSquare.style.borderColor = "white";
+          gridSquare.style.zIndex = 100;
+  }
+
+  //create a circular animation from any origin x, y position
+  function circularGridAnimation(x, y, radius)
+  {
+      if(currentBackgroundGridState == "active")
+      {
+          var counter = 0;
+
+          //because even at 1920x1080, there aren't anymore than 2500 grid squares,
+          //the radius will keep growing into non physical grid squares, so just clamp radius to hard stop number
+          //this will prevent the counter from counting thousands of intervals unnecessarily
+          radius = Math.min(20, radius);
+
+          var delayer = setInterval(function(){
+
+            if(counter !== radius)
+            {
+                //lightup circle around x, y origin
+                for(var i=0;i<360;i++)
+                {
+                    //ensure this function will ignore non existant grid squares
+                    lightupGridSquare(
+                      x + Math.round(Math.cos(i * Math.PI/180) * counter),
+                      y + Math.round(Math.sin(i * Math.PI/180) * counter),
+                      false
+                    );
+                }
+
+                counter++;
+            } else {
+                clearInterval(delayer);
+            }
+          }, 25);
+      } else {
+          console.log("background grid cross state is not active");
+      }
+  }
+
+  function removeGrid()
+  {
+      var masterGrid = document.getElementById("masterGrid");
+
+      while(masterGrid.children.length > 0)
+      {
+          masterGrid.removeChild(masterGrid.children[0]);
+      }
+
+      gridArray = [];
+  }
+
+  function removeCrosses()
+  {
+      var masterCross = document.getElementById("masterCross");
+
+      while(masterCross.children.length > 0)
+      {
+          masterCross.removeChild(masterCross.children[0]);
+      }
+
+      crossArray = [];
+  }
+
+  //shuffle an array
+  function randomizeArray(inputArray)
+  {
+      for(var i=0;i<inputArray.length;i++)
+      {
+          var randomPosition = Math.floor(Math.random() * inputArray.length);
+          var temp = inputArray[i];
+          inputArray[i] = inputArray[randomPosition];
+          inputArray[randomPosition] = temp;
+      }
+
+      return inputArray;
+  }
+
+  //transition off grid animation
+  function transitionOutGridAnimation()
+  {
+      gridArray.reverse();
+      //gridArray = randomizeArray(gridArray);
+
+      for(var i=0;i<gridArray.length;i++)
+      {
+          gsap.to(gridArray[i], {
+            scale: 1.25,
+            opacity: 0,
+            duration: Math.random(), //animate speed
+            delay: i / 2500, //animate speed, higher the number the faster
+          });
+      }
+
+      setTimeout(removeGrid, 2000);
+  }
+
+  //transition off cross animation
+  function transitionOutCrossAnimation()
+  {
+      crossArray.reverse();
+
+      for(var i=0;i<crossArray.length;i++)
+      {
+          gsap.to(crossArray[i], {
+            //scale: 1.25,
+            opacity: 0,
+            duration: 2, //animate speed
+            delay: i / 50, //animate speed, higher the number the faster
+          });
+      }
+
+      setTimeout(removeCrosses, 2000);
+  }
+
+  //transition out animation of grid and crosses
+  function animateOutGridCrossBackground()
+  {
+      if(currentBackgroundGridState == "active")
+      {
+          transitionOutGridAnimation();
+          transitionOutCrossAnimation();
+          currentBackgroundGridState = "inactive";
+      } else {
+          console.log("background grid cross state is not active");
+      }
+  }
+
+  //in the event of an onResize event, instantly redraw all grid and crosses without animations
+  function instantRedraw()
+  {
+      if(currentBackgroundGridState == "active")
+      {
+          removeGrid();
+          removeCrosses();
+          animateInGrid(false);
+          animateInCrossesOnGrid(false);
+      } else {
+          console.log("background grid cross state is not active");
+      }
+  }
+
+  //on resize, re-render background grid and crosses
+  function onResizeGridArray()
+  {
+      if(currentBackgroundGridState == "active")
+      {
+          console.log("on resize");
+          numGridX = Math.ceil(window.innerWidth / 26); //update how many squares across
+          numGridY = Math.ceil(window.innerHeight / 26); //update how many squares down
+          instantRedraw();
+      } else {
+          console.log("background grid cross state is not active");
+      }
+  }
+
+  //main animate in background function
+  function animateInGridCrossBackground()
+  {
+      if(currentBackgroundGridState == "inactive")
+      {
+          currentBackgroundGridState == "active";
+          animateInGrid();
+          setTimeout(animateInCrossesOnGrid, 750);
+      } else {
+          console.log("cannot animate in because background grid cross state is already active");
+      }
+  }
+
+  //animateInGridCrossBackground();
+  //animateBackgroundGrid(5, 15)
+  //animateRollingGrid(15, 20)
+  //animateOutGridCrossBackground()
+  //instantRedraw()
+  //circularGridAnimation(25, 25, 10)
+
+  window.addEventListener("resize", onResizeGridArray);
+
+  /*
+    QA test cases:
+
+      1) animate in grid and crosses works - ok
+      2) animate background grid works - ok
+      3) animate rolling background grid works - ok
+      4) animate circular grid works - ok
+      5) on resize instant redraws grid and crosses without animation - ok
+
+      6) after on resize instant redraw, animate background grid still works - ok
+      7) after on resize instant redraw, animate rolling background grid still works - ok
+      8) after on resize instant redraw, animate circular grid still works - ok
+
+      9) animate out grid and crosses works - ok
+
+      10) after animate out, animate background grid should not be able to run - ok
+      11) after animate out, animate rolling background grid should not be able to run - ok
+      12) after animate out, animate circular grid should not be able to run - ok
+      13) after animate out, on resize instant redraws grid and crosses should not be able to run - ok
+      14) after animate out, only animate in grid and crosses sequence can run - ok
+
+      15) after animate in second time, repeat testing: animate in grid and crosses works - ok
+      16) after animate in second time, repeat testing: animate background grid works - ok
+      17) after animate in second time, repeat testing: animate rolling background grid works - ok
+      18) after animate in second time, repeat testing: animate circular grid works - ok
+      19) after animate in second time, repeat testing: on resize instant redraws grid and crosses without animation - ok
+
+      20) after animate in second time and onResize, animate background grid works - ok
+      21) after animate in second time and onResize, animate rolling background grid works - ok
+      22) after animate in second time and onResize, animate circular grid works - ok
+      23) after animate in second time and onResize, animate out grid and crosses works
+
+  */
