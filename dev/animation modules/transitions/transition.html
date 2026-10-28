@@ -144,7 +144,7 @@
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCanvas.id = id;
-            tempCanvas.style.display = "block";
+            tempCanvas.style.display = "none";
             document.body.appendChild(tempCanvas);
         }
 
@@ -159,7 +159,10 @@
 
     resizeCanvas();
 
-    selectMask(maskwall, "background.png"); //maskwall, spotlight, crossfade
+    //selectMask can run crossfade, spotlight or maskwall as inputs at any time to change transitions
+    selectMask(crossfade, "background.png");
+    selectMask(spotlight, "background.png");
+    selectMask(maskwall, "background.png");
 
   </script>
 </html>

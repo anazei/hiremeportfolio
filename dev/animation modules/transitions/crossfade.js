@@ -20,7 +20,7 @@ var Crossfade = function(masterReference, mainCanvas)
     var xPosition = -1;
     var yPosition = -1;
 
-    var canvasHeight = Math.ceil(mainCanvas.height / 5);
+    var canvasHeight = Math.ceil(mainCanvas.height / 15);
 
     function setupMask()
     {
@@ -29,13 +29,13 @@ var Crossfade = function(masterReference, mainCanvas)
           xPosition++;
 
           var roundRect = new createjs.Shape();
-          roundRect.graphics.beginFill("red").drawRoundRect(0, 0, mainCanvas.width, 5, 0, 0, 0, 0);
+          roundRect.graphics.beginFill("red").drawRoundRect(0, 0, mainCanvas.width, 15, 0, 0, 0, 0);
 
           if(i % 1 == 0
           && i !== 0)
           {
             xPosition = 0;
-            yPosition += 5;
+            yPosition += 15;
           }
 
           roundRect.alpha = 0;
@@ -57,9 +57,9 @@ var Crossfade = function(masterReference, mainCanvas)
         for(let i=0;i<crossFadeBoxArray.length;i++)
         {
             gsap.to(crossFadeBoxArray[i], {
-              duration: 2,
+              duration: 1.5,
               alpha: 1,
-              delay: i / 200,
+              delay: i / 400,
               onUpdate: function(){
                   stage.update();
               },
@@ -77,12 +77,14 @@ var Crossfade = function(masterReference, mainCanvas)
 
     function resetMaskState()
     {
-        //crossFadeBoxArray.reverse();
+        crossFadeBoxArray.reverse();
 
         for(var i=0;i<crossFadeBoxArray.length;i++)
         {
             crossFadeBoxArray[i].alpha = 0;
         }
+
+        maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     }
 
     //creates invisible canvas for buffering
@@ -98,7 +100,7 @@ var Crossfade = function(masterReference, mainCanvas)
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCanvas.id = id;
-            tempCanvas.style.display = "block";
+            tempCanvas.style.display = "none";
             document.body.appendChild(tempCanvas);
         }
 

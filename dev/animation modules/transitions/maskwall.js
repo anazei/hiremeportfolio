@@ -54,7 +54,7 @@ var Maskwall = function(masterReference, mainCanvas)
 
     function startAnimate()
     {
-        for(var i=0;i<boxArray.length;i++)
+        for(let i=0;i<boxArray.length;i++)
         {
             gsap.to(boxArray[i], {
               duration: .75,
@@ -65,18 +65,31 @@ var Maskwall = function(masterReference, mainCanvas)
               onUpdate: function(){
                   stage.update();
               },
+              onComplete: function(){
+
+                  if(i == boxArray.length - 1)
+                  {
+                    resetMaskState();
+                  }
+              }
             });
         }
     }
 
     function resetMaskState()
     {
+        console.log("rset mask state")
+
+        parentReference.onMaskComplete();
+
         boxArray.reverse();
 
         for(var i=0;i<boxArray.length;i++)
         {
             boxArray[i].scaleX = boxArray[i].scaleY = 0;
         }
+
+        maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     }
 
     //creates invisible canvas for buffering
@@ -93,7 +106,7 @@ var Maskwall = function(masterReference, mainCanvas)
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCanvas.id = id;
-            tempCanvas.style.display = "block";
+            tempCanvas.style.display = "none";
             document.body.appendChild(tempCanvas);
         }
 

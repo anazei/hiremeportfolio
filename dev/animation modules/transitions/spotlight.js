@@ -56,7 +56,7 @@ var Spotlight = function(masterReference, mainCanvas)
         gsap.to(rectangle, {
           alpha: 1,
           duration: 2,
-          delay: 1,
+          delay: .5,
           onUpdate: setupMask,
           onComplete: resetMaskState,
         });
@@ -64,9 +64,12 @@ var Spotlight = function(masterReference, mainCanvas)
 
     function resetMaskState()
     {
+        parentReference.onMaskComplete();
+
         gradient.radius = 0
         rectangle.alpha = 0;
-        //maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     }
 
     //creates invisible canvas for buffering
@@ -83,7 +86,7 @@ var Spotlight = function(masterReference, mainCanvas)
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCanvas.id = id;
-            tempCanvas.style.display = "block";
+            tempCanvas.style.display = "none";
             document.body.appendChild(tempCanvas);
         }
 
