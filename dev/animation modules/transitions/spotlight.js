@@ -12,21 +12,53 @@ var Spotlight = function(masterReference, mainCanvas)
     var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
     var maskContext = maskCanvas.getContext("2d");
 
-    var stage = new createjs.Stage("maskCanvas"); //switch to bufferCanvas later
+    var stage = new createjs.Stage("maskCanvas");
     var maskContainer = new createjs.Container();
 
-    gsap.ticker.add(function() {
-        stage.update();
-    });
+    //tweenable properties
+    var gradient = {
+      radius: 0
+    };
+
+    var rectangle = {
+      alpha: 0,
+    };
 
     function setupMask()
     {
+        maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
+        const radial = maskContext.createRadialGradient(
+            mainCanvas.width / 2, mainCanvas.height / 2, 0,
+            mainCanvas.width / 2, mainCanvas.height / 2, Math.max(gradient.radius, 0.01)
+        );
+
+        radial.addColorStop(0, "rgba(255, 0, 0, 1)");
+        radial.addColorStop(0.5, "rgba(255, 0, 0, 0.7)");
+        radial.addColorStop(1, "rgba(255, 0, 0, 0)");
+
+        maskContext.fillStyle = radial;
+        maskContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        maskContext.fillStyle = "rgba(255, 0, 0," + rectangle.alpha + ")";
+        maskContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
     }
 
     function startAnimate()
     {
+        gsap.to(gradient, {
+          radius: 900,
+          duration: 3,
+          ease: "power2.out",
+          onUpdate: setupMask
+        });
 
+        gsap.to(rectangle, {
+          alpha: 1,
+          duration: 1,
+          delay: 2,
+          onUpdate: setupMask
+        });
     }
 
     function resetMaskState()

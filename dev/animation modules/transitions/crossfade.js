@@ -15,9 +15,9 @@ var Crossfade = function(masterReference, mainCanvas)
     var stage = new createjs.Stage("maskCanvas"); //switch to bufferCanvas later
     var maskContainer = new createjs.Container();
 
-    gsap.ticker.add(function() {
-        stage.update();
-    });
+    // gsap.ticker.add(function() {
+    //     stage.update();
+    // });
 
     var crossFadeBoxArray = new Array();
 
@@ -64,6 +64,9 @@ var Crossfade = function(masterReference, mainCanvas)
               duration: 2,
               alpha: 0,
               delay: i / 200,
+              onUpdate: function(){
+                  stage.update();
+              },
               onComplete: function(){
 
                   if(i == crossFadeBoxArray.length - 1)

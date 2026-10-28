@@ -38,15 +38,15 @@
     var mainCanvas = document.getElementById("mainCanvas");
     var mainContext = mainCanvas.getContext("2d");
 
-    var crossfade = new Crossfade(this, mainCanvas);
+    //var crossfade = new Crossfade(this, mainCanvas);
     //var maskwall = new Maskwall(this, mainCanvas);
-    //var spotlight = new Spotlight(this, mainCanvas);
+    var spotlight = new Spotlight(this, mainCanvas);
 
     var currentMask;
 
     var runOnMainLoop = false;
 
-    var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display
+    var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display at start
     var originalContext = originalImage.getContext("2d");
         originalContext.fillStyle = "#000000";
         originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
@@ -159,7 +159,7 @@
 
     resizeCanvas();
 
-    selectMask(crossfade, "background.png"); //maskwall, spotlight, crossfade
+    selectMask(spotlight, "background.png"); //maskwall, spotlight, crossfade
 
   </script>
 </html>
