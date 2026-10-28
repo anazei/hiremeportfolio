@@ -22,21 +22,21 @@ var Maskwall = function(masterReference, mainCanvas)
 
     function setupMask()
     {
-        for(var i=0;i<250;i++)
+        for(var i=0;i<155;i++)
         {
           xPosition++;
 
           var roundRect = new createjs.Shape();
           roundRect.graphics.beginFill("red").drawRoundRect(0, 0, 150, 100, 25, 25, 25, 25);
 
-          if(i % Math.ceil(mainCanvas.width / 150) == 0
+          if(i % 7 == 0
           && i !== 0)
           {
             xPosition = 0;
             yPosition += 50; //tighten up the spacing so it can achieve the roll down effect
           }
 
-          roundRect.x = xPosition * 200;
+          roundRect.x = xPosition * 300;
           roundRect.y = yPosition;
           roundRect.regX = 75;
           roundRect.regY = 30;
@@ -60,7 +60,8 @@ var Maskwall = function(masterReference, mainCanvas)
               duration: .75,
               scaleX: 2,
               scaleY: 1.5,
-              delay: i / 400,
+              delay: i / 600,
+              ease: "power1.inOut",
               onUpdate: function(){
                   stage.update();
               },

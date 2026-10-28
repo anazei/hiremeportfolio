@@ -64,8 +64,8 @@ var Spotlight = function(masterReference, mainCanvas)
 
     function resetMaskState()
     {
-        //gradient.radius = 900
-        //rectangle.alpha = 1;
+        gradient.radius = 0
+        rectangle.alpha = 0;
         //maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     }
 
