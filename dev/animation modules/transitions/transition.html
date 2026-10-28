@@ -38,8 +38,8 @@
     var mainCanvas = document.getElementById("mainCanvas");
     var mainContext = mainCanvas.getContext("2d");
 
-    //var crossfade = new Crossfade(this, mainCanvas);
-    //var maskwall = new Maskwall(this, mainCanvas);
+    var crossfade = new Crossfade(this, mainCanvas);
+    var maskwall = new Maskwall(this, mainCanvas);
     var spotlight = new Spotlight(this, mainCanvas);
 
     var currentMask;
@@ -94,12 +94,12 @@
         mainContext.globalCompositeOperation = "source-in";
 
         // 2) then newImage will automatically get masked
-        mainContext.drawImage(originalImage, 0, 0); //draw out originalImage
+        mainContext.drawImage(newImage, 0, 0); //draw out originalImage
 
         mainContext.globalCompositeOperation = "destination-atop";
 
         // 3) originalImage gets drawn last with "destination-atop" set beforehand
-        mainContext.drawImage(newImage, 0, 0); //draw out newImage
+        mainContext.drawImage(originalImage, 0, 0); //draw out newImage
 
         if(runOnMainLoop == true)
         {
@@ -159,7 +159,7 @@
 
     resizeCanvas();
 
-    selectMask(spotlight, "background.png"); //maskwall, spotlight, crossfade
+    selectMask(maskwall, "background.png"); //maskwall, spotlight, crossfade
 
   </script>
 </html>

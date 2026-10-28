@@ -15,10 +15,6 @@ var Crossfade = function(masterReference, mainCanvas)
     var stage = new createjs.Stage("maskCanvas"); //switch to bufferCanvas later
     var maskContainer = new createjs.Container();
 
-    // gsap.ticker.add(function() {
-    //     stage.update();
-    // });
-
     var crossFadeBoxArray = new Array();
 
     var xPosition = -1;
@@ -42,10 +38,10 @@ var Crossfade = function(masterReference, mainCanvas)
             yPosition += 5;
           }
 
+          roundRect.alpha = 0;
+
           roundRect.x = xPosition * mainCanvas.width;
           roundRect.y = yPosition;
-
-          roundRect.scaleX = roundRect.scaleY = 1;
 
           crossFadeBoxArray.push(roundRect);
 
@@ -62,7 +58,7 @@ var Crossfade = function(masterReference, mainCanvas)
         {
             gsap.to(crossFadeBoxArray[i], {
               duration: 2,
-              alpha: 0,
+              alpha: 1,
               delay: i / 200,
               onUpdate: function(){
                   stage.update();
@@ -85,7 +81,7 @@ var Crossfade = function(masterReference, mainCanvas)
 
         for(var i=0;i<crossFadeBoxArray.length;i++)
         {
-            crossFadeBoxArray[i].alpha = 1;
+            crossFadeBoxArray[i].alpha = 0;
         }
     }
 

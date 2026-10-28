@@ -48,22 +48,25 @@ var Spotlight = function(masterReference, mainCanvas)
     {
         gsap.to(gradient, {
           radius: 900,
-          duration: 3,
-          ease: "power2.out",
+          duration: 1,
+          //ease: "power2.in",
           onUpdate: setupMask
         });
 
         gsap.to(rectangle, {
           alpha: 1,
-          duration: 1,
-          delay: 2,
-          onUpdate: setupMask
+          duration: 2,
+          delay: 1,
+          onUpdate: setupMask,
+          onComplete: resetMaskState,
         });
     }
 
     function resetMaskState()
     {
-
+        //gradient.radius = 900
+        //rectangle.alpha = 1;
+        //maskContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
     }
 
     //creates invisible canvas for buffering
