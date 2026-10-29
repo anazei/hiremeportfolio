@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+
+      body
+      {
+          margin-left: 0px;
+          margin-right: 0px;
+          margin-top: 0px;
+          margin-bottom: 0px;
+          overflow-x: hidden;
+          overflow-y: hidden;
+          background-color: #000000;
+      }
+
+      #masterBufferContainer
+      {
+          position: absolute;
+          left: 350px;
+          top: 350px;
+      }
+
+      .bufferBar
+      {
+          width: 50px;
+          height: 2px;
+          background-color: white;
+          margin-bottom: 5px;
+          position: relative;
+      }
+
+      #bufferBarReadyText,
+      .bufferBarText
+      {
+          color: white;
+          font-size: 8pt;
+          font-family: monospace, sans-serif;
+          text-transform: uppercase;
+          position: relative;
+          left: 60px;
+          top: -95px;
+          opacity: 0;
+
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+      <div id="masterBufferContainer">
+
+        <div id="bufferBarsContainer">
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+            <div class="bufferBar"></div>
+        </div>
+
+        <div id="bufferBarText">
+          <div id="bufferBarText1" class="bufferBarText">Brainstorming...</div>
+          <div id="bufferBarText2" class="bufferBarText">Formal planning...</div>
+          <div id="bufferBarText3" class="bufferBarText">Storyboarding...</div>
+          <div id="bufferBarText4" class="bufferBarText">Design layout...</div>
+          <div id="bufferBarText5" class="bufferBarText">Create assets...</div>
+          <div id="bufferBarText6" class="bufferBarText">Develop animation...</div>
+          <div id="bufferBarText7" class="bufferBarText">Begin story...</div>
+        </div>
+
+        <div id="bufferBarReadyText">Ready</div>
+
+      </div>
+
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+
+  <script>
+
+    var bufferBarArray = new Array();
+    var bufferBarTextArray = new Array();
+    var flashReadyBufferText = true;
+    var bufferReadyTextDelayer;
+
+    function initBufferBars()
+    {
+        var bufferBarContainer = document.getElementById("bufferBarsContainer").children;
+        var bufferBarTextContainer = document.getElementById("bufferBarText").children;
+
+        for(var i=0;i<bufferBarContainer.length;i++)
+        {
+            bufferBarContainer[i].style.scaleX = 0;
+            bufferBarContainer[i].style.opacity = 1;
+            bufferBarContainer[i].style.transformOrigin = "50% 50%";
+
+            bufferBarArray.push(bufferBarContainer[i]);
+        }
+
+        for(var i=0;i<bufferBarTextContainer.length;i++)
+        {
+            bufferBarTextContainer[i].style.opacity = 0;
+
+            bufferBarTextArray.push(bufferBarTextContainer[i]);
+        }
+    }
+
+    function animateInBufferBars()
+    {
+        for(let i=0;i<bufferBarArray.length;i++)
+        {
+            gsap.fromTo(bufferBarArray[i],
+                {
+                    alpha: 0,
+                    transformOrigin: "50% 50%"
+                },
+                {
+                    alpha: 1,
+                    duration: 1,
+                    delay: i / 8,
+                }
+            );
+        }
+
+        for(let i=0;i<bufferBarTextArray.length;i++)
+        {
+            gsap.to(bufferBarTextArray[i],
+            {
+                alpha: 1,
+                duration: .5,
+                delay: i / 4,
+                onComplete: function(){
+                    if(i == bufferBarTextArray.length - 1)
+                    {
+                        bufferBarArray.reverse();
+                        bufferBarTextArray.reverse();
+
+                        flashBufferBarReadyText();
+                    }
+                }
+            });
+        }
+    }
+
+    function animateOutBufferBars()
+    {
+        for(var i=0;i<bufferBarArray.length;i++)
+        {
+            gsap.fromTo(bufferBarArray[i],
+                {
+                    scaleX: 1,
+                    alpha: 1,
+                    transformOrigin: "50% 50%"
+                },
+                {
+                    alpha: 0,
+                    scaleX: 0,
+                    duration: .35,
+                    delay: i / 25,
+                }
+            );
+        }
+
+        for(let i=0;i<bufferBarTextArray.length;i++)
+        {
+            gsap.to(bufferBarTextArray[i],
+            {
+                alpha: 0,
+                duration: .5,
+                delay: i / 25,
+                onComplete: function(){
+                    if(i == bufferBarTextArray.length - 1)
+                    {
+                        stopFlashBufferBarReadyText();
+                    }
+                }
+            });
+        }
+    }
+
+    function flashBufferBarReadyText()
+    {
+        var readyText = document.getElementById("bufferBarReadyText");
+        var counter = 0;
+
+        bufferReadyTextDelayer = setInterval(function(){
+
+            if(flashReadyBufferText == true)
+            {
+                if(counter % 2 == 0)
+                {
+                    readyText.style.opacity = 1;
+                } else {
+                    readyText.style.opacity = 0;
+                }
+
+                counter++;
+            } else {
+
+                readyText.style.opacity = 0;
+                clearInterval(bufferReadyTextDelayer)
+            }
+
+        }, 150)
+    }
+
+    function stopFlashBufferBarReadyText()
+    {
+        flashReadyBufferText = false;
+    }
+
+    initBufferBars();
+
+
+
+    animateInBufferBars();
+    //animateOutBufferBars();
+
+  </script>
+
+</html>

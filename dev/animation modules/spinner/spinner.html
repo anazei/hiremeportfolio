@@ -1,0 +1,120 @@
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <style>
+
+    body
+    {
+        background-color: black;
+    }
+
+    #circleContainer {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+    }
+
+    .rectangle {
+      position: absolute;
+      width: 8px;
+      height: 4px;
+      background-color: #D1D1D1;
+      transform-origin: 50% 50%;
+      /* border-radius: 5px; */
+    }
+
+  </style>
+
+  </head>
+  <body>
+
+    <div id="circleContainer"></div>
+
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script>
+
+    var rotateCircleSpinner = true;
+    var circleSpinnerDelayer;
+    var circleSpinnerAngle = 0;
+    var circleSpinnerArray = new Array();
+
+    function createCircleSpinner()
+    {
+        for(var i=0;i<24;i++)
+        {
+            const angle = (i / 24) * Math.PI * 2;
+            const degrees = angle * 180 / Math.PI + 90;
+
+            const rectangle = document.createElement("div");
+                  rectangle.className = "rectangle";
+                  rectangle.style.left = (80 + Math.cos(angle) * 45 - 20 / 2) + "px";
+                  rectangle.style.top = (100 + Math.sin(angle) * 45 - 50 / 2) + "px";
+                  rectangle.style.transform = `rotate(${degrees}deg)`;
+                  rectangle.style.opacity = 0;
+
+            document.getElementById("circleContainer").appendChild(rectangle);
+
+            circleSpinnerArray.push(rectangle);
+        }
+
+        circleSpinnerDelayer = setInterval(function(){
+
+            if(rotateCircleSpinner == true)
+            {
+                document.getElementById("circleContainer").style.transform = "rotate(" + circleSpinnerAngle + "deg)"
+
+                circleSpinnerAngle++;
+
+            } else {
+                clearInterval(circleSpinnerDelayer);
+            }
+
+        }, 100);
+
+        infiniteCircleSpinnerfadeInOut();
+    }
+
+    function infiniteCircleSpinnerfadeInOut()
+    {
+        for(let i=0;i<circleSpinnerArray.length;i++)
+        {
+            gsap.to(circleSpinnerArray[i], {
+                alpha: 1,
+                duration: 1,
+                delay: i / 15,
+                onComplete: function()
+                {
+                    gsap.to(circleSpinnerArray[i], {
+                        alpha: 0,
+                        duration: 1,
+                    });
+
+                    if(i == circleSpinnerArray.length - 1)
+                    {
+                        if(rotateCircleSpinner == true)
+                        {
+                            infiniteCircleSpinnerfadeInOut();
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function fadeOutCircleSpinner()
+    {
+        rotateCircleSpinner = false;
+    }
+
+
+
+    createCircleSpinner();
+    //fadeOutCircleSpinner();
+
+
+  </script>
+
+  </html>
