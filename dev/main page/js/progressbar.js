@@ -1,4 +1,4 @@
-  var progressAnimationNumberCounter = 10000;
+  var progressAnimationNumberCounter = 1000;
   var runProgressBarNumberCounter = true;
   var progressBarRotatingText;
 

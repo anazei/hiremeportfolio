@@ -20,6 +20,7 @@
           overflow-x: hidden;
           overflow-y: hidden;
           background-color: #000000;
+          user-select: none;
       }
 
       #mainCanvas
@@ -125,6 +126,57 @@
           letter-spacing: 0px;
       }
 
+      #masterBufferContainer
+      {
+          position: absolute;
+          left: 50px;
+          bottom: 0%;
+          z-index: 10;
+          opacity: 0.35;
+      }
+
+      .bufferBar
+      {
+          width: 50px;
+          height: 2px;
+          background-color: white;
+          margin-bottom: 5px;
+          position: relative;
+          opacity: 0;
+      }
+
+      #bufferBarReadyText,
+      .bufferBarText
+      {
+          color: white;
+          font-size: 8pt;
+          font-family: monospace, sans-serif;
+          text-transform: uppercase;
+          position: relative;
+          left: 60px;
+          top: -95px;
+          opacity: 0;
+      }
+
+      #circleContainer
+      {
+          position: relative;
+          top: -250px;
+          width: 150px;
+          height: 150px;
+          z-index: 10;
+      }
+
+      .rectangle
+      {
+          position: absolute;
+          width: 8px;
+          height: 4px;
+          background-color: #D1D1D1;
+          transform-origin: 50% 50%;
+          /* border-radius: 5px; */
+      }
+
     </style>
 
   </head>
@@ -166,7 +218,29 @@
     </div>
     <!-- end progress bar animation -->
 
+    <!-- begin buffer animation -->
+    <div id="masterBufferContainer">
 
+      <div id="bufferBarsContainer"></div>
+
+      <div id="bufferBarText">
+        <div id="bufferBarText1" class="bufferBarText">Brainstorming...</div>
+        <div id="bufferBarText2" class="bufferBarText">Formal planning...</div>
+        <div id="bufferBarText3" class="bufferBarText">Storyboarding...</div>
+        <div id="bufferBarText4" class="bufferBarText">Design layout...</div>
+        <div id="bufferBarText5" class="bufferBarText">Create assets...</div>
+        <div id="bufferBarText6" class="bufferBarText">Develop animation...</div>
+        <div id="bufferBarText7" class="bufferBarText">Begin story...</div>
+      </div>
+
+      <div id="bufferBarReadyText">Ready Go!</div>
+
+      <!-- begin circle spinner -->
+      <div id="circleContainer"></div>
+      <!-- end circle spinner -->
+
+    </div>
+    <!-- end buffer animation -->
 
   </body>
 
@@ -182,7 +256,8 @@
   <script src="js/gridcross.js"></script>
   <script src="js/progressbar.js"></script>
   <script src="js/herotitle.js"></script>
-
+  <script src="js/buffer.js"></script>
+  <script src="js/spinner.js"></script>
   <script>
 
     //animateInGridCrossBackground();
@@ -197,6 +272,12 @@
     //animateInProgressBarContainer();
     //animateOutProgressBarContainer();
 
+    //animateInBufferBars();
+    //animateOutBufferBars();
+
+    //createCircleSpinner();
+    //fadeOutCircleSpinner();
+
     var allowRollingGridEffect = true;
 
     function startMainPage()
@@ -205,19 +286,56 @@
         //setTimeout(function(){
         //}, 100);
 
+        //createCircleSpinner();
+
+        //keyframe
+        setTimeout(function(){
+
+            animateInBufferBars();
+
+        }, 1000);
+
+        //keyframe
+        setTimeout(function(){
+
+            //fadeOutCircleSpinner();
+
+        }, 1500);
+
         //keyframe
         setTimeout(function(){
 
             selectMask(crossfade, "images/background1.jpg");
 
-        }, 250);
+        }, 2000);
 
         //keyframe
         setTimeout(function(){
 
             animateInGridCrossBackground();
 
-        }, 1350);
+        }, 2500);
+
+        //keyframe
+        setTimeout(function(){
+
+            animateRollingGrid(15, 22);
+
+        }, 3500);
+
+        //keyframe
+        setTimeout(function(){
+
+            animateOutBufferBars();
+
+        }, 4000);
+
+        //keyframe
+        setTimeout(function(){
+
+            //circularGridAnimation(5, 25, 5)
+
+        }, 4250);
 
         //keyframe
         setTimeout(function(){
@@ -227,36 +345,64 @@
 
             animateInProgressBarContainer();
 
-        }, 1800);
+        }, 4500);
 
         //keyframe
         setTimeout(function(){
 
             createHeroTitle1("gift  giving  isn't  just  about  giving  things . . .");
 
-        }, 2500);
+        }, 5250);
 
         //keyframe
         setTimeout(function(){
 
-            animateRollingGrid(15, 22);
+            animateRollingGrid(30, 36);
 
-        }, 2800);
+        }, 8000);
 
         //keyframe
         setTimeout(function(){
 
             animateOutHeroTitle();
 
-        }, 5000);
+        }, 9000);
+
+        //keyframe
+        setTimeout(function(){
+
+            animateRollingGrid(10, 20);
+            //animateBackgroundGrid(10, 20)
+
+        }, 10250);
 
         //keyframe
         setTimeout(function(){
 
             animateOutProgressBarContainer();
 
-        }, 7000);
+        }, 11000);
 
+        //keyframe
+        setTimeout(function(){
+
+            selectMask(maskwall, "images/background2.jpg");
+
+        }, 11500);
+
+        //keyframe
+        setTimeout(function(){
+
+            animateOutGridCrossBackground();
+
+        }, 12500);
+
+        //keyframe
+        setTimeout(function(){
+
+            selectMask(crossfade, "images/blackbg.png");
+
+        }, 14500);
 
     }
 

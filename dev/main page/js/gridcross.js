@@ -364,9 +364,9 @@
       for(var i=0;i<gridArray.length;i++)
       {
           gsap.to(gridArray[i], {
-            scale: 1.25,
+            scale: 1,
             opacity: 0,
-            duration: Math.random(), //animate speed
+            duration: .35, //animate speed
             delay: i / 2500, //animate speed, higher the number the faster
           });
       }
