@@ -175,6 +175,42 @@
       }
   }
 
+  //this will fade out all story span tags in case there are multiple different text animations sharing the same line
+  function fadeOutAllStoryTextRandom(divID, reverse=false)
+  {
+      var storyTextDiv = document.getElementById(divID);
+      var storyTextArray = new Array();
+
+      for(var i=0;i<storyTextDiv.children.length;i++)
+      {
+          storyTextArray.push(storyTextDiv.children[i]);
+      }
+
+      storyTextArray = randomizeArray(storyTextArray);
+
+      if(reverse == true)
+      {
+          storyTextArray.reverse();
+      }
+
+      for(let i=0;i<storyTextArray.length;i++)
+      {
+          gsap.to(storyTextArray[i], {
+            duration: .35,
+            alpha: 0,
+            delay: i / 50,
+            onComplete: function(){
+
+                //remove span elements from html body
+                if(i == storyTextArray.length - 1)
+                {
+                    instantFadeOutStoryText(divID);
+                }
+            }
+          })
+      }
+  }
+
   //shuffle an array
   function randomizeArray(inputArray)
   {
@@ -230,7 +266,7 @@
       });
   });
 
-  createStoryWords("hello world hello world hello world", 250, 250, "storyText2", function(messageDiv, i){
+  createStoryCharactersRandom("hello world hello world hello world", 250, 250, "storyText2", function(messageDiv, i){
       gsap.fromTo(messageDiv,
         {
           y: i % 2 == 0 ? -Math.round(Math.random() * 25) + 15 : Math.round(Math.random() * 15) + 25,
@@ -247,3 +283,4 @@
 */
   //fadeOutAllStoryText("storyText", false)
   //fadeOutAllStoryText("storyText2", true)
+  //fadeOutAllStoryTextRandom("storyText", false)
