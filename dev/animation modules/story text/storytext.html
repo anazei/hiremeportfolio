@@ -13,7 +13,8 @@
           overflow-y: hidden;
       }
 
-      #storyText
+      #storyText,
+      #storyText2
       {
           position: absolute;
           color: #FABC66;
@@ -26,6 +27,7 @@
   <body>
 
       <div id="storyText"></div>
+      <div id="storyText2"></div>
 
   </body>
 
@@ -34,10 +36,10 @@
 
 
       //message, x/y position, how long message stays until it disappears, reverse fade out?, custom fade in function
-      function createStoryCharacters(message, x, y, duration, reverse=false, fadeInFunction)
+      function createStoryCharacters(message, x, y, divID, fadeInFunction)
       {
           var storyTextArray = new Array();
-          var storyTextDiv = document.getElementById("storyText");
+          var storyTextDiv = document.getElementById(divID);
 
           storyTextDiv.style.left = x + "px";
           storyTextDiv.style.top = y + "px";
@@ -54,39 +56,14 @@
 
               fadeInFunction(messageDiv, i);
           }
-
-          if(reverse == true)
-          {
-              storyTextArray.reverse();
-          }
-
-          setTimeout(function(){
-
-            for(let i=0;i<storyTextArray.length;i++)
-            {
-                gsap.to(storyTextArray[i], {
-                  duration: .5,
-                  alpha: 0,
-                  delay: i / 25,
-                  onComplete: function(){
-
-                      //remove span elements from html body
-                      setTimeout(function(){
-                          storyTextArray[i].remove();
-                      }, 2000);
-                  }
-                })
-            }
-
-          }, duration * 1000);
       }
 
       //message, x/y position, how long message stays until it disappears, reverse fade out?, custom fade in function
-      function createStoryWords(message, x, y, duration, reverse=false, fadeInFunction)
+      function createStoryWords(message, x, y, divID, fadeInFunction)
       {
           var wordArray = message.split(" ");
           var storyTextArray = new Array(); //divide the sentence by words
-          var storyTextDiv = document.getElementById("storyText");
+          var storyTextDiv = document.getElementById(divID);
 
           storyTextDiv.style.left = x + "px";
           storyTextDiv.style.top = y + "px";
@@ -103,34 +80,42 @@
 
               fadeInFunction(messageDiv, i);
           }
+      }
+
+      //this will fade out all story span tags in case there are multiple different text animations sharing the same line
+      function fadeOutAllStoryText(divID, reverse=false)
+      {
+          var storyTextDiv = document.getElementById(divID);
+          var storyTextArray = new Array();
+
+          for(var i=0;i<storyTextDiv.children.length;i++)
+          {
+              storyTextArray.push(storyTextDiv.children[i]);
+          }
 
           if(reverse == true)
           {
               storyTextArray.reverse();
           }
 
-          setTimeout(function(){
+          for(let i=0;i<storyTextArray.length;i++)
+          {
+              gsap.to(storyTextArray[i], {
+                duration: .5,
+                alpha: 0,
+                delay: i / 25,
+                onComplete: function(){
 
-            for(let i=0;i<storyTextArray.length;i++)
-            {
-                gsap.to(storyTextArray[i], {
-                  duration: .5,
-                  alpha: 0,
-                  delay: i / 25,
-                  onComplete: function(){
-
-                      //remove span elements from html body
-                      setTimeout(function(){
-                          storyTextArray[i].remove();
-                      }, 2000);
-                  }
-                })
-            }
-
-          }, duration * 1000);
+                    //remove span elements from html body
+                    setTimeout(function(){
+                        storyTextArray[i].remove();
+                    }, 2000);
+                }
+              })
+          }
       }
 
-      createStoryWords("hello world hello world hello world", 100, 100, 2, false, function(messageDiv, i){
+      createStoryWords("hello world hello world hello world", 100, 100, "storyText", function(messageDiv, i){
           gsap.fromTo(messageDiv,
             {
               y: 5,
@@ -150,7 +135,27 @@
           });
       });
 
-      createStoryWords("hello world hello world hello world", 250, 250, 2, false, function(messageDiv, i){
+      createStoryCharacters("hello world hello world hello world", 100, 100, "storyText", function(messageDiv, i){
+          gsap.fromTo(messageDiv,
+            {
+              y: 5,
+              scale: 2,
+              alpha: 0,
+              filter: "blur(2px)",
+
+            },
+            {
+              y: 0,
+              scale: 1,
+              filter: "blur(0px)",
+            duration: .35,
+            alpha: 1,
+            delay: i / 25,
+            ease: "Power2.in",
+          });
+      });
+
+      createStoryWords("hello world hello world hello world", 250, 250, "storyText2", function(messageDiv, i){
           gsap.fromTo(messageDiv,
             {
               y: i % 2 == 0 ? -Math.round(Math.random() * 25) + 15 : Math.round(Math.random() * 15) + 25,
@@ -165,6 +170,8 @@
           });
       });
 
+      //fadeOutAllStoryText("storyText", false)
+      //fadeOutAllStoryText("storyText2", true)
 
   </script>
 
