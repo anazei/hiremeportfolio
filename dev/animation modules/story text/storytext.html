@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+
+      body
+      {
+          background: #000000;
+          overflow-x: hidden;
+          overflow-y: hidden;
+      }
+
+      #storyText
+      {
+          position: absolute;
+          color: #FABC66;
+          font-size: 26pt;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+      <div id="storyText"></div>
+
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script>
+
+
+      //message, x/y position, how long message stays until it disappears, reverse fade out?, custom fade in function
+      function createStoryCharacters(message, x, y, duration, reverse=false, fadeInFunction)
+      {
+          var storyTextArray = new Array();
+          var storyTextDiv = document.getElementById("storyText");
+
+          storyTextDiv.style.left = x + "px";
+          storyTextDiv.style.top = y + "px";
+
+          for(var i=0;i<message.length;i++)
+          {
+              var messageDiv = document.createElement("span");
+                  messageDiv.innerHTML = message[i];
+                  messageDiv.style.marginRight = "2px";
+                  messageDiv.style.display = "inline-block";
+
+              storyTextArray.push(messageDiv);
+              storyTextDiv.appendChild(messageDiv);
+
+              fadeInFunction(messageDiv, i);
+          }
+
+          if(reverse == true)
+          {
+              storyTextArray.reverse();
+          }
+
+          setTimeout(function(){
+
+            for(let i=0;i<storyTextArray.length;i++)
+            {
+                gsap.to(storyTextArray[i], {
+                  duration: .5,
+                  alpha: 0,
+                  delay: i / 25,
+                  onComplete: function(){
+
+                      //remove span elements from html body
+                      setTimeout(function(){
+                          storyTextArray[i].remove();
+                      }, 2000);
+                  }
+                })
+            }
+
+          }, duration * 1000);
+      }
+
+      //message, x/y position, how long message stays until it disappears, reverse fade out?, custom fade in function
+      function createStoryWords(message, x, y, duration, reverse=false, fadeInFunction)
+      {
+          var wordArray = message.split(" ");
+          var storyTextArray = new Array(); //divide the sentence by words
+          var storyTextDiv = document.getElementById("storyText");
+
+          storyTextDiv.style.left = x + "px";
+          storyTextDiv.style.top = y + "px";
+
+          for(var i=0;i<wordArray.length;i++)
+          {
+              var messageDiv = document.createElement("span");
+                  messageDiv.innerHTML = wordArray[i];
+                  messageDiv.style.marginRight = "8px";
+                  messageDiv.style.display = "inline-block";
+
+              storyTextArray.push(messageDiv);
+              storyTextDiv.appendChild(messageDiv);
+
+              fadeInFunction(messageDiv, i);
+          }
+
+          if(reverse == true)
+          {
+              storyTextArray.reverse();
+          }
+
+          setTimeout(function(){
+
+            for(let i=0;i<storyTextArray.length;i++)
+            {
+                gsap.to(storyTextArray[i], {
+                  duration: .5,
+                  alpha: 0,
+                  delay: i / 25,
+                  onComplete: function(){
+
+                      //remove span elements from html body
+                      setTimeout(function(){
+                          storyTextArray[i].remove();
+                      }, 2000);
+                  }
+                })
+            }
+
+          }, duration * 1000);
+      }
+
+      createStoryWords("hello world hello world hello world", 100, 100, 2, false, function(messageDiv, i){
+          gsap.fromTo(messageDiv,
+            {
+              y: 5,
+              scale: 2,
+              alpha: 0,
+              filter: "blur(2px)",
+
+            },
+            {
+              y: 0,
+              scale: 1,
+              filter: "blur(0px)",
+            duration: .35,
+            alpha: 1,
+            delay: i / 25,
+            ease: "Power2.in",
+          });
+      });
+
+      createStoryWords("hello world hello world hello world", 250, 250, 2, false, function(messageDiv, i){
+          gsap.fromTo(messageDiv,
+            {
+              y: i % 2 == 0 ? -Math.round(Math.random() * 25) + 15 : Math.round(Math.random() * 15) + 25,
+              alpha: 0,
+            },
+            {
+              y: 0,
+            duration: 1,
+            alpha: 1,
+            delay: i / 7,
+            ease: "Power2.in",
+          });
+      });
+
+
+  </script>
+
+</html>
