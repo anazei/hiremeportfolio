@@ -6,7 +6,7 @@
   function generateRotatingProgressBarText(textLength)
   {
       progressAnimationNumberCounter += 46;
-      document.getElementById("scrambleTextProgressBar").innerHTML = "initializing..." + progressAnimationNumberCounter;
+      document.getElementById("scrambleTextProgressBar").innerHTML = "story state..." + progressAnimationNumberCounter;
   }
 
   function startProgressBarRotatingText()

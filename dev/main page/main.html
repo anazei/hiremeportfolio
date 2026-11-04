@@ -23,6 +23,14 @@
           user-select: none;
       }
 
+      #snow {
+        display:block;
+        width:100%;
+        height:100%;
+        position: fixed;
+        z-index: 30;
+      }
+
       #mainCanvas
       {
           position: fixed;
@@ -164,7 +172,7 @@
           top: -250px;
           width: 150px;
           height: 150px;
-          z-index: 10;
+          z-index: 30;
       }
 
       .rectangle
@@ -195,6 +203,9 @@
   </head>
 
   <body>
+
+    <!-- snow fall animation canvas -->
+    <canvas id="snow"></canvas>
 
     <!-- begin grid cross group background -->
     <div id="gridCrossGroup">
@@ -246,7 +257,7 @@
         <div id="bufferBarText7" class="bufferBarText">Begin story...</div>
       </div>
 
-      <div id="bufferBarReadyText">Ready Go!</div>
+      <div id="bufferBarReadyText">Ready and Action!</div>
 
       <!-- begin circle spinner -->
       <div id="circleContainer"></div>
@@ -273,6 +284,7 @@
 
   <!-- <script src="js/giftagramlogo.js"></script> -->
 
+  <script src="js/snow.js"></script>
   <script src="js/maskwall.js"></script>
   <script src="js/spotlight.js"></script>
   <script src="js/crossfade.js"></script>
@@ -371,7 +383,7 @@
         //setTimeout(function(){
         //}, 100);
 
-        //createCircleSpinner();
+        createCircleSpinner();
 
         //keyframe
         setTimeout(function(){
@@ -494,6 +506,9 @@
 
             selectMask(crossfade, "images/blackbg.png");
 
+            //start snow animation
+            requestAnimationFrame(animateSnow);
+
         }, 14500);
     }
 
@@ -512,8 +527,10 @@
                     y: 5,
                     scale: 1,
                     alpha: 0,
+                    shadowText: "0px 0px 50px rgba(250, 188, 102, 1)",
                   },
                   {
+                    shadowText: "0px 0px 50px rgba(250, 188, 102, 1)",
                     y: 0,
                     scale: 1,
                   duration: .35,
@@ -539,7 +556,7 @@
                     y: 0,
                     scale: 1,
                     filter: "blur(0px)",
-                  duration: 1.75,
+                  duration: 1,
                   alpha: 1,
                   delay: i / 25,
                 });
@@ -703,15 +720,15 @@
                 gsap.fromTo(messageDiv,
                   {
                     y: 5,
-                    scale: 1.5,
+                    scale: 2,
                     alpha: 0,
-                    //filter: "blur(5px)",
+                    filter: "blur(5px)",
                   },
                   {
                     y: 0,
                     scale: 1,
-                    //filter: "blur(0px)",
-                  duration: 1.5,
+                    filter: "blur(0px)",
+                  duration: 1,
                   alpha: 1,
                   delay: i / 75,
                 });
@@ -842,6 +859,13 @@
         //keyframe
         setTimeout(function(){
 
+            fadeOutAllStoryTextRandom("storyText5", false);
+
+        }, 23750);
+
+        //keyframe
+        setTimeout(function(){
+
             createStoryCharactersRandom("FOR THEIR AUTOMATED GIFT LOGISTICS", 50, screenHeight, "storyText6", function(messageDiv, i){
                 gsap.fromTo(messageDiv,
                   {
@@ -860,14 +884,7 @@
                 });
             });
 
-        }, 23500);
-
-        //keyframe
-        setTimeout(function(){
-
-            fadeOutAllStoryTextRandom("storyText5", false);
-
-        }, 23750);
+        }, 23000);
 
         //keyframe
         setTimeout(function(){
@@ -879,10 +896,783 @@
         //keyframe
         setTimeout(function(){
 
-
-
+            createStoryCharactersRandom("I HAVE STRONG TECHNICAL ", 50, screenHeight, "storyText", function(messageDiv, i){
+                gsap.fromTo(messageDiv,
+                  {
+                    x: 5,
+                    //scale: 2,
+                    alpha: 0,
+                    filter: "blur(10px)",
+                  },
+                  {
+                    x: 0,
+                    //scale: 1,
+                    filter: "blur(0px)",
+                  duration: 1,
+                  alpha: 1,
+                  delay: i / 50,
+                });
+            });
 
         }, 28000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharactersRandom("AND PROBLEM SOLVING EXPERIENCE", 50, screenHeight, "storyText", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -5,
+                  //scale: 2,
+                  alpha: 0,
+                  filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 50,
+              });
+          });
+
+        }, 29500);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText", true);
+
+        }, 32000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharactersRandom("DESIGNING AND BUILDING", window.innerWidth / 2, screenHeight, "storyText2", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -5,
+                  //scale: 2,
+                  alpha: 0,
+                  filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 50,
+              });
+          });
+
+        }, 32250);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("BUSINESS AUTOMATION AND INFRASTRUCTURE ", 50, screenHeight, "storyText3", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 5,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 34000);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText2", false);
+
+        }, 34500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("FROM SCRATCH", 50, screenHeight, "storyText3", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -5,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 35750);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText3", false);
+
+        }, 37000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("INCLUDING A LARGE SCALE DAILY DATA INGEST PROCESS", 50, screenHeight, "storyText4", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 50,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 2,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 37500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("A REAL ESTATE VECTOR SEARCH API", 50, screenHeight + 50, "storyText5", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 50,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 2,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 38500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("A CUSTOM CALENDAR SCHEDULING SERVICE", 50, screenHeight + 100, "storyText6", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 50,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 2,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 39500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("HUBSPOT CRM INTEGRATION", 50, screenHeight + 150, "storyText", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 50,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 2,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 40500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("AND SHIPPING CARRIER API INTEGRATIONS", 50, screenHeight + 200, "storyText2", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 50,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 2,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 41500);
+
+        //keyframe
+        setTimeout(function(){
+
+          fadeOutAllStoryText("storyText4", false);
+          fadeOutAllStoryText("storyText5", false);
+          fadeOutAllStoryText("storyText6", false);
+          fadeOutAllStoryText("storyText", false);
+          fadeOutAllStoryText("storyText2", false);
+
+        }, 46000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("I HAVE THE TECH SKILLS ", 50, screenHeight, "storyText3", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -5,
+                  y: -5,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 48000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("BUT I ALSO UNDERSTAND THE BUSINESS SIDE", 50, screenHeight, "storyText3", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: 5,
+                  y: 5,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(0px)",
+                },
+                {
+                  x: 0,
+                  y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 50000);
+
+        //keyframe
+        setTimeout(function(){
+
+          fadeOutAllStoryText("storyText3", false);
+
+        }, 51000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("I UNDERSTAND THAT EVERY DECISION ", 50, screenHeight, "storyText5", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 52500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("SHOULD HELP LEAD", 50, screenHeight, "storyText5", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  y: 10,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 50,
+              });
+          });
+
+        }, 53750);
+
+        //keyframe
+        setTimeout(function(){
+
+            instantFadeOutStoryText("storyText5")
+
+        }, 55250);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("TO MORE EVENTUAL BUSINESS GROWTH AND SALES", 50, screenHeight, "storyText6", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 55500);
+
+        //keyframe
+        setTimeout(function(){
+
+          fadeOutAllStoryText("storyText6");
+
+        }, 57000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("SO THIS IS AN OPPORTUNITY FOR YOU ", 50, screenHeight, "storyText", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 57500);
+
+        //keyframe
+        setTimeout(function(){
+
+          instantFadeOutStoryText("storyText")
+
+          createStoryCharacters("TO TAKE ADVANTAGE OF MY EXPERIENCE IN ", 50, screenHeight, "storyText", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: .75,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 60000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("GRAPHIC DESIGN ", 50, screenHeight + 50, "storyText2", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 61000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("COMPUTER SCIENCE ", 50, screenHeight + 100, "storyText3", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 62000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("COMPUTER GRAPHICS ", 50, screenHeight + 150, "storyText4", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 63000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("WEB AND SOFTWARE DEVELOPMENT ", 50, screenHeight + 200, "storyText5", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 64000);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText");
+            fadeOutAllStoryText("storyText2");
+            fadeOutAllStoryText("storyText3");
+            fadeOutAllStoryText("storyText4");
+            fadeOutAllStoryText("storyText5");
+
+        }, 66000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("ONE DAY... ", (window.innerWidth - 200) / 2, screenHeight, "storyText6", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 68500);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText6");
+
+        }, 70250);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("WHENEVER A SPECIAL OCCASSION ARISES OR A DEAL CLOSES", 50, screenHeight, "storyText", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 70500);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText", false);
+
+        }, 73000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("EVERY SALESPERSON WILL AUTOMATICALLY RECEIVE ", 50, screenHeight, "storyText2", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 74500);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText2", false);
+
+        }, 77000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("A CUSTOM GIFTAGRAM PURCHASE REMINDER", 50, screenHeight, "storyText3", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 77250);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText3", true);
+
+        }, 79500);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharacters("TO AUTHORIZE A GIFT WITH ONE CLICK", 50, screenHeight, "storyText4", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  x: -15,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  //filter: "blur(10px)",
+                },
+                {
+                  x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  //filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 75,
+              });
+          });
+
+        }, 80000);
+
+        //keyframe
+        setTimeout(function(){
+
+            fadeOutAllStoryText("storyText4", false);
+
+        }, 83000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharactersRandom("AND I WANT TO HELP YOU MAKE IT HAPPEN", (window.innerWidth - 725) / 2, screenHeight, "storyText5", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 25,
+              });
+          });
+
+        }, 84000);
+
+        //keyframe
+        setTimeout(function(){
+
+          createStoryCharactersRandom("GIVE ME A CALL AT (647) 741-0039", (window.innerWidth - 585) / 2, screenHeight + 50, "storyText6", function(messageDiv, i){
+              gsap.fromTo(messageDiv,
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 2,
+                  alpha: 0,
+                  filter: "blur(10px)",
+                },
+                {
+                  //x: 0,
+                  //y: 0,
+                  //scale: 1,
+                  filter: "blur(0px)",
+                duration: 1,
+                alpha: 1,
+                delay: i / 50,
+              });
+          });
+
+        }, 85000);
 
         //keyframe
         setTimeout(function(){
@@ -951,6 +1741,8 @@
 
     //startMainPage();
     beginTellStory();
+
+
 
 
 
