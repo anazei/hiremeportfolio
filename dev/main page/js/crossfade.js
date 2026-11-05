@@ -22,6 +22,8 @@ var Crossfade = function(masterReference, mainCanvas)
 
     var canvasHeight = Math.ceil(mainCanvas.height / 15);
 
+    var runStageUpdate = false;
+
     function setupMask()
     {
         for(var i=0;i<canvasHeight;i++)
@@ -54,21 +56,22 @@ var Crossfade = function(masterReference, mainCanvas)
 
     function startAnimate()
     {
+        runStageUpdate = true;
+        redrawEasel();
+
         for(let i=0;i<crossFadeBoxArray.length;i++)
         {
             gsap.to(crossFadeBoxArray[i], {
               duration: 1.5,
               alpha: 1,
               delay: i / 400,
-              onUpdate: function(){
-                  stage.update();
-              },
               onComplete: function(){
 
                   if(i == crossFadeBoxArray.length - 1)
                   {
                       parentReference.onMaskComplete();
                       resetMaskState();
+                      runStageUpdate = false;
                   }
               }
             });
@@ -105,6 +108,16 @@ var Crossfade = function(masterReference, mainCanvas)
         }
 
         return tempCanvas;
+    }
+
+    //only redrawl EaselJS while animating
+    function redrawEasel()
+    {
+        if(runStageUpdate == true)
+        {
+            stage.update();
+            window.requestAnimationFrame(redrawEasel);
+        }
     }
 
 }
