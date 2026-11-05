@@ -250,6 +250,35 @@
           opacity: 0;
       }
 
+      #landingTextContainer
+      {
+          position: absolute;
+          left: 125px;
+          top: 400px;
+          width: 1250px;
+      }
+
+      #landingTitle
+      {
+          color: #FCBE5E;
+          font-family: 'Roboto', monospace;
+          font-size: 36pt;
+          font-weight: 300;
+          z-index: 30;
+          position: absolute;
+      }
+
+      #landingText
+      {
+          color: white;
+          font-family: 'Roboto', monospace;
+          font-size: 22pt;
+          font-weight: 300;
+          z-index: 30;
+          position: absolute;
+          top: 100px;
+      }
+
     </style>
 
   </head>
@@ -260,11 +289,6 @@
     <canvas id="snow"></canvas>
 
     <!-- begin grid cross group background -->
-    <!-- <div id="gridCrossGroup">
-      <div id="masterGrid"></div>
-      <div id="masterCross"></div>
-    </div> -->
-
     <div id="gridCrossGroup">
       <canvas id="masterGrid" aria-label="Animated square grid"></canvas>
       <canvas id="masterCross" aria-label="Animated grid crosses"></canvas>
@@ -333,6 +357,13 @@
       <div id="storyText6"></div>
     </div>
     <!-- end story text -->
+
+    <!-- begin landing text container -->
+    <div id="landingTextContainer">
+      <div id="landingTitle"></div>
+      <div id="landingText"></div>
+    </div>
+    <!-- end landing text container -->
 
     <!-- begin giftagram logo -->
     <div id="giftagramLogoContainer">
@@ -430,6 +461,7 @@
   <script src="js/spinner.js"></script>
   <script src="js/storytext.js"></script>
   <script src="js/giftagramlogo.js"></script>
+  <script src="js/SplitText.min.js"></script>
   <script>
 
     //animateInGridCrossBackground();
@@ -511,6 +543,8 @@
 
     var allowRollingGridEffect = true;
     var screenHeight = Math.round(window.innerHeight / 2);
+
+    gsap.registerPlugin(SplitText);
 
     function startMainPage()
     {
@@ -639,7 +673,7 @@
         //keyframe
         setTimeout(function(){
 
-            selectMask(crossfade, "images/bluebg.png");
+            selectMask(crossfade, "images/bluebg.jpg");
 
             //start snow animation
             requestAnimationFrame(animateSnow);
@@ -1838,13 +1872,15 @@
     function fadeInMainPage()
     {
         //fade out story text
-        fadeOutAllStoryText("storyText5", false);
-        fadeOutAllStoryText("storyText6", false);
+        fadeOutAllStoryText("storyText5", true);
+        fadeOutAllStoryText("storyText6", true);
 
         //keyframe
         setTimeout(function(){
 
-        }, 1000);
+            displayMainLandingText();
+
+        }, 1500);
 
         //keyframe
         setTimeout(function(){
@@ -1900,8 +1936,60 @@
         allowRollingGridEffect = false;
     }
 
+
+    var landingTextCounter = 0;
+    var landTextTitleArray = new Array();
+    var landTextArray = new Array();
+
+    landTextTitleArray.push("From an unusual background");
+    landTextArray.push("I was originally a graphic designer who transitioned into Flash development in the advertising industry before transitioning into the streaming video software development industry and then transitioning into building my own computer graphics and real estate software startups. I understand the importance of helping generate revenue, client retention and word of mouth referrals.");
+
+
+    function displayMainLandingText()
+    {
+        document.getElementById("landingTitle").innerHTML = "From an unusual background";
+        document.getElementById("landingText").innerHTML = "I was originally a graphic designer who transitioned into Flash development in the advertising industry before transitioning into the streaming video software development industry and then transitioning into building my own computer graphics and real estate software startups. I understand the importance of helping generate revenue, client retention and word of mouth referrals.";
+
+        var landingTitleSplit = SplitText.create("#landingTitle", {
+          type: "chars"
+        });
+
+        gsap.fromTo(landingTitleSplit.chars, {
+          opacity: 0,
+        },
+        {
+          duration: .75,
+          opacity: 1,
+          scale: 1,
+          delay: function(i){
+              return i / 45;
+          },
+          ease: "power2.inOut",
+        });
+
+        var landingTextSplit = SplitText.create("#landingText", {
+          type: "words"
+        });
+
+        gsap.fromTo(landingTextSplit.words, {
+          opacity: 0,
+        },
+        {
+          duration: 3,
+          opacity: 1,
+          scale: 1,
+          delay: function(i){
+              return i / 115;
+          },
+          ease: "power2.inOut",
+        });
+
+    }
+
     startMainPage();
     //beginTellStory();
+
+    //displayMainLandingText();
 
 
 

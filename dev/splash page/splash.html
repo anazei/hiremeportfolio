@@ -55,6 +55,7 @@
           top: 50%;
           width: 50%;
           z-index: 20;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
       }
 
       #backgroundRotationText
@@ -336,6 +337,10 @@
       <source src="" type="audio/mpeg">
     </audio>
 
+    <video id="mainVideo" width="427" height="240" style="display:none;">
+      <source src="" type="video/mp4">
+    </video>
+
   </body>
   <script src="js/gsap.min.js"></script>
   <script src="js/easeljs.min.js"></script>
@@ -366,11 +371,6 @@
 
     function startSplashPage()
     {
-        //play splash page background music
-        audio = document.getElementById("music");
-        audio.setAttribute('src', "audio/timeless.mp3");
-        audio.play();
-
         //start snow animation
         requestAnimationFrame(animateSnow);
 
@@ -406,46 +406,45 @@
         //keyframe
         setTimeout(function(){
 
-            startAnimateBackgroundRotatingText(67);
+            startAnimateBackgroundRotatingText(48);
 
-        }, 6000);
-
-        //keyframe
-        setTimeout(function(){
-
-            createRotatingMessageString("i  am  applying  as  an  entry/mid  level  front  end  developer");
-
-        }, 6500);
+        }, 4000);
 
         //keyframe
         setTimeout(function(){
 
-            selectMask(spotlight, "images/splashbackground.jpg");
+            createRotatingMessageString("welcome  to  my  symphony  of  code  portfolio");
 
-        }, 8000);
+        }, 4500);
+
+        //keyframe
+        setTimeout(function(){
+
+            //selectMask(spotlight, "images/splashbackground.jpg");
+            selectMask(maskwall, "video/symphony2.mp4");
+
+        }, 9250);
 
         //keyframe
         setTimeout(function(){
 
             stopAnimateBackgroundRotatingText();
 
-        }, 11500);
+        }, 10000);
+
+        //keyframe
+        setTimeout(function(){
+
+            startAnimateBackgroundRotatingText(50);
+
+        }, 15000);
 
         //keyframe
         setTimeout(function(){
 
             createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience");
 
-        }, 14000);
-
-        //keyframe
-        setTimeout(function(){
-
-            //animate out rolling source code
-            animateOutMasterSourceCode();
-            startAnimateBackgroundRotatingText(67);
-
-        }, 15000);
+        }, 16000);
 
         //keyframe
         setTimeout(function(){
@@ -458,16 +457,10 @@
         //keyframe
         setTimeout(function(){
 
-            selectMask(crossfade, "images/blackbg.png");
+            //selectMask(crossfade, "images/blackbg.png");
+            selectMask(spotlight, "images/splashbackground.jpg");
 
-        }, 17000);
-
-        //keyframe
-        setTimeout(function(){
-
-            stopAnimateBackgroundRotatingText();
-
-        }, 19000);
+        }, 17500);
 
         setTimeout(function(){
 
@@ -475,16 +468,39 @@
             clickLock = "allowed";
 
         }, 20000);
+
+        //keyframe
+        setTimeout(function(){
+
+            stopAnimateBackgroundRotatingText();
+
+        }, 20500);
+
+        //keyframe
+        setTimeout(function(){
+
+            //animate out rolling source code
+            animateOutMasterSourceCode();
+
+        }, 22500);
     }
 
     function fadeOutSplashPage()
     {
-        startAnimateBackgroundRotatingText(55);
-        fadeOutSnowfall(3);
-        animateOutLogo();
+        selectMask(crossfade, "images/blackbg.png");
 
         explodeOutForegroundText();
         startParticleEmitter(750, 490, 1550, 490);
+
+        fadeOutSnowfall(3);
+
+        //keyframe
+        setTimeout(function(){
+
+            startAnimateBackgroundRotatingText(55);
+            animateOutLogo();
+
+        }, 1000);
 
         //keyframe
         setTimeout(function(){
@@ -500,7 +516,7 @@
             console.log("next page in");
             window.location.href = "temp/main.html";
 
-        }, 5000);
+        }, 7000);
     }
 
     window.addEventListener("click", function(){
@@ -509,10 +525,20 @@
         if(alreadyClicked == false)
         {
             document.getElementById("masterCode").style.visibility = "visible";
-
             alreadyClicked = true;
+
+            //play splash page background music
+            audio = document.getElementById("music");
+            audio.setAttribute('src', "audio/climatechange.mp3");
+            audio.play();
+
             fadeOutGreetingText();
-            startSplashPage();
+
+            setTimeout(function(){
+
+                startSplashPage();
+
+            }, 750);
         }
 
         //second click begins portfolio experience

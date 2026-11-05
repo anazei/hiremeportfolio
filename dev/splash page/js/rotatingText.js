@@ -140,7 +140,7 @@
               messageDiv.innerHTML = message[i];
               messageDiv.style.marginRight = "4px";
               messageDiv.style.filter = "blur(10px)";
-              messageDiv.style.scale = 6;
+              messageDiv.style.scale = 10;
               messageDiv.style.display = "inline-block";
 
               messageDiv.style.opacity = 0;

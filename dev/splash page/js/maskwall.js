@@ -60,7 +60,7 @@ var Maskwall = function(masterReference, mainCanvas)
               duration: .75,
               scaleX: 2,
               scaleY: 1.5,
-              delay: i / 600,
+              delay: i / 300,
               ease: "power1.inOut",
               onUpdate: function(){
                   stage.update();
@@ -80,7 +80,7 @@ var Maskwall = function(masterReference, mainCanvas)
     {
         parentReference.onMaskComplete();
 
-        boxArray.reverse();
+        //boxArray.reverse();
 
         for(var i=0;i<boxArray.length;i++)
         {

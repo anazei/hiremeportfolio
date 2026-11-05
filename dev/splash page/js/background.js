@@ -15,9 +15,13 @@
       originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
   var newImage = new Image(); //new incoming image
+  var newVideo = document.getElementById("mainVideo");
+
+  var videoActive = false; //is transition masking a video?
+  var keepCopyingVideo = false;
 
   //setup which ever mask is selected
-  async function selectMask(mask, imageSrc)
+  async function selectMask(mask, src)
   {
       if(currentMask !== mask)
       {
@@ -27,8 +31,21 @@
           currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
       }
 
-      newImage = await setImage(imageSrc);
-      animateMask(mask);
+      if(src.indexOf(".mp4") >= 0)
+      {
+          keepCopyingVideo = true;
+
+          newVideo = await setVideo(src);
+          animateMask(mask);
+
+      } else {
+
+          newImage = await setImage(src);
+
+          keepCopyingVideo = false;
+
+          animateMask(mask);
+      }
   }
 
   async function setImage(imageSrc)
@@ -46,7 +63,23 @@
       });
   }
 
-  //main animation transition command
+  async function setVideo(videoSrc)
+  {
+    return new Promise(function(resolve){
+
+        //set the new incoming video
+        newVideo.src = videoSrc;
+        newVideo.load();
+
+        newVideo.addEventListener("durationchange", function(){
+
+            videoActive = true;
+            resolve(newVideo);
+        });
+    });
+  }
+
+  //main masking animation transition command
   function onMainloop()
   {
       mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
@@ -57,16 +90,35 @@
       mainContext.globalCompositeOperation = "source-in";
 
       // 2) then newImage will automatically get masked
-      mainContext.drawImage(newImage, 0, 0); //draw out originalImage
+      if(videoActive == true)
+      {
+          mainContext.drawImage(newVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
+      } else {
+          mainContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
+      }
 
       mainContext.globalCompositeOperation = "destination-atop";
 
       // 3) originalImage gets drawn last with "destination-atop" set beforehand
-      mainContext.drawImage(originalImage, 0, 0); //draw out newImage
+      mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out originalImage
 
       if(runOnMainLoop == true)
       {
           requestAnimationFrame(onMainloop);
+      }
+  }
+
+  //this copies the video to the main canvas continuously after masking in effect is completed
+  function keepVideoCopying()
+  {
+      mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+      //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
+      mainContext.drawImage(newVideo, 0, 0, mainCanvas.width, mainCanvas.height);
+
+      if(keepCopyingVideo == true)
+      {
+          requestAnimationFrame(keepVideoCopying);
       }
   }
 
@@ -75,6 +127,11 @@
   {
       //allow main loop to run
       runOnMainLoop = true;
+
+      if(videoActive == true)
+      {
+          newVideo.play();
+      }
 
       //start on main loop
       onMainloop();
@@ -89,8 +146,19 @@
       //stop on main loop when done
       runOnMainLoop = false;
 
-      //set permanent image state
-      originalImage = newImage; //current image on display
+      if(videoActive == true)
+      {
+          videoActive = false;
+
+          originalImage = newVideo; //current video on display
+
+          keepVideoCopying();
+
+      } else {
+
+          //set permanent image state
+          originalImage = newImage; //current image on display
+      }
   }
 
   //creates invisible canvas for buffering
@@ -126,3 +194,4 @@
   //selectMask(crossfade, "background.png");
   //selectMask(spotlight, "background.png");
   //selectMask(maskwall, "background.png");
+  //selectMask(maskwall, "video/symphony2.mp4");
