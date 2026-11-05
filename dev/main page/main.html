@@ -1676,7 +1676,60 @@
 
         //keyframe
         setTimeout(function(){
+
+            //change background to main background with mask wall
+            selectMask(maskwall, "images/splashbackground.jpg");
+
+        }, 86000);
+
+        //keyframe
+        setTimeout(function(){
+
+          fadeInMainPage()
+
+        }, 90000);
+
+        //keyframe
+        setTimeout(function(){
         }, 0);
+    }
+
+    //once story is finished, fade in main page
+    function fadeInMainPage()
+    {
+        //keyframe
+        setTimeout(function(){
+
+            //fade out story text last
+            fadeOutAllStoryText("storyText5", false);
+            fadeOutAllStoryText("storyText6", true);
+
+        }, 1000);
+
+        //keyframe
+        setTimeout(function(){
+
+            animateInGridCrossBackground();
+
+        }, 2500);
+
+        //keyframe
+        setTimeout(function(){
+
+            //fade out snow
+            fadeOutSnowfall();
+
+        }, 3000);
+
+        //fade back in grid cross
+
+        //fade in nav
+
+        //fade in giftagram logo
+
+        // fade in main intro text blurb
+
+        //fade in permanent contact info
     }
 
     function startRandomRollingGridEffect()
@@ -1718,30 +1771,8 @@
         allowRollingGridEffect = false;
     }
 
-    function generalFadeIn1(messageDiv, i)
-    {
-        gsap.fromTo(messageDiv,
-          {
-            y: 5,
-            scale: 2,
-            alpha: 0,
-            filter: "blur(2px)",
-
-          },
-          {
-            y: 0,
-            scale: 1,
-            filter: "blur(0px)",
-          duration: 1.5,
-          alpha: 1,
-          delay: i / 25,
-          ease: "Power2.in",
-        });
-    }
-
     startMainPage();
     //beginTellStory();
-
 
 
 

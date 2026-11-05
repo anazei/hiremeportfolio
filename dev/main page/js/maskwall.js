@@ -22,9 +22,13 @@ var Maskwall = function(masterReference, mainCanvas)
 
     var runStageUpdate = false;
 
+    var howManyAcross = window.innerWidth / 150;
+    var howManyDown = window.innerHeight / 100;
+    var totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 1.2);
+
     function setupMask()
     {
-        for(var i=0;i<155;i++)
+        for(var i=0;i<totalRectsNeeded;i++)
         {
           xPosition++;
 
