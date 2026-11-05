@@ -58,7 +58,8 @@
     var newImage = new Image(); //new incoming image
     var newVideo = document.getElementById("mainVideo");
 
-    var videoMode = false; //is transition using video?
+    var videoActive = false; //is transition masking a video?
+    var keepCopyingVideo = false;
 
     //setup which ever mask is selected
     async function selectMask(mask, src)
@@ -73,12 +74,17 @@
 
         if(src.indexOf(".mp4") >= 0)
         {
+            keepCopyingVideo = true;
+
             newVideo = await setVideo(src);
             animateMask(mask);
 
         } else {
 
             newImage = await setImage(src);
+
+            keepCopyingVideo = false;
+
             animateMask(mask);
         }
     }
@@ -108,7 +114,7 @@
 
           newVideo.addEventListener("durationchange", function(){
 
-              videoMode = true;
+              videoActive = true;
               resolve(newVideo);
           });
       });
@@ -125,17 +131,17 @@
         mainContext.globalCompositeOperation = "source-in";
 
         // 2) then newImage will automatically get masked
-        if(videoMode == true)
+        if(videoActive == true)
         {
             mainContext.drawImage(newVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
         } else {
-            mainContext.drawImage(newImage, 0, 0); //draw out newImage
+            mainContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
         }
 
         mainContext.globalCompositeOperation = "destination-atop";
 
         // 3) originalImage gets drawn last with "destination-atop" set beforehand
-        mainContext.drawImage(originalImage, 0, 0); //draw out originalImage
+        mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out originalImage
 
         if(runOnMainLoop == true)
         {
@@ -149,9 +155,12 @@
         mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
         //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
-        mainContext.drawImage(document.getElementById("mainVideo"), 0, 0, mainCanvas.width, mainCanvas.height);
+        mainContext.drawImage(newVideo, 0, 0, mainCanvas.width, mainCanvas.height);
 
-        requestAnimationFrame(keepVideoCopying);
+        if(keepCopyingVideo == true)
+        {
+            requestAnimationFrame(keepVideoCopying);
+        }
     }
 
     //animate the specific mask
@@ -160,7 +169,7 @@
         //allow main loop to run
         runOnMainLoop = true;
 
-        if(videoMode == true)
+        if(videoActive == true)
         {
             newVideo.play();
         }
@@ -178,8 +187,10 @@
         //stop on main loop when done
         runOnMainLoop = false;
 
-        if(videoMode == true)
+        if(videoActive == true)
         {
+            videoActive = false;
+
             originalImage = newVideo; //current video on display
 
             keepVideoCopying();
@@ -205,7 +216,7 @@
             tempCanvas.width = width;
             tempCanvas.height = height;
             tempCanvas.id = id;
-            tempCanvas.style.display = "none";
+            tempCanvas.style.display = "block";
             document.body.appendChild(tempCanvas);
         }
 
@@ -225,6 +236,8 @@
       //selectMask can run crossfade, spotlight or maskwall as inputs at any time to change transitions
       //selectMask(crossfade, "background.png");
       //selectMask(spotlight, "background.png");
+      //selectMask(maskwall, "background.png");
+
       selectMask(maskwall, "video/symphony2.mp4");
 
     })
