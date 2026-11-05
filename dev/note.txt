@@ -1,0 +1,2 @@
+- when the screen resizes, just reload the splash page
+- onresize, check if the screen orientation is portrait, reload and display the "rotate landscape"

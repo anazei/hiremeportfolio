@@ -163,7 +163,7 @@
       Turn your screen to landscape<br><br>
       This website is entirely Javascript driven and custom designed for Giftagram<br>
       All original graphic designs and Javascript created by Kevin<br>
-      Music credits from CREDITS HERE<br><br>
+      Music by Hans Zimmer<br><br>
       Click anywhere to begin
     </div>
 
@@ -425,9 +425,10 @@
         setTimeout(function(){
 
             //selectMask(spotlight, "images/splashbackground.jpg");
-            selectMask(maskwall, "video/symphony2.mp4");
+            //selectMask(maskwall, "video/symphony2.mp4");
+            selectMask(maskwall, "video/cello.mp4");
 
-        }, 9250);
+        }, 9500);
 
         //keyframe
         setTimeout(function(){
@@ -439,16 +440,23 @@
         //keyframe
         setTimeout(function(){
 
-            startAnimateBackgroundRotatingText(50);
+            selectMask(maskwall, "video/violins.mp4");
 
-        }, 15000);
+        }, 12000);
 
         //keyframe
         setTimeout(function(){
 
-            createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience");
+            startAnimateBackgroundRotatingText(50);
 
-        }, 16000);
+        }, 18000);
+
+        //keyframe
+        setTimeout(function(){
+
+            selectMask(spotlight, "video/conductor.mp4");
+
+        }, 16500);
 
         //keyframe
         setTimeout(function(){
@@ -456,15 +464,14 @@
             //animate in hello giftagram logo and subtitle
             animateInLogo();
 
-        }, 16500);
+        }, 19500);
 
         //keyframe
         setTimeout(function(){
 
-            //selectMask(crossfade, "images/blackbg.png");
-            selectMask(spotlight, "images/splashbackground.jpg");
+            createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience");
 
-        }, 17500);
+        }, 19750);
 
         setTimeout(function(){
 
@@ -476,9 +483,10 @@
         //keyframe
         setTimeout(function(){
 
-            stopAnimateBackgroundRotatingText();
+            //selectMask(crossfade, "images/blackbg.png");
+            selectMask(crossfade, "images/splashbackground.jpg");
 
-        }, 20500);
+        }, 21250);
 
         //keyframe
         setTimeout(function(){
@@ -487,12 +495,17 @@
             animateOutMasterSourceCode();
 
         }, 22500);
+
+        //keyframe
+        setTimeout(function(){
+
+            stopAnimateBackgroundRotatingText();
+
+        }, 25000);
     }
 
     function fadeOutSplashPage()
     {
-        selectMask(crossfade, "images/blackbg.png");
-
         explodeOutForegroundText();
         startParticleEmitter(750, 490, 1550, 490);
 
@@ -500,6 +513,8 @@
 
         //keyframe
         setTimeout(function(){
+
+            selectMask(crossfade, "images/blackbg.png");
 
             startAnimateBackgroundRotatingText(55);
             animateOutLogo();

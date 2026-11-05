@@ -80,7 +80,7 @@ var Maskwall = function(masterReference, mainCanvas)
     {
         parentReference.onMaskComplete();
 
-        //boxArray.reverse();
+        boxArray.reverse();
 
         for(var i=0;i<boxArray.length;i++)
         {

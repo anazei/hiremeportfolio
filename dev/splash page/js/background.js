@@ -136,8 +136,8 @@
       //unload and stop copying video once it ends
       if(incomingVideo.ended == true)
       {
-          keepCopyingVideo = false;
-          incomingVideo.src = "";
+          //keepCopyingVideo = false;
+          //incomingVideo.src = "";
       }
 
       if(keepCopyingVideo == true)
