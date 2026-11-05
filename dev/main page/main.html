@@ -442,6 +442,14 @@
     </div>
     <!-- end giftagram logo -->
 
+    <video id="mainVideo" style="display:none;">
+      <source src="" type="video/mp4">
+    </video>
+
+    <video id="mainVideo2" style="display:none;">
+      <source src="" type="video/mp4">
+    </video>
+
   </body>
 
   <script src="js/gsap.min.js"></script>
@@ -1941,14 +1949,15 @@
     var landTextTitleArray = new Array();
     var landTextArray = new Array();
 
-    landTextTitleArray.push("From an unusual background");
-    landTextArray.push("I was originally a graphic designer who transitioned into Flash development in the advertising industry before transitioning into the streaming video software development industry and then transitioning into building my own computer graphics and real estate software startups. I understand the importance of helping generate revenue, client retention and word of mouth referrals.");
+    landTextTitleArray.push("An Unusual Journey");
+    landTextTitleArray.push("A storyteller at heart");
+    landTextArray.push("I was originally a graphic designer who transitioned into Flash development for the advertising industry before transitioning into the streaming video industry as a video player developer. I had a private computer science mentor for a decade but I learned my graphics trade-math and rendering techniques independently. I then tried to build my own computer graphics and real estate software startups. I understand the importance of helping generate revenue, client retention and word of mouth referrals.");
 
 
     function displayMainLandingText()
     {
-        document.getElementById("landingTitle").innerHTML = "From an unusual background";
-        document.getElementById("landingText").innerHTML = "I was originally a graphic designer who transitioned into Flash development in the advertising industry before transitioning into the streaming video software development industry and then transitioning into building my own computer graphics and real estate software startups. I understand the importance of helping generate revenue, client retention and word of mouth referrals.";
+        document.getElementById("landingTitle").innerHTML = landTextTitleArray[0];
+        document.getElementById("landingText").innerHTML = landTextArray[0];
 
         var landingTitleSplit = SplitText.create("#landingTitle", {
           type: "chars"
@@ -1956,13 +1965,14 @@
 
         gsap.fromTo(landingTitleSplit.chars, {
           opacity: 0,
+          scale: 2,
         },
         {
-          duration: .75,
+          duration: .5,
           opacity: 1,
           scale: 1,
           delay: function(i){
-              return i / 45;
+              return i / 25;
           },
           ease: "power2.inOut",
         });
@@ -1975,7 +1985,7 @@
           opacity: 0,
         },
         {
-          duration: 3,
+          duration: 1.5,
           opacity: 1,
           scale: 1,
           delay: function(i){
