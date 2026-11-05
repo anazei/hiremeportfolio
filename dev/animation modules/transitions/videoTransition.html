@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+
+      body {
+        margin: 0;
+        background-color: #FFFFFF;
+        overflow-x: hidden;
+      }
+
+      #mainCanvas{
+        width: 100%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <video id="mainVideo" width="427" height="240" style="display:none;">
+      <source src="video/symphony.mp4" type="video/mp4">
+    </video>
+
+    <canvas id="mainCanvas" class="mainCanvas" width="1920" height="1080"></canvas>
+
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+  <script src="maskwall.js"></script>
+  <script src="spotlight.js"></script>
+  <script src="crossfade.js"></script>
+  <script>
+
+    var mainCanvas = document.getElementById("mainCanvas");
+    var mainContext = mainCanvas.getContext("2d");
+
+    var crossfade = new Crossfade(this, mainCanvas);
+    var maskwall = new Maskwall(this, mainCanvas);
+    var spotlight = new Spotlight(this, mainCanvas);
+
+    var currentMask;
+
+    var runOnMainLoop = false;
+
+    var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display at start
+    var originalContext = originalImage.getContext("2d");
+        originalContext.fillStyle = "#000000";
+        originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+    var newImage = new Image(); //new incoming image
+    var newVideo = document.getElementById("mainVideo");
+
+    var videoMode = false; //is transition using video?
+
+    //setup which ever mask is selected
+    async function selectMask(mask, src)
+    {
+        if(currentMask !== mask)
+        {
+            currentMask = mask;
+
+            //setup mask
+            currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
+        }
+
+        if(src.indexOf(".mp4") >= 0)
+        {
+            newVideo = await setVideo(src);
+            animateMask(mask);
+
+        } else {
+
+            newImage = await setImage(src);
+            animateMask(mask);
+        }
+    }
+
+    async function setImage(imageSrc)
+    {
+        return new Promise(function(resolve){
+
+            //set the new incoming image
+            var image = new Image();
+                image.src = imageSrc;
+
+            image.onload = function()
+            {
+                resolve(image);
+            }
+        });
+    }
+
+    async function setVideo(videoSrc)
+    {
+      return new Promise(function(resolve){
+
+          //set the new incoming video
+          newVideo.src = videoSrc;
+          newVideo.load();
+
+          newVideo.addEventListener("durationchange", function(){
+
+              videoMode = true;
+              resolve(newVideo);
+          });
+      });
+    }
+
+    //main masking animation transition command
+    function onMainloop()
+    {
+        mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        // 1) mask from mask canvas is drawn first
+        mainContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
+
+        mainContext.globalCompositeOperation = "source-in";
+
+        // 2) then newImage will automatically get masked
+        if(videoMode == true)
+        {
+            mainContext.drawImage(newVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
+        } else {
+            mainContext.drawImage(newImage, 0, 0); //draw out newImage
+        }
+
+        mainContext.globalCompositeOperation = "destination-atop";
+
+        // 3) originalImage gets drawn last with "destination-atop" set beforehand
+        mainContext.drawImage(originalImage, 0, 0); //draw out originalImage
+
+        if(runOnMainLoop == true)
+        {
+            requestAnimationFrame(onMainloop);
+        }
+    }
+
+    //this copies the video to the main canvas continuously after masking in effect is completed
+    function keepVideoCopying()
+    {
+        mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
+        mainContext.drawImage(document.getElementById("mainVideo"), 0, 0, mainCanvas.width, mainCanvas.height);
+
+        requestAnimationFrame(keepVideoCopying);
+    }
+
+    //animate the specific mask
+    function animateMask(mask)
+    {
+        //allow main loop to run
+        runOnMainLoop = true;
+
+        if(videoMode == true)
+        {
+            newVideo.play();
+        }
+
+        //start on main loop
+        onMainloop();
+
+        //run mask animation
+        mask.startAnimate(); //method to call mask object
+    }
+
+    //when masking animation is complete, reset for next mask setup
+    function onMaskComplete()
+    {
+        //stop on main loop when done
+        runOnMainLoop = false;
+
+        if(videoMode == true)
+        {
+            originalImage = newVideo; //current video on display
+
+            keepVideoCopying();
+
+        } else {
+
+            //set permanent image state
+            originalImage = newImage; //current image on display
+        }
+    }
+
+    //creates invisible canvas for buffering
+    function createInvisibleCanvas(id, width, height)
+    {
+        var tempCanvas;
+
+        if(document.getElementById(id) !== null)
+        {
+            tempCanvas = document.getElementById(id);
+        } else {
+
+            tempCanvas = document.createElement("canvas");
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            tempCanvas.id = id;
+            tempCanvas.style.display = "none";
+            document.body.appendChild(tempCanvas);
+        }
+
+        return tempCanvas;
+    }
+
+    function resizeCanvas()
+    {
+        mainCanvas.width = window.innerWidth;
+        mainCanvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+
+    window.addEventListener("click", function(){
+
+      //selectMask can run crossfade, spotlight or maskwall as inputs at any time to change transitions
+      //selectMask(crossfade, "background.png");
+      //selectMask(spotlight, "background.png");
+      selectMask(maskwall, "video/symphony2.mp4");
+
+    })
+
+  </script>
+</html>
