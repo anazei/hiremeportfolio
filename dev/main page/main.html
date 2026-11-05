@@ -208,6 +208,12 @@
           color: #FABC66;
           font-size: 26pt;
           z-index: 30;
+
+          text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+          display: inline-block;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+          will-change: transform, opacity;
       }
 
       #giftagramLogoContainer
@@ -1809,6 +1815,11 @@
             //change background to main background with mask wall
             selectMask(maskwall, "images/splashbackground.jpg");
 
+            initGiftagramLogo();
+            animateInLogo();
+
+            animateInGridCrossBackground();
+
         }, 86000);
 
         //keyframe
@@ -1816,7 +1827,7 @@
 
           fadeInMainPage()
 
-        }, 90000);
+        }, 89000);
 
         //keyframe
         setTimeout(function(){
@@ -1826,36 +1837,21 @@
     //once story is finished, fade in main page
     function fadeInMainPage()
     {
-        initGiftagramLogo();
-        animateInLogo();
+        //fade out story text
+        fadeOutAllStoryText("storyText5", false);
+        fadeOutAllStoryText("storyText6", false);
 
         //keyframe
         setTimeout(function(){
-
-            //fade out story text
-            fadeOutAllStoryText("storyText5", false);
-            fadeOutAllStoryText("storyText6", false);
 
         }, 1000);
 
         //keyframe
         setTimeout(function(){
 
-            animateInGridCrossBackground();
-
-        }, 2500);
-
-        //keyframe
-        setTimeout(function(){
-
-            //fade out snow
             fadeOutSnowfall();
 
-        }, 5500);
-
-
-
-
+        }, 7500);
 
           //fade in main intro text blurb
 
