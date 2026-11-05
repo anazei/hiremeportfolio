@@ -369,7 +369,7 @@
         //play splash page background music
         audio = document.getElementById("music");
         audio.setAttribute('src', "audio/timeless.mp3");
-        //audio.play();
+        audio.play();
 
         //start snow animation
         requestAnimationFrame(animateSnow);
@@ -498,8 +498,9 @@
         setTimeout(function(){
 
             console.log("next page in");
+            window.location.href = "temp/main.html";
 
-        }, 4000);
+        }, 5000);
     }
 
     window.addEventListener("click", function(){

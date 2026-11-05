@@ -42,7 +42,19 @@
       #gridCrossGroup
       {
           position: absolute;
-          z-index: 2;
+          z-index: 5;
+          width: 100vw;
+          height: 100vh;
+      }
+
+      #masterGrid,
+      #masterCross
+      {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          display: block;
       }
 
       #progressBarContainer
@@ -198,6 +210,40 @@
           z-index: 30;
       }
 
+      #giftagramLogoContainer
+      {
+          position: absolute;
+          left: 0%;
+          top: 5%;
+          scale: 0.8;
+          z-index: 30;
+          scale: 0.7;
+      }
+
+      #giftagramLogo
+      {
+          color: white;
+          font-family: 'Roboto', monospace;
+          font-size: 50pt;
+          font-weight: 400;
+          letter-spacing: 0px;
+      }
+
+      #giftagramLogoSubtitle
+      {
+          color: #FCBE5E;
+          font-family: 'Roboto', monospace;
+          font-size: 19pt;
+          font-weight: 300;
+          letter-spacing: 0px;
+      }
+
+      .giftagramLogoSpan
+      {
+          display: inline-block;
+          opacity: 0;
+      }
+
     </style>
 
   </head>
@@ -208,9 +254,14 @@
     <canvas id="snow"></canvas>
 
     <!-- begin grid cross group background -->
-    <div id="gridCrossGroup">
+    <!-- <div id="gridCrossGroup">
       <div id="masterGrid"></div>
       <div id="masterCross"></div>
+    </div> -->
+
+    <div id="gridCrossGroup">
+      <canvas id="masterGrid" aria-label="Animated square grid"></canvas>
+      <canvas id="masterCross" aria-label="Animated grid crosses"></canvas>
     </div>
     <!-- end grid cross group background -->
 
@@ -277,6 +328,83 @@
     </div>
     <!-- end story text -->
 
+    <!-- begin giftagram logo -->
+    <div id="giftagramLogoContainer">
+      <div id="giftagramLogo">
+        <span class="giftagramLogoSpan">H</span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">O </span>
+        <img class="giftagramLogoSpan" src="images/giftagramlogo.png"/>
+        <span class="giftagramLogoSpan">G</span>
+        <span class="giftagramLogoSpan">I</span>
+        <span class="giftagramLogoSpan">F</span>
+        <span class="giftagramLogoSpan">T</span>
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">G</span>
+        <span class="giftagramLogoSpan">R</span>
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">M</span>
+      </div>
+
+      <div id="giftagramLogoSubtitle">
+        <span class="giftagramLogoSpan">A</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">c</span>
+        <span class="giftagramLogoSpan">a</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">f</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan">y</span>
+        <span class="giftagramLogoSpan">/</span>
+        <span class="giftagramLogoSpan">M</span>
+        <span class="giftagramLogoSpan">i</span>
+        <span class="giftagramLogoSpan">d</span>
+        <span class="giftagramLogoSpan">-</span>
+        <span class="giftagramLogoSpan">L</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">v</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">F</span>
+        <span class="giftagramLogoSpan">r</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">t</span>
+        <span class="giftagramLogoSpan">-</span>
+        <span class="giftagramLogoSpan">E</span>
+        <span class="giftagramLogoSpan">n</span>
+        <span class="giftagramLogoSpan">d</span>
+        <span class="giftagramLogoSpan"> </span>
+        <span class="giftagramLogoSpan">D</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">v</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">l</span>
+        <span class="giftagramLogoSpan">o</span>
+        <span class="giftagramLogoSpan">p</span>
+        <span class="giftagramLogoSpan">e</span>
+        <span class="giftagramLogoSpan">r</span>
+
+      </div>
+    </div>
+    <!-- end giftagram logo -->
+
   </body>
 
   <script src="js/gsap.min.js"></script>
@@ -289,12 +417,13 @@
   <script src="js/spotlight.js"></script>
   <script src="js/crossfade.js"></script>
   <script src="js/background.js"></script>
-  <script src="js/gridcross.js"></script>
+  <script src="js/gridcross2.js"></script>
   <script src="js/progressbar.js"></script>
   <script src="js/herotitle.js"></script>
   <script src="js/buffer.js"></script>
   <script src="js/spinner.js"></script>
   <script src="js/storytext.js"></script>
+  <script src="js/giftagramlogo.js"></script>
   <script>
 
     //animateInGridCrossBackground();
@@ -1697,12 +1826,15 @@
     //once story is finished, fade in main page
     function fadeInMainPage()
     {
+        initGiftagramLogo();
+        animateInLogo();
+
         //keyframe
         setTimeout(function(){
 
-            //fade out story text last
+            //fade out story text
             fadeOutAllStoryText("storyText5", false);
-            fadeOutAllStoryText("storyText6", true);
+            fadeOutAllStoryText("storyText6", false);
 
         }, 1000);
 
@@ -1719,17 +1851,18 @@
             //fade out snow
             fadeOutSnowfall();
 
-        }, 3000);
+        }, 5500);
 
-        //fade back in grid cross
 
-        //fade in nav
 
-        //fade in giftagram logo
 
-        // fade in main intro text blurb
 
-        //fade in permanent contact info
+          //fade in main intro text blurb
+
+          //fade in permanent contact info
+
+          //fade in nav
+
     }
 
     function startRandomRollingGridEffect()
