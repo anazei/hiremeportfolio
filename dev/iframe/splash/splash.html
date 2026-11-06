@@ -62,8 +62,8 @@
       {
           color: white;
           font-family: 'Roboto Condensed', monospace;
-          font-size: 15pt;
-          font-weight: 300;
+          font-size: 20pt;
+          font-weight: 400;
           letter-spacing: 3px;
           position: absolute;
           opacity: 0;
@@ -73,8 +73,8 @@
       {
           color: white;
           font-family: 'Roboto Condensed', monospace;
-          font-size: 15pt;
-          font-weight: 300;
+          font-size: 20pt;
+          font-weight: 400;
           letter-spacing: 3px;
           position: absolute;
           opacity: 0;
@@ -123,22 +123,6 @@
           opacity: 0;
       }
 
-      #entryGreetingText
-      {
-          position: absolute;
-          color: #FCBE5E;
-          font-family: 'Roboto', monospace;
-          font-size: 26pt;
-          font-weight: 300;
-          letter-spacing: 1px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-      }
-
       #particleEmitter
       {
           position: absolute;
@@ -158,14 +142,6 @@
     </style>
   </head>
   <body>
-
-    <div id="entryGreetingText">
-      Turn your screen to landscape<br><br>
-      This website is entirely Javascript driven and custom designed for Giftagram<br>
-      All original graphic designs and Javascript created by Kevin<br>
-      Music by Hans Zimmer<br><br>
-      Click anywhere to begin
-    </div>
 
     <div id="particleGroup">
       <div id="particleEmitter"></div>
@@ -360,18 +336,9 @@
 
   <script>
 
-    var audio;
-    var alreadyClicked = false;
+    //var audio;
+    //var alreadyClicked = false;
     var clickLock = "disallowed"; //until the entire landing splash page is completed, the user cannot click to begin experience
-
-    //fade out "this contains audio, click anywhere to begin" text
-    function fadeOutGreetingText()
-    {
-        gsap.to(entryGreetingText, {
-            opacity: 0,
-            duration: .35,
-        });
-    }
 
     function startSplashPage()
     {
@@ -442,7 +409,7 @@
 
             selectMask(maskwall, "video/violins.mp4");
 
-        }, 12000);
+        }, 13000);
 
         //keyframe
         setTimeout(function(){
@@ -464,7 +431,7 @@
             //animate in hello giftagram logo and subtitle
             animateInLogo();
 
-        }, 19500);
+        }, 21500);
 
         //keyframe
         setTimeout(function(){
@@ -507,7 +474,7 @@
     function fadeOutSplashPage()
     {
         explodeOutForegroundText();
-        startParticleEmitter(750, 490, 1550, 490);
+        startParticleEmitter(750, 500, 1550, 490);
 
         fadeOutSnowfall(3);
 
@@ -538,36 +505,28 @@
         }, 7000);
     }
 
+    function init()
+    {
+        document.getElementById("masterCode").style.visibility = "visible";
+        alreadyClicked = true;
+
+        setTimeout(function(){
+
+            startSplashPage();
+
+        }, 750);
+    }
+
+    init();
+
     window.addEventListener("click", function(){
 
-        //first click being the splash page
-        if(alreadyClicked == false)
+        window.parent.postMessage("iframeClicked", "*");
+
+        if(clickLock == "allowed")
         {
-            document.getElementById("masterCode").style.visibility = "visible";
-            alreadyClicked = true;
-
-            //play splash page background music
-            audio = document.getElementById("music");
-            audio.setAttribute('src', "audio/climatechange.mp3");
-            audio.play();
-
-            fadeOutGreetingText();
-
-            setTimeout(function(){
-
-                startSplashPage();
-
-            }, 750);
-        }
-
-        //second click begins portfolio experience
-        if(alreadyClicked == true)
-        {
-            if(clickLock == "allowed")
-            {
-                clickLock = "disallowed";
-                fadeOutSplashPage();
-            }
+            clickLock = "disallowed";
+            fadeOutSplashPage();
         }
     });
 

@@ -1,0 +1,364 @@
+  var spectrumCanvas = document.getElementById("audioVisualizerBinCanvas");
+  var spectrumContext = spectrumCanvas.getContext("2d");
+
+  var stage = new createjs.Stage("audioVisualizerBinCanvas");
+  var spectrumContainer = new createjs.Container;
+
+  var particleArray = new Array();
+  var particlePool = new Array();
+
+  const ALPHA_255_TO_1 = 0.0039215686274509803921568627451; // computed by 100 / (255 * 100), normalizes RGB value from 0-255 to 0-1 alpha property
+
+  var audioContext;
+  var analyser;
+  var frequencyData;
+
+  var currentAudioState = "playing"; //playing, paused
+
+  async function setupAudioAnalyzer()
+  {
+      const audio = document.getElementById("audioPlayer");
+
+      audioContext = new AudioContext();
+
+      const source = audioContext.createMediaElementSource(audio);
+
+      analyser = audioContext.createAnalyser();
+
+      // FFT size determines number of bins
+      analyser.fftSize = 2048;
+
+      // Smoothing (0 = none, 1 = maximum)
+      analyser.smoothingTimeConstant = 0.7;
+
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+
+      // Create array for frequency data
+      frequencyData = new Uint8Array(analyser.frequencyBinCount);
+
+      await audioContext.resume();
+
+      updateAnalyzer();
+  }
+
+  function updateAnalyzer()
+  {
+      // Get current frequency bin values
+      analyser.getByteFrequencyData(frequencyData);
+
+      drawRectangles();
+
+      requestAnimationFrame(updateAnalyzer);
+  }
+
+  //draw the rectangle bars based on the bin data
+  function drawRectangles()
+  {
+      //clear existing bars
+      while(spectrumContainer.numChildren)
+      {
+          spectrumContainer.removeChildAt(0);
+      }
+
+      for(var i=0;i<500;i++)
+      {
+          var startPositionX = i * 5 + 2;
+
+          var rect = new createjs.Shape();
+
+          var freqHeight = frequencyData[i];
+
+          if(frequencyData[i] > 30)
+          {
+              freqHeight = frequencyData[i] /8;
+          } else {
+              freqHeight = frequencyData[i] / 4;
+          }
+
+          if(frequencyData[i] == 0)
+          {
+              freqHeight = 1;
+          } else {
+
+              //limit the amount of particles that can be rendered
+              if(Math.round(Math.random() * 2) == 0)
+              {
+                  //generate a new particle data for every bin data value greater than 0
+                  generateNewParticle(startPositionX, spectrumCanvas.height - freqHeight, -90, freqHeight);
+              }
+          }
+
+          //draw the spectrum bars only
+          rect.graphics.beginFill("#A4C5D9").drawRect(0, 0, 3, -freqHeight, 0, 0, 0, 0);
+
+          rect.x = startPositionX;
+          rect.y = spectrumCanvas.height;
+
+          spectrumContainer.addChild(rect);
+          stage.addChild(spectrumContainer);
+      }
+
+      manageEmitter();
+      renderParticles();
+
+      stage.update();
+  }
+
+  //manage the particle array data
+  function manageEmitter()
+  {
+    //iterate through the entire particleArray and update all values accordingly
+    for(var i=0;i<particleArray.length;i++)
+    {
+        //if particleArray[i] is not already dead
+        if(particleArray[i] !== null && particleArray[i] !== undefined)
+        {
+          //if lifespan is maxed out, kill off particle
+          if(particleArray[i].currentLifespan == particleArray[i].lifecycle)
+          {
+              //return particle to pool when life cycle completes
+              putParticleInstance(particleArray[i]);
+
+              particleArray.splice(i, i + 1); //splice it from main particle array, mutates array to remove particle
+
+          } else {
+
+            //interpolate how much alpha until death - alpha to zero over life cycle
+            particleArray[i].alpha = ((particleArray[i].lifecycle / particleArray[i].originalAlpha) * (particleArray[i].lifecycle - particleArray[i].currentLifespan)) * ALPHA_255_TO_1;
+
+            particleArray[i].speed += (Math.round(Math.random() * 10)/10);
+
+            particleArray[i].x = Math.round(Math.cos(particleArray[i].direction * Math.PI/180) * particleArray[i].speed + particleArray[i].startX);
+            particleArray[i].y = (Math.round(Math.sin(particleArray[i].direction * Math.PI/180) * particleArray[i].speed + particleArray[i].startY));
+
+            //update lifespan
+            particleArray[i].currentLifespan++;
+          }
+        }
+    }
+  }
+
+  //render the particle based on the array data states
+  function renderParticles()
+  {
+      //render new particle managed data
+      for(var i=0;i<particleArray.length;i++)
+      {
+          if(particleArray[i] !== null && particleArray[i] !== undefined)
+          {
+              var rect = new createjs.Shape();
+
+              //30% chance of randomly selecting some particles to have sparkle effect
+              if(Math.round(Math.random() * 10) >= 6) //this last number sets the percentage likeliness of sparkling
+              {
+                  //if selected, set draw it random * 3 size which has a good chance of causing it to look like it's sparkling
+                  rect.graphics.beginFill("#A4C5D9").drawCircle(0, 0, Math.random() * 3); //this number sets the max size of the sparkles
+              } else {
+                  //use particle radius generated by emitter
+                  rect.graphics.beginFill("#A4C5D9").drawCircle(0, 0, particleArray[i].radius * 0.75);
+              }
+
+              rect.x = particleArray[i].x;
+              rect.y = particleArray[i].y;
+              rect.alpha = particleArray[i].alpha;
+              spectrumContainer.addChild(rect);
+          }
+      }
+  }
+
+  //init and generate particle pool
+  function initParticlePool()
+  {
+      for(var i=0;i<1000;i++)
+      {
+          particlePool[i] = createOneNewParticle();
+      }
+  }
+
+  //get particle from pool, create new ones if none available
+  function getParticleInstance()
+  {
+      //adds a new particle to pool if under 50 to maintain minimum of 50 available particles for future use
+      if(particlePool.length < 50)
+      {
+          particlePool.unshift( createOneNewParticle() )
+          return getParticleInstance();
+
+      } else {
+
+        //get available particle
+        return particlePool.shift();
+
+      }
+  }
+
+  //return particle back to pool
+  function putParticleInstance(particle)
+  {
+      //reset particle properties
+      resetParticle(particle);
+
+      //return particle to pool
+      particlePool[particlePool.length] = particle;
+  }
+
+  //creates a single instance of a new particle
+  function createOneNewParticle()
+  {
+      var particle = new Object();
+          particle.radius = 0;
+          particle.originalAlpha = 0;
+          particle.red = 0;
+          particle.green = 0;
+          particle.blue = 0;
+          particle.alpha = 0;
+          particle.currentLifespan = 0;
+          particle.lifecycle = 0;
+          particle.direction = 0;
+          particle.speed = 0;
+          particle.startX = 0;
+          particle.startY = 0;
+          particle.x = 0;
+          particle.y = 0;
+
+      return particle;
+  }
+
+  //cleans any used particles
+  function resetParticle(particle)
+  {
+      particle.radius = 0;
+      particle.originalAlpha = 0;
+      particle.red = 0;
+      particle.green = 0;
+      particle.blue = 0;
+      particle.alpha = 0;
+      particle.currentLifespan = 0;
+      particle.lifecycle = 0;
+      particle.direction = 0;
+      particle.speed = 0;
+      particle.startX = 0;
+      particle.startY = 0;
+      particle.x = 0;
+      particle.y = 0;
+
+      return particle;
+  }
+
+  //this will create ONE particle from a bar at each redraw - emitter function
+  function generateNewParticle(startX, startY, direction, barHeight)
+  {
+      if(barHeight > 10)
+      {
+          var particle = getParticleInstance();
+
+          //var startAlpha = (Math.random() * 71) + 64; //max alpha 135, min 64
+          var startAlpha = (Math.random() * 127) + 128;
+
+          particle.originalAlpha = startAlpha;
+          particle.alpha = startAlpha;
+
+          particle.radius = (Math.random() * 2) + 1; //this sets the maximum and minimum size of the particles
+
+          particle.currentLifespan = 0; //current number of frame redraws
+
+          //length of frame redraws, computed by bar height, stronger the longer
+          //60 represents the 60 minimum frames (1 second) a particle can be redrawn before it dies
+          //180 represents the 180 maximum frames (3 seconds) a particle can be redrawn before it dies
+          //10 - 127.5 represent the possible min and max signal strength range of each bar height
+          particle.lifecycle = computeConstraintAlgebra(barHeight, 10, 127.5, 90, 180);
+
+          particle.direction = direction; //angle in degrees
+
+          //add speed as new radius per frame draw, computed by bar height, stronger the faster,
+          //per frame redraw speed is between 0.5-5 (min 30px per second,  max 300px per second),
+          //fourier frequency strength is between 10 and 127.5
+          particle.speed = computeConstraintAlgebra(barHeight, 10, 127.5, 1, 5) ;
+
+          particle.startX = startX; //offset x
+          particle.startY = startY; //offset y
+
+          particle.x = startX + Math.round(Math.cos(direction * Math.PI/180) * barHeight);
+          particle.y = startY + Math.round(Math.sin(direction * Math.PI/180) * barHeight);
+
+          particleArray.push(particle);
+      }
+  }
+
+  /*
+    This function computes value given two constraints and a range value.
+    Given two speed constraints (minimum speed 0.5, maximum speed 5) pixels per frame redraw
+    Given a range from bar height (10 - 127.5) which represents signal strength
+    Compute what the proportional speed is based on an unknown signal strength value
+    Minimum speed is 0.5 = 10 strength, maximum speed is 5 = 127.5 strength
+
+    used by generateNewParticle() to compute the lifecycle and speed of each particle based on known signal strength
+  */
+  function computeConstraintAlgebra(knownStrength, minStrength, maxStrength, minConstraint, maxConstraint)
+  {
+      //compute the ranges of strength and constraint.
+      //This will equalize the two ranges to be proprtional to each other.
+      var strengthRange = maxStrength - minStrength;
+      var constraintRange = maxConstraint - minConstraint;
+
+      //get the 1 percent of the constraint range - divide into 100 pieces
+      var onePercentOfConstraintRange = constraintRange / 100;
+
+      //Subtract min strength (offset) from input strength to equalize input strength
+      var equalizedKnownStrength = knownStrength - minStrength;
+
+      //now determine what percentage of equalizedKnownStrength is to equalized strengthRange
+      var percentageInputStrength = (equalizedKnownStrength / strengthRange) * 100;
+
+      //compute pre-offset 1% constraint * percentage of inputStrength
+      var preoffsetConstraint = percentageInputStrength * onePercentOfConstraintRange;
+
+      //add back in min constraint (offset) back to preoffsetConstraint to restore to true value
+      var postOffsetConstraint = preoffsetConstraint + minConstraint;
+
+      return Math.round(postOffsetConstraint);
+  }
+
+  //creates invisible canvas for buffering
+  function createInvisibleCanvas(id, width, height)
+  {
+      var tempCanvas;
+
+      if(document.getElementById(id) !== null)
+      {
+          tempCanvas = document.getElementById(id);
+      } else {
+
+          tempCanvas = document.createElement("canvas");
+          tempCanvas.width = width;
+          tempCanvas.height = height;
+          tempCanvas.id = id;
+          tempCanvas.style.display = "none";
+          document.body.appendChild(tempCanvas);
+      }
+
+      return tempCanvas;
+  }
+
+  function playPauseAudio()
+  {
+      if(currentAudioState == "playing")
+      {
+          currentAudioState = "paused";
+          audio.pause();
+
+          document.getElementById("audioVisualizerPlayButton").style.display = "block";
+          document.getElementById("audioVisualizerPauseButton").style.display = "none";
+
+      } else {
+          currentAudioState = "playing";
+          audio.play();
+
+          document.getElementById("audioVisualizerPlayButton").style.display = "none";
+          document.getElementById("audioVisualizerPauseButton").style.display = "block";
+      }
+  }
+
+  document.getElementById("audioVisualizerPlayButton").addEventListener("click", playPauseAudio);
+  document.getElementById("audioVisualizerPauseButton").addEventListener("click", playPauseAudio);

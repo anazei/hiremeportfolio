@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello Giftagram!</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com" rel="stylesheet">
+
+    <style>
+
+        iframe
+        {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+
+        body
+        {
+            margin: 0;
+            background-color: #000000;
+            overflow-y: hidden;
+        }
+
+        #audioVisualizerWindowContainer
+        {
+            position: absolute;
+            left: 5px;
+            bottom: 100px;
+            width: 500px;
+            height: 80px;
+            scale: 0.75;
+            z-index: 2;
+            opacity: 0;
+        }
+
+        #audioVisualizerBinCanvas
+        {
+            margin-bottom: -5px;
+        }
+
+        #audioVisualizerTextContainer
+        {
+            position: absolute;
+            z-index: 1;
+        }
+
+        #audioVisualizerBackground
+        {
+            width: inherit;
+            height: inherit;
+            background-color: #2C3E48;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            position: relative;
+            opacity: .2;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 1));
+        }
+
+        .audioVisualizerText
+        {
+            color: white;
+            font-family: 'Roboto Condensed', monospace;
+        }
+
+        #audioVisualizerTitle
+        {
+            font-size: 10pt;
+            font-weight: 500;
+            position: relative;
+            left: 25px;
+            top: 15px;
+        }
+
+        #audioVisualizerText
+        {
+            font-size: 14pt;
+            font-weight: 300;
+            position: relative;
+            left: 25px;
+            top: 25px;
+        }
+
+        #audioVisualizerPlayButton
+        {
+            background-image: url("images/playButton.png");
+            width: 60px;
+            height: 60px;
+            position: relative;
+            left: 400px;
+            top: -25px;
+            display: none;
+        }
+
+        #audioVisualizerPauseButton
+        {
+            background-image: url("images/pauseButton.png");
+            width: 60px;
+            height: 60px;
+            position: relative;
+            left: 400px;
+            top: -25px;
+            display: block;
+        }
+
+        #entryGreetingText
+        {
+            position: absolute;
+            color: #FCBE5E;
+            font-family: 'Roboto', monospace;
+            font-size: 26pt;
+            font-weight: 300;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        #mainIframe
+        {
+            position: absolute;
+            z-index: 1;
+        }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="entryGreetingText">
+      Turn your screen to landscape<br><br>
+      This website is entirely Javascript driven and custom designed for Giftagram<br>
+      All original graphic designs and Javascript created by Kevin<br>
+      Music by Hans Zimmer<br><br>
+      Click anywhere to begin
+    </div>
+
+      <div id="audioVisualizerWindowContainer">
+          <canvas id="audioVisualizerBinCanvas" width="500" height="100"></canvas>
+          <div id="audioVisualizerTextContainer">
+              <div id="audioVisualizerTitle" class="audioVisualizerText">NOW PLAYING:</div>
+              <div id="audioVisualizerText" class="audioVisualizerText">Climate Change - Hans Zimmer, Planet Earth III</div>
+              <div id="audioVisualizerPlayButton"></div>
+              <div id="audioVisualizerPauseButton"></div>
+          </div>
+          <div id="audioVisualizerBackground"></div>
+          <audio id="audioPlayer" src=""></audio>
+      </div>
+
+      <div id="iframeDiv">
+          <!-- <iframe id="mainIframe" src=""></iframe> -->
+      </div>
+
+  </body>
+
+  <script src="js/gsap.min.js"></script>
+  <script src="js/easeljs.min.js"></script>
+  <script src="js/audiovisualizer.js"></script>
+  <script>
+
+      var audio;
+      var alreadyClicked = false;
+
+
+          //fade out "this contains audio, click anywhere to begin" text
+          function fadeOutGreetingText()
+          {
+              gsap.to("#entryGreetingText", {
+                  opacity: 0,
+                  duration: .35,
+              });
+
+              gsap.to("#audioVisualizerWindowContainer", {
+                  opacity: 1,
+                  duration: 2,
+                  delay: 10,
+              });
+          }
+
+
+      document.getElementById("audioPlayer").addEventListener("play", function(){
+              if(!audioContext){
+                  setupAudioAnalyzer();
+              } else {
+                  audioContext.resume();
+              }
+          }
+      );
+
+      window.addEventListener("message", function(event){
+
+            if(event.source !== document.getElementById("mainIframe").contentWindow){
+                return;
+            }
+
+            if(event.data === "iframeClicked")
+            {
+                console.log("message from iframe child");
+            }
+      });
+
+      window.addEventListener("click", function(){
+
+          if(alreadyClicked == false)
+          {
+              alreadyClicked = true;
+
+              //play splash page background music
+              audio = document.getElementById("audioPlayer");
+              audio.setAttribute('src', "audio/climatechange.mp3");
+              audio.play();
+
+              fadeOutGreetingText();
+
+              var iframe = document.createElement("iframe");
+                  iframe.id = "mainIframe";
+                  iframe.src = "splash/splash.html";
+
+              document.getElementById("iframeDiv").appendChild(iframe);
+          }
+      });
+
+
+  </script>
+
+</html>
