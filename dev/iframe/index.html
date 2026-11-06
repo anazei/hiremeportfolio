@@ -144,7 +144,7 @@
           <canvas id="audioVisualizerBinCanvas" width="500" height="100"></canvas>
           <div id="audioVisualizerTextContainer">
               <div id="audioVisualizerTitle" class="audioVisualizerText">NOW PLAYING:</div>
-              <div id="audioVisualizerText" class="audioVisualizerText">Climate Change - Hans Zimmer, Planet Earth III</div>
+              <div id="audioVisualizerText" class="audioVisualizerText"></div>
               <div id="audioVisualizerPlayButton"></div>
               <div id="audioVisualizerPauseButton"></div>
           </div>
@@ -161,27 +161,32 @@
   <script src="js/gsap.min.js"></script>
   <script src="js/easeljs.min.js"></script>
   <script src="js/audiovisualizer.js"></script>
+
   <script>
 
       var audio;
       var alreadyClicked = false;
 
+      //fade out "this contains audio, click anywhere to begin" text
+      function fadeOutGreetingText()
+      {
+          gsap.to("#entryGreetingText", {
+              opacity: 0,
+              duration: .35,
+          });
 
-          //fade out "this contains audio, click anywhere to begin" text
-          function fadeOutGreetingText()
-          {
-              gsap.to("#entryGreetingText", {
-                  opacity: 0,
-                  duration: .35,
-              });
+          gsap.to("#audioVisualizerWindowContainer", {
+              opacity: 1,
+              duration: 2,
+              delay: 10,
+          });
 
-              gsap.to("#audioVisualizerWindowContainer", {
-                  opacity: 1,
-                  duration: 2,
-                  delay: 10,
-              });
-          }
+          setTimeout(function(){
 
+              changeAudioTrackTitle("Climate Change - Hans Zimmer, Planet Earth III");
+
+          }, 10500);
+      }
 
       document.getElementById("audioPlayer").addEventListener("play", function(){
               if(!audioContext){

@@ -341,6 +341,50 @@
       return tempCanvas;
   }
 
+  //this will change the audio track title in the player
+  function changeAudioTrackTitle(newTitle)
+  {
+      var titleText = document.getElementById("audioVisualizerText");
+
+      if(titleText.innerHTML == "")
+      {
+          titleText.innerHTML = newTitle;
+
+          //fade in text
+          gsap.fromTo(titleText, {
+              alpha: 0
+          },
+          {
+              alpha: .75,
+              duration: 1,
+          });
+
+      } else {
+
+          //fade out old text and then fade in new text
+          gsap.fromTo(titleText, {
+              alpha: 1
+          },
+          {
+              alpha: 0,
+              duration: .75,
+              onComplete: function(){
+
+                  titleText.innerHTML = newTitle;
+
+                  gsap.fromTo(titleText, {
+                      alpha: 0
+                  },
+                  {
+                      alpha: .75,
+                      duration: 1,
+                  });
+              }
+          });
+
+      }
+  }
+
   function playPauseAudio()
   {
       if(currentAudioState == "playing")
