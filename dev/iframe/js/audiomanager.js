@@ -4,7 +4,7 @@
   */
   class AudioManager {
 
-    constructor(fftSize = 2048) {
+    constructor(fftSize = 1024) {
 
       this.ctx = new AudioContext();
       this.tracks = new Map();
