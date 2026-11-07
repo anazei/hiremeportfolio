@@ -200,9 +200,9 @@
                       }
 
                       setTimeout(function(){
-                        
+
                           loadNewSong("mainMusic", "audio/main.mp3");
-                          changeAudioTrackTitle("Forests - Hans Zimmer, Planet Earth III");
+                          changeAudioTrackTitle("Somewhere But Not Here - Nicolai Patricio");
                       }, 2000);
 
                       document.getElementById("mainIframe").src = "main/main.html";
@@ -275,7 +275,7 @@
           document.getElementById("audioVisualizerPauseButton").style.display = "block";
           document.getElementById("audioVisualizerRepeatButton").style.display = "none";
 
-          music.onEnded("splashMusic", function(id) {
+          music.onEnded(id, function(id) {
 
               currentAudioState = "finished";
 
