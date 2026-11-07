@@ -99,7 +99,7 @@
       this.currentTrack = id;
     }
 
-    // Fade out a track
+    // Fade out a track smoothly
     fadeOut(id, duration = 2) {
 
       const track = this.getTrack(id);
@@ -110,11 +110,27 @@
       const now = this.ctx.currentTime;
       const gain = track.gain.gain;
 
-      gain.linearRampToValueAtTime(
-        0,
-        now + duration
+      const startVolume = gain.value;
+      const steps = 128;
+      const curve = new Float32Array(steps);
+
+      // Generate smooth fade-out curve
+      for (let i = 0; i < steps; i++) {
+
+        const t = i / (steps - 1);
+
+        curve[i] = startVolume * Math.pow(1 - t, 2);
+
+      }
+
+      // Apply fade
+      gain.setValueCurveAtTime(
+        curve,
+        now,
+        duration
       );
 
+      // Pause when fade completes
       track.timer = setTimeout(() => {
 
         track.audio.pause();
@@ -126,7 +142,6 @@
 
       }, duration * 1000);
     }
-
     // Crossfade to another track
     async crossFade(newId, duration = 3) {
 
