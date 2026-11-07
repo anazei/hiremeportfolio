@@ -109,8 +109,8 @@
 
             particleArray[i].speed += (Math.round(Math.random() * 10)/10);
 
-            particleArray[i].x = Math.round(Math.cos(particleArray[i].direction * Math.PI/180) * particleArray[i].speed + particleArray[i].startX);
-            particleArray[i].y = (Math.round(Math.sin(particleArray[i].direction * Math.PI/180) * particleArray[i].speed + particleArray[i].startY));
+            particleArray[i].x = Math.round(0.0008 * particleArray[i].speed + particleArray[i].startX); //precomputed at -90 degrees upwards direction by Math.cos(-90 * Math.PI/180)
+            particleArray[i].y = Math.round(-(particleArray[i].speed) + particleArray[i].startY); //precomputed at -90 degrees upwards direction by Math.sin(-90 * Math.PI/180)
 
             //update lifespan
             particleArray[i].currentLifespan++;
@@ -258,8 +258,8 @@
           particle.startX = startX; //offset x
           particle.startY = startY; //offset y
 
-          particle.x = startX + Math.round(Math.cos(direction * Math.PI/180) * barHeight);
-          particle.y = startY + Math.round(Math.sin(direction * Math.PI/180) * barHeight);
+          particle.x = startX + Math.round(-1.58 * barHeight); //-90 degrees upwards fixed direction at Math.cos(direction * Math.PI/180
+          particle.y = startY + Math.round(-1.58 * barHeight); //-90 degrees upwards fixed direction at Math.sin(direction * Math.PI/180
 
           particleArray.push(particle);
       }
