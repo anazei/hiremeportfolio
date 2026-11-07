@@ -440,13 +440,6 @@
 
         }, 19750);
 
-        setTimeout(function(){
-
-            //user is now allowed to begin portfolio experience
-            clickLock = "allowed";
-
-        }, 20000);
-
         //keyframe
         setTimeout(function(){
 
@@ -469,6 +462,13 @@
             stopAnimateBackgroundRotatingText();
 
         }, 25000);
+
+        setTimeout(function(){
+
+            //user is now allowed to begin portfolio experience
+            clickLock = "allowed";
+
+        }, 26000);
     }
 
     function fadeOutSplashPage()
@@ -499,8 +499,8 @@
         //keyframe
         setTimeout(function(){
 
-            //console.log("next page in");            
-            window.parent.postMessage("mainPageIn", "*");
+            //console.log("next page in");
+            window.parent.postMessage("iframeClicked", "*");
 
         }, 7000);
     }
@@ -515,20 +515,20 @@
             startSplashPage();
 
         }, 750);
+
+        window.addEventListener("click", function(){
+
+            if(clickLock == "allowed")
+            {
+                clickLock = "disallowed";
+                fadeOutSplashPage();
+            }
+        });
     }
 
     init();
 
-    window.addEventListener("click", function(){
 
-        window.parent.postMessage("iframeClicked", "*");
-
-        if(clickLock == "allowed")
-        {
-            clickLock = "disallowed";
-            fadeOutSplashPage();
-        }
-    });
 
   </script>
 

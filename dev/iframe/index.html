@@ -187,7 +187,6 @@
           music.load("mainMusic", "audio/main.mp3", false); //boolean is whether to loop
 
           music.onEnded("splashMusic", function(id) {
-              console.log("Music finished:", id);
 
               currentAudioState = "finished";
 
@@ -197,7 +196,6 @@
           });
 
           music.onEnded("mainMusic", function(id) {
-              console.log("Music finished:", id);
 
               currentAudioState = "finished";
 
@@ -217,8 +215,11 @@
                   //load main page after splash page is finished
                   case "iframeClicked":
 
-                      music.fadeOut(currentAudioTrack, 2);
-
+                      if(currentAudioState == "playing")
+                      {
+                          music.fadeOut(currentAudioTrack, 2);
+                      }
+                      
                       document.getElementById("mainIframe").src = "main/main.html";
                   break;
               }
