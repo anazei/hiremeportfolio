@@ -183,27 +183,6 @@
 
       function init()
       {
-          music.load("splashMusic", "audio/climatechange.mp3", false); //boolean is whether to loop
-          music.load("mainMusic", "audio/main.mp3", false); //boolean is whether to loop
-
-          music.onEnded("splashMusic", function(id) {
-
-              currentAudioState = "finished";
-
-              document.getElementById("audioVisualizerPlayButton").style.display = "none";
-              document.getElementById("audioVisualizerPauseButton").style.display = "none";
-              document.getElementById("audioVisualizerRepeatButton").style.display = "block";
-          });
-
-          music.onEnded("mainMusic", function(id) {
-
-              currentAudioState = "finished";
-
-              document.getElementById("audioVisualizerPlayButton").style.display = "none";
-              document.getElementById("audioVisualizerPauseButton").style.display = "none";
-              document.getElementById("audioVisualizerRepeatButton").style.display = "block";
-          });
-
           window.addEventListener("message", function(event){
 
               if(event.source !== document.getElementById("mainIframe").contentWindow){
@@ -219,7 +198,13 @@
                       {
                           music.fadeOut(currentAudioTrack, 2);
                       }
-                      
+
+                      setTimeout(function(){
+                        
+                          loadNewSong("mainMusic", "audio/main.mp3");
+                          changeAudioTrackTitle("Forests - Hans Zimmer, Planet Earth III");
+                      }, 2000);
+
                       document.getElementById("mainIframe").src = "main/main.html";
                   break;
               }
@@ -232,7 +217,7 @@
               {
                   alreadyClicked = true;
 
-                  playSong("splashMusic");
+                  loadNewSong("splashMusic", "audio/climatechange.mp3");
 
                   fadeOutGreetingText();
 
@@ -276,6 +261,28 @@
 
           music.play(currentAudioTrack);
           updateAnalyzer();
+      }
+
+      function loadNewSong(id, url)
+      {
+          music.load(id, url, false); //boolean is whether to loop
+          playSong(id);
+
+          currentAudioState = "playing";
+
+          //display play button every time a new song is loaded, in case it's in pause or finished mode
+          document.getElementById("audioVisualizerPlayButton").style.display = "none";
+          document.getElementById("audioVisualizerPauseButton").style.display = "block";
+          document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+
+          music.onEnded("splashMusic", function(id) {
+
+              currentAudioState = "finished";
+
+              document.getElementById("audioVisualizerPlayButton").style.display = "none";
+              document.getElementById("audioVisualizerPauseButton").style.display = "none";
+              document.getElementById("audioVisualizerRepeatButton").style.display = "block";
+          });
       }
 
       init();
