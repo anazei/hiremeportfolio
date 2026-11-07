@@ -3,143 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Hello Giftagram!</title>
-
-    <!-- include this for Roboto font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://googleapis.com" rel="stylesheet">
-
-    <style>
-
-      html,body {
-        margin:0;
-        width:100%;
-        height:100%;
-        overflow:hidden;
-        background:#000000;
-        user-select: none;
-      }
-
-      #snow {
-        display:block;
-        width:100%;
-        height:100%;
-        position: fixed;
-        z-index: 30;
-      }
-
-      #masterCode
-      {
-          font-family: system-ui, sans-serif;
-          opacity: .20;
-          margin-left: 35px;
-          visibility: hidden;
-          position: absolute;
-          z-index: 20;
-      }
-
-      .code-line { display: block; white-space: pre; }
-      .tok-keyword { color: #c678dd; }
-      .tok-function { color: #61afef; }
-      .tok-string { color: #98c379; }
-      .tok-number { color: #d19a66; }
-      .tok-comment { color: #7f848e; }
-      .tok-builtin { color: #e5c07b; }
-      .tok-operator { color: #56b6c2; }
-      .tok-identifier, .tok-punctuation, .tok-plain { color: #d7d7d7; }
-
-      #rotatingTextContainer
-      {
-          position: absolute;
-          left: 40%;
-          top: 50%;
-          width: 50%;
-          z-index: 20;
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
-      }
-
-      #backgroundRotationText
-      {
-          color: white;
-          font-family: 'Roboto Condensed', monospace;
-          font-size: 20pt;
-          font-weight: 400;
-          letter-spacing: 3px;
-          position: absolute;
-          opacity: 0;
-      }
-
-      #mainRotationText
-      {
-          color: white;
-          font-family: 'Roboto Condensed', monospace;
-          font-size: 20pt;
-          font-weight: 400;
-          letter-spacing: 3px;
-          position: absolute;
-          opacity: 0;
-          width: auto;
-          height: auto;
-      }
-
-      #mainCanvas
-      {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        z-index: 10;
-      }
-
-      #giftagramLogoContainer
-      {
-          position: absolute;
-          right: 380px;
-          top: 350px;
-          scale: 0.8;
-          z-index: 20;
-      }
-
-      #giftagramLogo
-      {
-          color: white;
-          font-family: 'Roboto', monospace;
-          font-size: 50pt;
-          font-weight: 400;
-          letter-spacing: 0px;
-      }
-
-      #giftagramLogoSubtitle
-      {
-          color: #FCBE5E;
-          font-family: 'Roboto', monospace;
-          font-size: 19pt;
-          font-weight: 300;
-          letter-spacing: 0px;
-      }
-
-      .giftagramLogoSpan
-      {
-          display: inline-block;
-          opacity: 0;
-      }
-
-      #particleEmitter
-      {
-          position: absolute;
-          width: 5px;
-          height: 5px;
-          background-color: white;
-          border-radius: 50px;
-          opacity: 0;
-      }
-
-      #particleGroup
-      {
-          position: absolute;
-          z-index: 20;
-      }
-
-    </style>
+    <link rel="stylesheet" href="css/splash.css">
   </head>
   <body>
 
@@ -308,10 +175,6 @@
 
     <!-- main background image using zTransitions style effect to spotlight in -->
     <canvas id="mainCanvas" class="mainCanvas" width="1920" height="1080"></canvas>
-
-    <audio id="music">
-      <source src="" type="audio/mpeg">
-    </audio>
 
     <video id="mainVideo" style="display:none;">
       <source src="" type="video/mp4">
