@@ -146,8 +146,7 @@
     <div id="entryGreetingText">
       Turn your screen to landscape<br><br>
       This website is entirely Javascript driven and custom designed for Giftagram<br>
-      All original graphic designs and Javascript created by Kevin<br>
-      Music by Hans Zimmer<br><br>
+      All original graphic designs and Javascript created by Kevin Lam<br><br>
       Click anywhere to begin
     </div>
 
@@ -163,9 +162,7 @@
           <div id="audioVisualizerBackground"></div>
       </div>
 
-      <div id="iframeDiv">
-          <!-- <iframe id="mainIframe" src=""></iframe> -->
-      </div>
+      <div id="iframeDiv"></div>
 
   </body>
 
@@ -176,18 +173,11 @@
 
   <script>
 
-      var audio;
       var alreadyClicked = false;
-      var music = new AudioManager();
-      var currentAudioTrack = "";
 
       function init()
       {
           window.addEventListener("message", function(event){
-
-              if(event.source !== document.getElementById("mainIframe").contentWindow){
-                  return;
-              }
 
               switch(event.data)
               {
@@ -221,6 +211,7 @@
 
                   fadeOutGreetingText();
 
+                  //only load splash page after click to allow audio browser persmission to play
                   var iframe = document.createElement("iframe");
                       iframe.id = "mainIframe";
                       iframe.src = "splash/splash.html";
@@ -255,40 +246,7 @@
           }, 10500);
       }
 
-      function playSong(name)
-      {
-          currentAudioTrack = name;
-
-          music.play(currentAudioTrack);
-          updateAnalyzer();
-      }
-
-      function loadNewSong(id, url)
-      {
-          music.load(id, url, false); //boolean is whether to loop
-          playSong(id);
-
-          currentAudioState = "playing";
-
-          //display play button every time a new song is loaded, in case it's in pause or finished mode
-          document.getElementById("audioVisualizerPlayButton").style.display = "none";
-          document.getElementById("audioVisualizerPauseButton").style.display = "block";
-          document.getElementById("audioVisualizerRepeatButton").style.display = "none";
-
-          music.onEnded(id, function(id) {
-
-              currentAudioState = "finished";
-
-              document.getElementById("audioVisualizerPlayButton").style.display = "none";
-              document.getElementById("audioVisualizerPauseButton").style.display = "none";
-              document.getElementById("audioVisualizerRepeatButton").style.display = "block";
-          });
-      }
-
       init();
-
-
-
 
   </script>
 

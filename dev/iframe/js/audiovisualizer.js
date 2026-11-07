@@ -1,4 +1,5 @@
   /*
+    Simple audio player with visualizer
     This is connected to AudioManager class
   */
 
@@ -18,6 +19,8 @@
   var frequencyData;
 
   var currentAudioState = "playing"; //playing, paused
+  var music = new AudioManager();
+  var currentAudioTrack = "";
 
   function updateAnalyzer()
   {
@@ -378,6 +381,36 @@
               document.getElementById("audioVisualizerRepeatButton").style.display = "none";
           break;
       }
+  }
+
+  function playSong(name)
+  {
+      currentAudioTrack = name;
+
+      music.play(currentAudioTrack);
+      updateAnalyzer();
+  }
+
+  function loadNewSong(id, url)
+  {
+      music.load(id, url, false); //boolean is whether to loop
+      playSong(id);
+
+      currentAudioState = "playing";
+
+      //display play button every time a new song is loaded, in case it's in pause or finished mode
+      document.getElementById("audioVisualizerPlayButton").style.display = "none";
+      document.getElementById("audioVisualizerPauseButton").style.display = "block";
+      document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+
+      music.onEnded(id, function(id) {
+
+          currentAudioState = "finished";
+
+          document.getElementById("audioVisualizerPlayButton").style.display = "none";
+          document.getElementById("audioVisualizerPauseButton").style.display = "none";
+          document.getElementById("audioVisualizerRepeatButton").style.display = "block";
+      });
   }
 
   document.getElementById("audioVisualizerPlayButton").addEventListener("click", playPauseAudio);
