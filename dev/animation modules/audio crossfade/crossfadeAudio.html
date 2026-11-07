@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="playTrack(0)">Play Song 1</button>
+<button onclick="playTrack(1)">Play Song 2</button>
+<button onclick="fadeOut()">Fade Out</button>
+
+<script>
+const audioCtx = new AudioContext();
+
+const tracks = [
+  new Audio("climatechange.mp3"),
+  new Audio("main.mp3")
+];
+
+const gains = [];
+
+let currentTrack = -1;
+const fadeDuration = 3;
+
+// Setup audio routing
+tracks.forEach((audio, i) => {
+
+  audio.loop = true;
+  audio.preload = "auto";
+
+  const source = audioCtx.createMediaElementSource(audio);
+  const gain = audioCtx.createGain();
+
+  source.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  gain.gain.value = 0;
+  gains.push(gain);
+
+});
+
+async function playTrack(index) {
+
+  await audioCtx.resume();
+
+  if (currentTrack === index) return;
+
+  const now = audioCtx.currentTime;
+  const oldTrack = currentTrack;
+
+  // Start new track silently
+  const newAudio = tracks[index];
+  const newGain = gains[index].gain;
+
+  newAudio.currentTime = 0;
+  await newAudio.play();
+
+  const startTime = audioCtx.currentTime;
+
+  // Fade new track IN
+  newGain.cancelScheduledValues(startTime);
+  newGain.setValueAtTime(0, startTime);
+  newGain.linearRampToValueAtTime(
+    1,
+    startTime + fadeDuration
+  );
+
+  // Fade old track OUT
+  if (oldTrack !== -1) {
+
+    const oldGain = gains[oldTrack].gain;
+
+    oldGain.cancelScheduledValues(startTime);
+    oldGain.setValueAtTime(
+      oldGain.value,
+      startTime
+    );
+
+    oldGain.linearRampToValueAtTime(
+      0,
+      startTime + fadeDuration
+    );
+
+    // Stop old track after fade
+    const oldAudio = tracks[oldTrack];
+
+    setTimeout(() => {
+      if (currentTrack !== oldTrack) {
+        oldAudio.pause();
+      }
+    }, fadeDuration * 1000);
+
+  }
+
+  currentTrack = index;
+}
+
+function fadeOut() {
+
+  if (currentTrack === -1) return;
+
+  const index = currentTrack;
+  const gain = gains[index].gain;
+  const now = audioCtx.currentTime;
+
+  gain.cancelScheduledValues(now);
+  gain.setValueAtTime(gain.value, now);
+  gain.linearRampToValueAtTime(
+    0,
+    now + fadeDuration
+  );
+
+  currentTrack = -1;
+
+  setTimeout(() => {
+    if (currentTrack !== index) {
+      tracks[index].pause();
+    }
+  }, fadeDuration * 1000);
+
+}
+</script>
+
+</body>
+</html>

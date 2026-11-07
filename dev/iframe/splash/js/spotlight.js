@@ -34,7 +34,7 @@ var Spotlight = function(masterReference, mainCanvas)
         );
 
         radial.addColorStop(0, "rgba(255, 0, 0, 1)");
-        radial.addColorStop(0.5, "rgba(255, 0, 0, 0.2)");
+        radial.addColorStop(0.5, "rgba(255, 0, 0, 0.5)");
         radial.addColorStop(1, "rgba(255, 0, 0, 0)");
 
         maskContext.fillStyle = radial;
@@ -49,7 +49,7 @@ var Spotlight = function(masterReference, mainCanvas)
         gsap.to(gradient, {
           radius: 1200,
           duration: 5,
-          //ease: "power2.inOut",
+          //ease: "power2.in",
           onUpdate: setupMask
         });
 

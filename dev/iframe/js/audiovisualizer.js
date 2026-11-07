@@ -1,3 +1,7 @@
+  /*
+    This is connected to AudioManager class
+  */
+
   var spectrumCanvas = document.getElementById("audioVisualizerBinCanvas");
   var spectrumContext = spectrumCanvas.getContext("2d");
 
@@ -15,37 +19,10 @@
 
   var currentAudioState = "playing"; //playing, paused
 
-  async function setupAudioAnalyzer()
-  {
-      const audio = document.getElementById("audioPlayer");
-
-      audioContext = new AudioContext();
-
-      const source = audioContext.createMediaElementSource(audio);
-
-      analyser = audioContext.createAnalyser();
-
-      // FFT size determines number of bins
-      analyser.fftSize = 2048;
-
-      // Smoothing (0 = none, 1 = maximum)
-      analyser.smoothingTimeConstant = 0.7;
-
-      source.connect(analyser);
-      analyser.connect(audioContext.destination);
-
-      // Create array for frequency data
-      frequencyData = new Uint8Array(analyser.frequencyBinCount);
-
-      await audioContext.resume();
-
-      updateAnalyzer();
-  }
-
   function updateAnalyzer()
   {
       // Get current frequency bin values
-      analyser.getByteFrequencyData(frequencyData);
+      frequencyData = music.getBins();
 
       drawRectangles();
 
@@ -82,7 +59,7 @@
           } else {
 
               //limit the amount of particles that can be rendered
-              if(Math.round(Math.random() * 2) == 0)
+              if(Math.round(Math.random() * 6) == 0)
               {
                   //generate a new particle data for every bin data value greater than 0
                   generateNewParticle(startPositionX, spectrumCanvas.height - freqHeight, -90, freqHeight);
@@ -189,7 +166,6 @@
 
         //get available particle
         return particlePool.shift();
-
       }
   }
 
@@ -320,27 +296,6 @@
       return Math.round(postOffsetConstraint);
   }
 
-  //creates invisible canvas for buffering
-  function createInvisibleCanvas(id, width, height)
-  {
-      var tempCanvas;
-
-      if(document.getElementById(id) !== null)
-      {
-          tempCanvas = document.getElementById(id);
-      } else {
-
-          tempCanvas = document.createElement("canvas");
-          tempCanvas.width = width;
-          tempCanvas.height = height;
-          tempCanvas.id = id;
-          tempCanvas.style.display = "none";
-          document.body.appendChild(tempCanvas);
-      }
-
-      return tempCanvas;
-  }
-
   //this will change the audio track title in the player
   function changeAudioTrackTitle(newTitle)
   {
@@ -390,14 +345,16 @@
       if(currentAudioState == "playing")
       {
           currentAudioState = "paused";
-          audio.pause();
+
+          music.stop(currentAudioTrack);
 
           document.getElementById("audioVisualizerPlayButton").style.display = "block";
           document.getElementById("audioVisualizerPauseButton").style.display = "none";
 
       } else {
           currentAudioState = "playing";
-          audio.play();
+
+          music.play(currentAudioTrack);
 
           document.getElementById("audioVisualizerPlayButton").style.display = "none";
           document.getElementById("audioVisualizerPauseButton").style.display = "block";

@@ -379,14 +379,14 @@
 
             startAnimateBackgroundRotatingText(48);
 
-        }, 4000);
+        }, 6000);
 
         //keyframe
         setTimeout(function(){
 
             createRotatingMessageString("welcome  to  my  symphony  of  code  portfolio");
 
-        }, 4500);
+        }, 7500);
 
         //keyframe
         setTimeout(function(){
@@ -402,7 +402,7 @@
 
             stopAnimateBackgroundRotatingText();
 
-        }, 10000);
+        }, 12000);
 
         //keyframe
         setTimeout(function(){
@@ -499,8 +499,8 @@
         //keyframe
         setTimeout(function(){
 
-            console.log("next page in");
-            window.location.href = "temp/main.html";
+            //console.log("next page in");            
+            window.parent.postMessage("mainPageIn", "*");
 
         }, 7000);
     }

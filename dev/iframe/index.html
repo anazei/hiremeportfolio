@@ -149,7 +149,6 @@
               <div id="audioVisualizerPauseButton"></div>
           </div>
           <div id="audioVisualizerBackground"></div>
-          <audio id="audioPlayer" src=""></audio>
       </div>
 
       <div id="iframeDiv">
@@ -160,12 +159,53 @@
 
   <script src="js/gsap.min.js"></script>
   <script src="js/easeljs.min.js"></script>
+  <script src="js/audiomanager.js"></script>
   <script src="js/audiovisualizer.js"></script>
 
   <script>
 
       var audio;
       var alreadyClicked = false;
+      var music = new AudioManager();
+      var currentAudioTrack = "";
+
+      function init()
+      {
+          music.load("splashMusic", "audio/climatechange.mp3", false); //boolean is whether to loop
+          music.load("mainMusic", "audio/main.mp3", false); //boolean is whether to loop
+
+          window.addEventListener("message", function(event){
+
+              if(event.source !== document.getElementById("mainIframe").contentWindow){
+                  return;
+              }
+
+              if(event.data === "iframeClicked")
+              {
+                  console.log("message from iframe child");
+              }
+          });
+
+          window.addEventListener("click", function(){
+
+              if(alreadyClicked == false)
+              {
+                  alreadyClicked = true;
+
+                  currentAudioTrack = "splashMusic";
+                  music.play(currentAudioTrack);
+                  updateAnalyzer();
+
+                  fadeOutGreetingText();
+
+                  var iframe = document.createElement("iframe");
+                      iframe.id = "mainIframe";
+                      iframe.src = "splash/splash.html";
+
+                  document.getElementById("iframeDiv").appendChild(iframe);
+              }
+          });
+      }
 
       //fade out "this contains audio, click anywhere to begin" text
       function fadeOutGreetingText()
@@ -175,9 +215,13 @@
               duration: .35,
           });
 
-          gsap.to("#audioVisualizerWindowContainer", {
+          gsap.fromTo("#audioVisualizerWindowContainer",
+          {
+              opacity: 0,
+          },
+          {
               opacity: 1,
-              duration: 2,
+              duration: 4,
               delay: 10,
           });
 
@@ -188,47 +232,9 @@
           }, 10500);
       }
 
-      document.getElementById("audioPlayer").addEventListener("play", function(){
-              if(!audioContext){
-                  setupAudioAnalyzer();
-              } else {
-                  audioContext.resume();
-              }
-          }
-      );
+      init();
 
-      window.addEventListener("message", function(event){
 
-            if(event.source !== document.getElementById("mainIframe").contentWindow){
-                return;
-            }
-
-            if(event.data === "iframeClicked")
-            {
-                console.log("message from iframe child");
-            }
-      });
-
-      window.addEventListener("click", function(){
-
-          if(alreadyClicked == false)
-          {
-              alreadyClicked = true;
-
-              //play splash page background music
-              audio = document.getElementById("audioPlayer");
-              audio.setAttribute('src', "audio/climatechange.mp3");
-              audio.play();
-
-              fadeOutGreetingText();
-
-              var iframe = document.createElement("iframe");
-                  iframe.id = "mainIframe";
-                  iframe.src = "splash/splash.html";
-
-              document.getElementById("iframeDiv").appendChild(iframe);
-          }
-      });
 
 
   </script>
