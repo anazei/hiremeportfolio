@@ -13,7 +13,7 @@
       // Shared analyser for all audio
       this.analyser = this.ctx.createAnalyser();
       this.analyser.fftSize = fftSize;
-      this.analyser.smoothingTimeConstant = 0.8;
+      this.analyser.smoothingTimeConstant = 0.6;
 
       // Allocate reusable arrays
       this.bins = new Uint8Array(
@@ -67,6 +67,24 @@
 
       this.cancelFade(track);
 
+      track.gain.gain.value = 1;
+
+      await track.audio.play();
+
+      this.currentTrack = id;
+    }
+
+    // Restart a track from the beginning
+    async restart(id) {
+
+      const track = this.getTrack(id);
+      if (!track) return;
+
+      await this.ctx.resume();
+
+      this.cancelFade(track);
+
+      track.audio.currentTime = 0;
       track.gain.gain.value = 1;
 
       await track.audio.play();
@@ -279,7 +297,25 @@
 
       return track;
     }
-  }
+
+    // Listen for when a track finishes naturally
+    onEnded(id, callback) {
+
+      const track = this.getTrack(id);
+      if (!track) return;
+
+      track.audio.addEventListener("ended", () => {
+
+        if (this.currentTrack === id) {
+          this.currentTrack = null;
+        }
+
+        callback(id);
+
+      });
+    }
+
+  } //end class
 
   /*  API
 

@@ -105,6 +105,17 @@
             display: block;
         }
 
+        #audioVisualizerRepeatButton
+        {
+            background-image: url("images/repeat.png");
+            width: 60px;
+            height: 60px;
+            position: relative;
+            left: 400px;
+            top: -25px;
+            display: none;
+        }
+
         #entryGreetingText
         {
             position: absolute;
@@ -147,6 +158,7 @@
               <div id="audioVisualizerText" class="audioVisualizerText"></div>
               <div id="audioVisualizerPlayButton"></div>
               <div id="audioVisualizerPauseButton"></div>
+              <div id="audioVisualizerRepeatButton"></div>
           </div>
           <div id="audioVisualizerBackground"></div>
       </div>
@@ -174,27 +186,52 @@
           music.load("splashMusic", "audio/climatechange.mp3", false); //boolean is whether to loop
           music.load("mainMusic", "audio/main.mp3", false); //boolean is whether to loop
 
+          music.onEnded("splashMusic", function(id) {
+              console.log("Music finished:", id);
+
+              currentAudioState = "finished";
+
+              document.getElementById("audioVisualizerPlayButton").style.display = "none";
+              document.getElementById("audioVisualizerPauseButton").style.display = "none";
+              document.getElementById("audioVisualizerRepeatButton").style.display = "block";
+          });
+
+          music.onEnded("mainMusic", function(id) {
+              console.log("Music finished:", id);
+
+              currentAudioState = "finished";
+
+              document.getElementById("audioVisualizerPlayButton").style.display = "none";
+              document.getElementById("audioVisualizerPauseButton").style.display = "none";
+              document.getElementById("audioVisualizerRepeatButton").style.display = "block";
+          });
+
           window.addEventListener("message", function(event){
 
               if(event.source !== document.getElementById("mainIframe").contentWindow){
                   return;
               }
 
-              if(event.data === "iframeClicked")
+              switch(event.data)
               {
-                  console.log("message from iframe child");
+                  //load main page after splash page is finished
+                  case "iframeClicked":
+
+                      music.fadeOut(currentAudioTrack, 2);
+
+                      document.getElementById("mainIframe").src = "main/main.html";
+                  break;
               }
           });
 
           window.addEventListener("click", function(){
 
+              //first click to enter splash page
               if(alreadyClicked == false)
               {
                   alreadyClicked = true;
 
-                  currentAudioTrack = "splashMusic";
-                  music.play(currentAudioTrack);
-                  updateAnalyzer();
+                  playSong("splashMusic");
 
                   fadeOutGreetingText();
 
@@ -230,6 +267,14 @@
               changeAudioTrackTitle("Climate Change - Hans Zimmer, Planet Earth III");
 
           }, 10500);
+      }
+
+      function playSong(name)
+      {
+          currentAudioTrack = name;
+
+          music.play(currentAudioTrack);
+          updateAnalyzer();
       }
 
       init();

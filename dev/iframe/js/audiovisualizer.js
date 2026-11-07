@@ -342,24 +342,44 @@
 
   function playPauseAudio()
   {
-      if(currentAudioState == "playing")
+      switch(currentAudioState)
       {
-          currentAudioState = "paused";
+          case "playing":
 
-          music.stop(currentAudioTrack);
+              currentAudioState = "paused";
 
-          document.getElementById("audioVisualizerPlayButton").style.display = "block";
-          document.getElementById("audioVisualizerPauseButton").style.display = "none";
+              music.stop(currentAudioTrack);
 
-      } else {
-          currentAudioState = "playing";
+              document.getElementById("audioVisualizerPlayButton").style.display = "block";
+              document.getElementById("audioVisualizerPauseButton").style.display = "none";
+              document.getElementById("audioVisualizerRepeatButton").style.display = "none";
 
-          music.play(currentAudioTrack);
+          break;
 
-          document.getElementById("audioVisualizerPlayButton").style.display = "none";
-          document.getElementById("audioVisualizerPauseButton").style.display = "block";
+          case "paused":
+
+              currentAudioState = "playing";
+
+              music.play(currentAudioTrack);
+
+              document.getElementById("audioVisualizerPlayButton").style.display = "none";
+              document.getElementById("audioVisualizerPauseButton").style.display = "block";
+              document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+          break;
+
+          case "finished":
+
+              currentAudioState = "playing";
+
+              music.restart(currentAudioTrack);
+
+              document.getElementById("audioVisualizerPlayButton").style.display = "none";
+              document.getElementById("audioVisualizerPauseButton").style.display = "block";
+              document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+          break;
       }
   }
 
   document.getElementById("audioVisualizerPlayButton").addEventListener("click", playPauseAudio);
   document.getElementById("audioVisualizerPauseButton").addEventListener("click", playPauseAudio);
+  document.getElementById("audioVisualizerRepeatButton").addEventListener("click", playPauseAudio);
