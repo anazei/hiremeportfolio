@@ -58,7 +58,7 @@
               if(Math.round(Math.random() * 4) == 0)
               {
                   //generate a new particle data for every bin data value greater than 0
-                  generateNewParticle(i * 7, spectrumCanvas.height - freqHeight, -90, freqHeight);
+                  generateNewParticle(i * 6, spectrumCanvas.height - freqHeight, -90, freqHeight);
               }
           }
 
@@ -102,7 +102,7 @@
             //interpolate how much alpha until death - alpha to zero over life cycle
             particleArray[i].alpha = ((particleArray[i].lifecycle / particleArray[i].originalAlpha) * (particleArray[i].lifecycle - particleArray[i].currentLifespan)) * ALPHA_255_TO_1;
 
-            particleArray[i].speed += (Math.round(Math.random() * 10) * 0.166); // * 0.166 multiply operation is faster than / 6 division operation, 0.25 is computed by 1 / n division inverse where N is the value being divided
+            particleArray[i].speed += (Math.round(Math.random() * 10) * .1); // * 0.166 multiply operation is faster than / 6 division operation, 0.25 is computed by 1 / n division inverse where N is the value being divided
 
             particleArray[i].x = Math.round(0.0008 * particleArray[i].speed + particleArray[i].startX); //precomputed at -90 degrees upwards direction by Math.cos(-90 * Math.PI/180)
             particleArray[i].y = Math.round(-(particleArray[i].speed) + particleArray[i].startY); //precomputed at -90 degrees upwards direction by Math.sin(-90 * Math.PI/180)
@@ -145,7 +145,7 @@
   //init and generate particle pool
   function initParticlePool()
   {
-      for(var i=0;i<5000;i++)
+      for(var i=0;i<1000;i++)
       {
           particlePool[i] = createOneNewParticle();
       }
@@ -233,7 +233,7 @@
           particle.originalAlpha = startAlpha;
           particle.alpha = startAlpha;
 
-          particle.radius = Math.round(Math.random() * 3) + 1; //this sets the maximum and minimum size of the particles
+          particle.radius = Math.round(Math.random() * 5) + 1; //this sets the maximum and minimum size of the particles
 
           particle.currentLifespan = 0; //current number of frame redraws
 

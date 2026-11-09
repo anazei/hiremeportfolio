@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- include this for Roboto font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com" rel="stylesheet">
+
+    <style>
+
+        body
+        {
+            background-color: black;
+        }
+
+        a
+        {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        #contactInfoContainer
+        {
+            color: white;
+            font-family: 'Roboto Condensed', monospace;
+            font-size: 15pt;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        #contactInfo
+        {
+            opacity: 0;
+        }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="contactInfoContainer">
+      <div id="contactInfo">
+        Kevin
+        |
+        <a href="tel:6477410039">tel: 647.741.0039</a>
+         |
+        <a href="mailto:cineblueone@gmail.com">email: cineblueone@gmail.com</a>
+      </div>
+    </div>
+
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="SplitText.min.js"></script>
+  <script>
+
+      gsap.registerPlugin(SplitText);
+
+      function fadeInContactInfo()
+      {
+          document.getElementById("contactInfo").style.opacity = 1;
+
+          var contactTextSplit = SplitText.create("#contactInfo", {
+            type: "chars"
+          });
+
+          gsap.fromTo(contactTextSplit.chars,
+          {
+              alpha: 0,
+          },
+          {
+              alpha: 1,
+              delay: function(i){
+                  return i / 250;
+              },
+              onComplete: function(){
+                  contactTextSplit.revert();
+              }
+          });
+      }
+
+      function fadeOutContactInfo()
+      {
+          gsap.to("#contactInfo", {
+              alpha: 0,
+              duration: 1,
+          });
+      }
+
+      fadeInContactInfo();
+      //fadeOutContactInfo();
+
+
+
+
+  </script>
+
+</html>

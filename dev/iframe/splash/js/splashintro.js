@@ -1,5 +1,5 @@
   /*
-    This is the splash page key frames intro function 
+    This is the splash page key frames intro function
 
       startSplashPage()
       fadeOutSplashPage()
@@ -132,7 +132,7 @@
           //user is now allowed to begin portfolio experience
           clickLock = "allowed";
 
-      }, 26000);
+      }, 25000);
   }
 
   function fadeOutSplashPage()

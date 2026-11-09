@@ -22,6 +22,7 @@
             margin: 0;
             background-color: #000000;
             overflow-y: hidden;
+            user-select: none;
         }
 
         #audioVisualizerWindowContainer
@@ -151,7 +152,7 @@
     </div>
 
       <div id="audioVisualizerWindowContainer">
-          <canvas id="audioVisualizerBinCanvas" width="500" height="200"></canvas>
+          <canvas id="audioVisualizerBinCanvas" width="500" height="250"></canvas>
           <div id="audioVisualizerTextContainer">
               <div id="audioVisualizerTitle" class="audioVisualizerText">NOW PLAYING:</div>
               <div id="audioVisualizerText" class="audioVisualizerText"></div>
@@ -196,6 +197,14 @@
                       }, 2000);
 
                       document.getElementById("mainIframe").src = "main/main.html";
+                  break;
+
+                  case "moveAudioPlayer":
+
+                    gsap.to("#audioVisualizerWindowContainer", {
+                      y: "-= 75",
+                      duration: .5,
+                    });
                   break;
               }
           });
