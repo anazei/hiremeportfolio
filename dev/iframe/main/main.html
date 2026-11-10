@@ -256,6 +256,7 @@
           left: 125px;
           top: 300px;
           width: 1000px;
+          z-index: 40;
       }
 
       #landingTitle
@@ -277,6 +278,11 @@
           z-index: 30;
           position: absolute;
           top: 100px;
+      }
+
+      .colorGold
+      {
+          color: #FCBE5E;
       }
 
       a
@@ -529,13 +535,13 @@
         <span id="navSep1" class="navText marginLeft10">|</span>
         <span id="navPortfolio" class="handCursor navText marginLeft10">View Portfolio</span>
         <span id="navSep2" class="navText marginLeft10">|</span>
-        <span id="navBehindScenes" class="handCursor navText marginLeft10">Making this website</span>
+        <span id="navBehindScenes" class="handCursor navText marginLeft10">Making This Website</span>
       </div>
 
       <div id="slideNavContainer">
-        <span id="slideNavNext" class="handCursor slideNavText marginLeft25">Next</span>
-        <span id="slideNavSep" class="navText marginLeft25">|</span>
         <span id="slideNavPrevious" class="handCursor slideNavText marginLeft25">Previous</span>
+        <span id="slideNavSep" class="navText marginLeft25">|</span>
+        <span id="slideNavNext" class="handCursor slideNavText marginLeft25">Next</span>
         <span id="slideNavPage" class="navText marginLeft25">1 / 3</span>
       </div>
     </div>
@@ -588,9 +594,9 @@
         setTimeout(function(){
 
             //fade in main intro text blurb
-            displayMainLandingText();
-            startRotateLandingText();
+            displayDownloadCVPage();
 
+            //fade in nav and contact info
             navListeners();
 
             gsap.to("#masterNavContainer", {
@@ -599,6 +605,7 @@
               delay: .5,
             });
 
+            //move audio play upwards
             window.parent.postMessage("moveAudioPlayer", "*");
 
         }, 1500);
@@ -609,11 +616,6 @@
             fadeOutSnowfall();
 
         }, 7500);
-
-          //fade in permanent contact info
-
-          //fade in nav
-
     }
 
     function startRandomRollingGridEffect()
@@ -659,15 +661,10 @@
     var landTextTitleArray = new Array();
     var landTextArray = new Array();
 
-    landTextTitleArray.push("An unusual journey");
-    landTextTitleArray.push("Experienced developer but entry level ReactJS");
-    landTextTitleArray.push("I'm searching for my next adventure");
-    landTextArray.push("I started out as a graphic designer who transitioned into Flash development for the advertising industry before moving into the streaming video industry as a video player software developer. I learned core computer science through a private comp sci mentor for a decade but I learned my computer graphics trade-mathematics, 2D rendering science and techniques independently.");
-    landTextArray.push("I’m an experienced software developer but an entry level ReactJS developer. I have a lot of experience with vanilla HTML/CSS/Javascript but I’ve never used the ReactJS framework because I spent two years building a single page online video editor/remixer called zTransitions that did not need ReactJS but I am eager to gain experience with ReactJS.");
-    landTextArray.push("Giftagram seems like the small tight knit startup like environment I've always thrived in and I immediately wanted to be a part of your journey as my first choice. It is important to me that I can contribute to make a positive impact to help you win.");
-
     function displayMainLandingText()
     {
+        lockNav();
+
         gsap.to("#landingTitle", {
           alpha: 0,
           duration: .35,
@@ -697,7 +694,7 @@
                 opacity: 1,
                 scale: 1,
                 delay: function(i){
-                    return i / 25;
+                    return i / 55;
                 },
                 ease: "power2.inOut",
                 onComplete: function(){
@@ -713,79 +710,149 @@
                 opacity: 0,
               },
               {
-                duration: 1.5,
+                duration: .75,
                 opacity: 1,
                 scale: 1,
                 delay: function(i){
-                    return i / 115;
+                    return i / 155;
                 },
                 ease: "power2.inOut",
                 onComplete: function(){
                     landingTextSplit.revert();
+
+                    unlockNav();
                 }
               });
-
-              landingTextCounter++;
           }
         });
     }
 
-    var allowRotateLandingText = true;
-    var allowRotateLandingTextInterval;
-
-    //rotate landing page text infinnitely
-    function startRotateLandingText()
-    {
-        allowRotateLandingTextInterval = setInterval(function(){
-
-          if(allowRotateLandingText == true)
-          {
-              displayMainLandingText();
-          } else {
-              clearInterval(allowRotateLandingTextInterval);
-          }
-
-        }, 25000);
-    }
-
-    function stopRotatingLandingText()
-    {
-        allowRotateLandingText = false;
-    }
-
-    //rotate background images
-    function startRotatingLandingBackgroundImages()
-    {
-
-    }
-
-    function stopRotatingLandingBackgroundImages()
-    {
-
-    }
-
     function displayDownloadCVPage()
     {
+        landingTextCounter = -1;
+        landTextTitleArray = new Array();
+        landTextArray = new Array();
 
+        landTextTitleArray.push("An unusual journey");
+        landTextTitleArray.push("Experienced developer but entry level ReactJS");
+        landTextTitleArray.push("I'm searching for my next adventure");
+
+        landTextArray.push("I started out as a graphic designer who transitioned into Flash development for the advertising industry before moving into the streaming video industry as a video player software developer. I learned core computer science through a private comp sci mentor for a decade but I learned my computer graphics trade-mathematics, 2D rendering science and techniques independently.");
+        landTextArray.push("I’m an experienced software developer but an entry level ReactJS developer. I have a lot of experience with vanilla HTML/CSS/Javascript but I’ve never used the ReactJS framework because I spent two years building a single page online video editor/remixer called zTransitions that did not need ReactJS. However, I am eager to gain experience with ReactJS.");
+        landTextArray.push("Giftagram seems like the small tight knit startup like environment I've always thrived in and I immediately wanted to be a part of your journey as my first choice. It is important to me that I can contribute to make a positive impact to help you win.");
+
+        displayMainLandingText();
+        landingTextCounter++;
+
+        document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+
+        //set backgrounds
+
+        //load youtube videos
     }
 
     function displayPortfolioPage()
     {
+        landingTextCounter = -1;
+        landTextTitleArray = new Array();
+        landTextArray = new Array();
 
+        landTextTitleArray.push("zTransitions video remixer");
+        landTextTitleArray.push("A standalone web app");
+        landTextTitleArray.push("Audio visualizer");
+        landTextTitleArray.push("Drone Vision video codec");
+
+        landTextArray.push("I built zTransitions in 2019 as an online video editor/remixer for social media that was as easy to use as Powerpoint while offering powerful video transitions, audio mixing and special effects to help users quickly create their marketing story videos without any skill required. I especially envisioned it as helping realtor photographers make promotional real estate videos.");
+        landTextArray.push("zTransitions was built with only vanilla HTML/CSS/Javascript and is a standalone web app that uses no backend or servers. Everything runs off the browser only. I created all the graphic design and wrote all the code by myself and it took two years to build from scratch.");
+        landTextArray.push("In 2015, I took a part time four month web dev night class bootcamp after work to familiarize myself with HTML/CSS/JS. This Javascript particle system audio visualizer was one of my three final projects I created from scratch and presented to the class before graduation. See my actual live CodePen project at: <span class=\"colorGold\"><a href=\"https://codepen.io/kevin-lam-the-scripter/pen/KKQJepr\" target=\"_blank\">https://codepen.io/kevin-lam-the-scripter/pen/KKQJepr</a></span>");
+        landTextArray.push("Drone Vision was my submission to a 2025 Canadian Armed Forces’s public drone technology contest. I proposed that a combined black-and-white and chroma-subsampling based video broadcast codec would use less intense video encoding effort with equally effective results but consume less battery power to keep a drone airborne much longer than traditional DCT video codecs originally meant for watching movies.");
+
+        displayMainLandingText();
+        landingTextCounter++;
+
+        document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+
+        //set backgrounds
+
+        //load youtube videos
     }
 
     function displayBehindTheScenes()
     {
+        landingTextCounter = -1;
+        landTextTitleArray = new Array();
+        landTextArray = new Array();
 
+        landTextTitleArray.push("Planning and Storyboarding");
+        landTextTitleArray.push("Building Individual Animated Components");
+        landTextTitleArray.push("Advanced Masking Transitions");
+        landTextTitleArray.push("Utilizing Artificial Intelligence");
+
+        landTextArray.push("It took a month to build this portfolio website from start to finish. The first stage always begins with planning and storyboarding where brainstormed ideas and rough graphic design layouts create the initial look and feel of the website which took an entire week. Even then, there were many major later revisions over the month as better ideas emerged. See this website project’s GIT repo at <span class=\"colorGold\"><a href=\"https://github.com/anazei/hiremeportfolio.git\" target=\"_blank\">https://github.com/anazei/hiremeportfolio.git</a></span>");
+        landTextArray.push("After how the entire look and feel of the website was planned out, each of the complex animations that make up the experience was individually hand coded separately before being integrated together to create the final design. Almost two dozen individual animations had to be designed and coded from scratch one-by-one and slowly integrated to help create my story experience.");
+        landTextArray.push("One of the animation components I built for this project was animated masking used to transition between images and videos in real time. It consisted of a core masking algorithm that manages the masking logic while several unique animation object classes were created separately using a standardized code interface to “plug in” to the masking algorithm.");
+        landTextArray.push("AI was utilized to provide specialized rendering advice, help debug, generate video content for the intro scene as well as generate boiler plate code. It was also used to translate code between HTML and Canvas. Instead of being forced to rewrite an entire codebase for Canvas all over again, AI quickly translated it into Canvas within minutes saving me an entire day of effort.");
+
+        displayMainLandingText();
+        landingTextCounter++;
+
+        document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+
+        //set backgrounds
+
+        //load youtube videos
     }
 
-    startMainPage();
+    function nextSlide()
+    {
+        landingTextCounter++;
+
+        displayMainLandingText();
+        document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+    }
+
+    function previousSlide()
+    {
+        if(landingTextCounter == 0)
+        {
+            landingTextCounter = landTextTitleArray.length;
+        }
+
+        landingTextCounter--;
+
+        displayMainLandingText();
+        document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+    }
+
+    function lockNav()
+    {
+        document.getElementById("navDownloadCV").style.pointerEvents = "none";
+        document.getElementById("navPortfolio").style.pointerEvents = "none";
+        document.getElementById("navBehindScenes").style.pointerEvents = "none";
+        document.getElementById("slideNavPrevious").style.pointerEvents = "none";
+        document.getElementById("slideNavNext").style.pointerEvents = "none";
+    }
+
+    function unlockNav()
+    {
+        document.getElementById("navDownloadCV").style.pointerEvents = "auto";
+        document.getElementById("navPortfolio").style.pointerEvents = "auto";
+        document.getElementById("navBehindScenes").style.pointerEvents = "auto";
+        document.getElementById("slideNavPrevious").style.pointerEvents = "auto";
+        document.getElementById("slideNavNext").style.pointerEvents = "auto";
+    }
+
+    //startMainPage();
     //beginTellStory();
 
-    //displayMainLandingText();
-    //startRotateLandingText();
+    displayDownloadCVPage();
+    navListeners();
+    gsap.to("#masterNavContainer", {
+      alpha: 1,
+      duration: 1,
+      delay: .5,
+    });
 
-    //stopRotatingLandingText(); //stop rotating text when switching pages
     //stopRandomRollingGridEffect(); //stop rotating rolling grid when in gallery mode
 
 

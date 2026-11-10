@@ -58,7 +58,7 @@
               if(Math.round(Math.random() * 4) == 0)
               {
                   //generate a new particle data for every bin data value greater than 0
-                  generateNewParticle(i * 6, spectrumCanvas.height - freqHeight, -90, freqHeight);
+                  generateNewParticle(i * 6 + 7, spectrumCanvas.height - freqHeight, -90, freqHeight);
               }
           }
 

@@ -5,22 +5,32 @@
   {
       document.getElementById("navDownloadCV").addEventListener("click", function(){
           lightupNavItem("navDownloadCV", mainNavArray);
+
+          displayDownloadCVPage();
       });
 
       document.getElementById("navPortfolio").addEventListener("click", function(){
           lightupNavItem("navPortfolio", mainNavArray);
+
+          displayPortfolioPage();
       });
 
       document.getElementById("navBehindScenes").addEventListener("click", function(){
           lightupNavItem("navBehindScenes", mainNavArray);
+
+          displayBehindTheScenes();
       });
 
       document.getElementById("slideNavNext").addEventListener("click", function(){
           lightupNavItem("slideNavNext", nextPreviousArray);
+
+          nextSlide();
       });
 
       document.getElementById("slideNavPrevious").addEventListener("click", function(){
           lightupNavItem("slideNavPrevious", nextPreviousArray);
+
+          previousSlide();
       });
   }
 
