@@ -746,7 +746,7 @@
 
         displayMainLandingText();
 
-        selectMask(maskwall, landBackgroundArray[0]);
+        selectMask(crossfade, landBackgroundArray[0]);
 
         landingTextCounter++;
 
@@ -781,7 +781,7 @@
 
         displayMainLandingText();
 
-        selectMask(maskwall, landBackgroundArray[0]);
+        selectMask(crossfade, landBackgroundArray[0]);
 
         landingTextCounter++;
 
@@ -804,10 +804,10 @@
         landTextTitleArray.push("Advanced Masking Transitions");
         landTextTitleArray.push("Utilizing Artificial Intelligence");
 
-        landTextArray.push("It took a month to build this portfolio website from start to finish. The first stage always begins with planning and storyboarding where brainstormed ideas and rough graphic design layouts create the initial look and feel of the website which took an entire week. Even then, there were many major later revisions over the month as better ideas emerged. See this website project’s GIT repo at <span class=\"colorGold\"><a href=\"https://github.com/anazei/hiremeportfolio.git\" target=\"_blank\">https://github.com/anazei/hiremeportfolio.git</a></span>");
+        landTextArray.push("It took a month to build this portfolio website from start to finish. The first stage always begins with planning and storyboarding where brainstormed ideas and rough graphic design layouts create the initial look and feel of the website. Even then, there were many major later revisions over the month as better ideas emerged. See this website project’s GIT repo at <span class=\"colorGold\"><a href=\"https://github.com/anazei/hiremeportfolio.git\" target=\"_blank\">https://github.com/anazei/hiremeportfolio.git</a></span>");
         landTextArray.push("After how the entire look and feel of the website was planned out, each of the complex animations that make up the experience was individually hand coded separately before being integrated together to create the final design. Almost two dozen individual animations had to be designed and coded from scratch one-by-one and slowly integrated to help create my story experience.");
         landTextArray.push("One of the animation components I built for this project was animated masking used to transition between images and videos in real time. It consisted of a core masking algorithm that manages the masking logic while several unique animation object classes were created separately using a standardized code interface to “plug in” to the masking algorithm.");
-        landTextArray.push("AI was utilized to provide specialized rendering advice, help debug, plot graphs, generate video content for the intro scene as well as generate boiler plate code. It was also used to translate code between HTML and Canvas. Instead of being forced to rewrite an entire codebase for Canvas all over again, AI quickly translated it into Canvas within minutes saving me an entire day of effort.");
+        landTextArray.push("AI was utilized to provide specialized rendering advice, help debug, plot graph calculations, generate video content for the intro scene as well as generate boiler plate code. It was also used to translate code between HTML and Canvas. Instead of being forced to rewrite an entire codebase for Canvas all over again, AI quickly translated it into Canvas within minutes, saving me an entire day of effort.");
 
         landBackgroundArray.push("images/planningstoryboard1.jpg");
         landBackgroundArray.push("images/animatedAndividualComponents2.jpg");
@@ -816,7 +816,7 @@
 
         displayMainLandingText();
 
-        selectMask(maskwall, landBackgroundArray[0]);
+        selectMask(crossfade, landBackgroundArray[0]);
 
         landingTextCounter++;
 
@@ -872,9 +872,9 @@
         document.getElementById("slideNavNext").style.pointerEvents = "auto";
     }
 
-    //startMainPage();
+    startMainPage();
     //beginTellStory();
-
+/*
     displayDownloadCVPage();
     navListeners();
     gsap.to("#masterNavContainer", {
@@ -882,7 +882,7 @@
       duration: 1,
       delay: .5,
     });
-
+*/
     //stopRandomRollingGridEffect(); //stop rotating rolling grid when in gallery mode
 
 
