@@ -790,12 +790,12 @@
         landTextArray.push("In 2015, I took a part time four month web dev night class bootcamp after work to familiarize myself with HTML/CSS/JS. This Javascript particle system audio visualizer was one of my three final projects I created from scratch and presented to the class before graduation. See my actual live CodePen project at: <span class=\"colorGold\"><a href=\"https://codepen.io/kevin-lam-the-scripter/pen/KKQJepr\" target=\"_blank\">https://codepen.io/kevin-lam-the-scripter/pen/KKQJepr</a></span>");
         landTextArray.push("Drone Vision was my submission to a 2025 Canadian Armed Forces’s public drone technology contest. I proposed that a combined black-and-white and chroma-subsampling based video broadcast codec would use less intense video encoding effort with equally effective results but consume less battery power to keep a drone airborne much longer than traditional DCT video codecs originally meant for watching movies.");
 
-        landBackgroundArray.push("images/ztransitions1.jpg");
+        landBackgroundArray.push("images/ztransitions.jpg");
         landBackgroundArray.push("images/ztransitions2.jpg");
         landBackgroundArray.push("images/audiovisualizer3.jpg");
         landBackgroundArray.push("images/drone4.jpg");
 
-        youTubeVideoArray.push("https://www.youtube.com/embed/ebwK2_mYQJw?si=q8xtFPgHUEknFsxO");
+        youTubeVideoArray.push("https://www.youtube.com/embed/ebwK2_mYQJw?si=q8xtFPgHUEknFsxO,https://www.youtube.com/embed/YBR1JsYLgm4?si=4MCof1U7vdzonxWL");
         youTubeVideoArray.push("https://www.youtube.com/embed/luKWLUVWaOw?si=Nv6yjBkHIL2wBttA");
         youTubeVideoArray.push("https://www.youtube.com/embed/KVNEMDnTGQw?si=D0LraFa2OboZF6WT");
         youTubeVideoArray.push("https://www.youtube.com/embed/ABtN03Dv3v8?si=Il0-PWxmXEQG2CTZ");
@@ -835,8 +835,8 @@
         landBackgroundArray.push("images/AI4.jpg");
 
         youTubeVideoArray.push("");
-        youTubeVideoArray.push("");
-        youTubeVideoArray.push("");
+        youTubeVideoArray.push("https://www.youtube.com/embed/65-sgi_AIPo?si=20x_Ukf2QwJ6SWy8");
+        youTubeVideoArray.push("https://www.youtube.com/embed/a5Pgz0u5ywc?si=QZM7yi2cAAQkw-WL");
         youTubeVideoArray.push("");
 
         displayMainLandingText();
@@ -912,20 +912,63 @@
 
     function createYouTubeVideos(URL)
     {
-        var div = document.createElement("div");
-            div.style.marginBottom = "35px";
+        if(URL.indexOf(",") >= 0)
+        {
+            //if two videos in one slide
+            var videos = URL.split(",");
 
-        var iframe = document.createElement("iframe");
-            iframe.width = "400";
-            iframe.height = "225";
-            iframe.src = URL;
-            iframe.frameborder = "0";
-            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
-            iframe.referrerpolicy = "strict-origin-when-cross-origin";
-            iframe.allowfullscreen = true;
+            var div = document.createElement("div");
+                div.style.marginBottom = "35px";
 
-        document.getElementById("youtubeVideos").appendChild(div);
-        div.appendChild(iframe);
+            var iframe = document.createElement("iframe");
+                iframe.width = "400";
+                iframe.height = "225";
+                iframe.src = videos[0];
+                iframe.frameborder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+                iframe.referrerpolicy = "strict-origin-when-cross-origin";
+                iframe.allowfullscreen = true;
+
+            document.getElementById("youtubeVideos").appendChild(div);
+            div.appendChild(iframe);
+
+            var div = document.createElement("div");
+                div.style.marginBottom = "35px";
+
+            var iframe = document.createElement("iframe");
+                iframe.width = "400";
+                iframe.height = "225";
+                iframe.src = videos[1];
+                iframe.frameborder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+                iframe.referrerpolicy = "strict-origin-when-cross-origin";
+                iframe.allowfullscreen = true;
+
+            document.getElementById("youtubeVideos").appendChild(div);
+            div.appendChild(iframe);
+
+            document.getElementById("youtubeVideos").style.top = "200px";
+
+        } else {
+            //one video in one slide
+
+            var div = document.createElement("div");
+                div.style.marginBottom = "35px";
+
+            var iframe = document.createElement("iframe");
+                iframe.width = "400";
+                iframe.height = "225";
+                iframe.src = URL;
+                iframe.frameborder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+                iframe.referrerpolicy = "strict-origin-when-cross-origin";
+                iframe.allowfullscreen = true;
+
+            document.getElementById("youtubeVideos").appendChild(div);
+            div.appendChild(iframe);
+
+            document.getElementById("youtubeVideos").style.top = "350px";
+        }
     }
 
     function clearYouTubeVideos()
@@ -937,8 +980,6 @@
             youtubeDiv.children[0].remove();
         }
     }
-
-    //createYouTubeVideos("https://www.youtube.com/embed/ebwK2_mYQJw?si=l6Qa6Xxpe4v4hP_W");
 
     startMainPage();
     //beginTellStory();
