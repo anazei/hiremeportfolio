@@ -256,7 +256,7 @@
           left: 125px;
           top: 300px;
           width: 1000px;
-          z-index: 40;
+          z-index: 150;
       }
 
       #landingTitle
@@ -349,6 +349,14 @@
           height: 100%;
           z-index: 50;
           opacity: 0;
+      }
+
+      #youtubeVideos
+      {
+          position: absolute;
+          z-index: 150;
+          right: 150px;
+          top: 350px;
       }
 
     </style>
@@ -547,6 +555,8 @@
     </div>
     <!-- end navigation container -->
 
+    <div id="youtubeVideos"></div>
+
   </body>
 
   <script src="js/gsap.min.js"></script>
@@ -658,6 +668,7 @@
     var landTextTitleArray = new Array();
     var landTextArray = new Array();
     var landBackgroundArray = new Array();
+    var youTubeVideoArray = new Array();
 
     function displayMainLandingText()
     {
@@ -731,6 +742,7 @@
         landTextTitleArray = new Array();
         landTextArray = new Array();
         landBackgroundArray = new Array();
+        youTubeVideoArray = new Array();
 
         landTextTitleArray.push("An unusual journey");
         landTextTitleArray.push("Experienced developer but entry level ReactJS");
@@ -744,6 +756,11 @@
         landBackgroundArray.push("images/splashbackground.jpg");
         landBackgroundArray.push("images/splashbackground.jpg");
 
+        youTubeVideoArray.push("");
+        youTubeVideoArray.push("");
+        youTubeVideoArray.push("");
+        youTubeVideoArray.push("");
+
         displayMainLandingText();
 
         selectMask(crossfade, landBackgroundArray[0]);
@@ -752,9 +769,7 @@
 
         document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
 
-        //set backgrounds
-
-        //load youtube videos
+        displayYouTubeVideo();
     }
 
     function displayPortfolioPage()
@@ -763,6 +778,7 @@
         landTextTitleArray = new Array();
         landTextArray = new Array();
         landBackgroundArray = new Array();
+        youTubeVideoArray = new Array();
 
         landTextTitleArray.push("zTransitions video remixer");
         landTextTitleArray.push("A standalone web app");
@@ -779,6 +795,11 @@
         landBackgroundArray.push("images/audiovisualizer3.jpg");
         landBackgroundArray.push("images/drone4.jpg");
 
+        youTubeVideoArray.push("https://www.youtube.com/embed/ebwK2_mYQJw?si=q8xtFPgHUEknFsxO");
+        youTubeVideoArray.push("https://www.youtube.com/embed/luKWLUVWaOw?si=Nv6yjBkHIL2wBttA");
+        youTubeVideoArray.push("https://www.youtube.com/embed/KVNEMDnTGQw?si=D0LraFa2OboZF6WT");
+        youTubeVideoArray.push("https://www.youtube.com/embed/ABtN03Dv3v8?si=Il0-PWxmXEQG2CTZ");
+
         displayMainLandingText();
 
         selectMask(crossfade, landBackgroundArray[0]);
@@ -787,9 +808,7 @@
 
         document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
 
-        //set backgrounds
-
-        //load youtube videos
+        displayYouTubeVideo();
     }
 
     function displayBehindTheScenes()
@@ -798,6 +817,7 @@
         landTextTitleArray = new Array();
         landTextArray = new Array();
         landBackgroundArray = new Array();
+        youTubeVideoArray = new Array();
 
         landTextTitleArray.push("Planning and Storyboarding");
         landTextTitleArray.push("Building Individual Animated Components");
@@ -814,6 +834,11 @@
         landBackgroundArray.push("images/advancedMaskTransitions3.jpg");
         landBackgroundArray.push("images/AI4.jpg");
 
+        youTubeVideoArray.push("");
+        youTubeVideoArray.push("");
+        youTubeVideoArray.push("");
+        youTubeVideoArray.push("");
+
         displayMainLandingText();
 
         selectMask(crossfade, landBackgroundArray[0]);
@@ -822,9 +847,7 @@
 
         document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
 
-        //set backgrounds
-
-        //load youtube videos
+        displayYouTubeVideo();
     }
 
     function nextSlide()
@@ -836,6 +859,8 @@
         selectMask(maskwall, landBackgroundArray[landingTextCounter % landBackgroundArray.length]);
 
         document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+
+        displayYouTubeVideo();
     }
 
     function previousSlide()
@@ -852,6 +877,8 @@
         selectMask(maskwall, landBackgroundArray[landingTextCounter % landBackgroundArray.length]);
 
         document.getElementById("slideNavPage").innerHTML = (Math.abs(landingTextCounter) % landTextTitleArray.length + 1) + " / " + landTextTitleArray.length;
+
+        displayYouTubeVideo();
     }
 
     function lockNav()
@@ -871,6 +898,47 @@
         document.getElementById("slideNavPrevious").style.pointerEvents = "auto";
         document.getElementById("slideNavNext").style.pointerEvents = "auto";
     }
+
+    function displayYouTubeVideo()
+    {
+        clearYouTubeVideos();
+
+        var youtubeVideo = youTubeVideoArray[landingTextCounter % landTextTitleArray.length];
+        if(youtubeVideo !== "")
+        {
+            createYouTubeVideos(youtubeVideo);
+        }
+    }
+
+    function createYouTubeVideos(URL)
+    {
+        var div = document.createElement("div");
+            div.style.marginBottom = "35px";
+
+        var iframe = document.createElement("iframe");
+            iframe.width = "400";
+            iframe.height = "225";
+            iframe.src = URL;
+            iframe.frameborder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+            iframe.referrerpolicy = "strict-origin-when-cross-origin";
+            iframe.allowfullscreen = true;
+
+        document.getElementById("youtubeVideos").appendChild(div);
+        div.appendChild(iframe);
+    }
+
+    function clearYouTubeVideos()
+    {
+        var youtubeDiv = document.getElementById("youtubeVideos");
+
+        while(youtubeDiv.children.length > 0)
+        {
+            youtubeDiv.children[0].remove();
+        }
+    }
+
+    //createYouTubeVideos("https://www.youtube.com/embed/ebwK2_mYQJw?si=l6Qa6Xxpe4v4hP_W");
 
     startMainPage();
     //beginTellStory();
