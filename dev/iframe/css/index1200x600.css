@@ -25,8 +25,8 @@
     #audioVisualizerWindowContainer
     {
         position: absolute;
-        left: 5px;
-        bottom: 200px;
+        left: -3%;
+        bottom: 33%;
         width: 500px;
         height: 80px;
         scale: 0.75;
@@ -146,6 +146,7 @@
       min-height: 100vh;
       left: 50%;
       transform: translateX(-50%);
+      scale: 0.75;
     }
 
     .bufferingCanvas {

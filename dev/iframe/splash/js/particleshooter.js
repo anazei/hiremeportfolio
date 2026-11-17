@@ -32,6 +32,7 @@
           newParticleDiv.style.borderRadius = "50px";
           newParticleDiv.style.backgroundColor = "white";
           newParticleDiv.style.opacity = 0.75;
+          newParticleDiv.className = "particleShooterScale";
 
       document.getElementById("particleShooters").appendChild(newParticleDiv);
 

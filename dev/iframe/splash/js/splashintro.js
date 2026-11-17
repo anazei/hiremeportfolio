@@ -138,7 +138,29 @@
   function fadeOutSplashPage()
   {
       explodeOutForegroundText();
-      startParticleEmitter(750, 500, 1550, 490);
+
+      var particleShooterStartX = Math.round(window.screen.width * .39);
+      var particleShooterStartY = Math.round(window.screen.height * 0.48);
+
+      if(window.screen.width <= 1200)
+      {
+          particleShooterStartX = Math.round(window.screen.width * .37);
+          particleShooterStartY = Math.round(window.screen.height * 0.55);
+      }
+
+      if(window.screen.width <= 900)
+      {
+          particleShooterStartX = Math.round(window.screen.width * .45);
+          particleShooterStartY = Math.round(window.screen.height * .55);
+      }
+
+      if(window.screen.width <= 500)
+      {
+          particleShooterStartX = Math.round(window.screen.width * .5);
+          particleShooterStartY = Math.round(window.screen.height * .55);
+      }
+
+      startParticleEmitter(particleShooterStartX, particleShooterStartY, particleShooterStartX + 800, particleShooterStartY);
 
       fadeOutSnowfall(3);
 
