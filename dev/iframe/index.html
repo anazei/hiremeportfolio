@@ -3,11 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Hello Giftagram!</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index1200x600.css">
+    <link rel="stylesheet" href="css/index900x450.css">
+    <link rel="stylesheet" href="css/index500x250.css">
+    <link rel="stylesheet" href="css/index350x175.css">    
     <link rel="icon" type="image/png" href="favicon.png">
   </head>
   <body>
@@ -245,6 +249,14 @@
           }
       }
 
+      //when page loads, position every element based on screen width/height
+      function positionElements()
+      {
+          //scale audio visualizer 377x250, base width 1920, scale height accordingly: 375:250 = 1 : 0.66
+          //document.getElementById("audioVisualizerWindowContainer").style.scale = (0.75 * window.innerWidth) / 1920;
+      }
+
+      positionElements();
       init();
 
   </script>

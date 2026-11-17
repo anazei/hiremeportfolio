@@ -1,0 +1,156 @@
+/* Short landscape screens, typically phones */
+@media (max-height: 500px) and (min-height: 250px) {
+    /* Reduce vertical gaps, headings, and top/bottom padding */
+
+    html
+    {
+        font-size: 26pt; /* rem base font size for index */
+    }
+
+    iframe
+    {
+        width: 100%;
+        height: 100vh;
+        border: none;
+    }
+
+    body
+    {
+        margin: 0;
+        background-color: #000000;
+        overflow-y: hidden;
+        user-select: none;
+    }
+
+    #audioVisualizerWindowContainer
+    {
+        position: absolute;
+        left: 5px;
+        bottom: 200px;
+        width: 500px;
+        height: 80px;
+        scale: 0.75;
+        z-index: 2;
+        opacity: 0;
+    }
+
+    #audioVisualizerBinCanvas
+    {
+        margin-bottom: -5px;
+    }
+
+    #audioVisualizerTextContainer
+    {
+        position: absolute;
+        z-index: 1;
+    }
+
+    #audioVisualizerBackground
+    {
+        width: inherit;
+        height: inherit;
+        background-color: #2C3E48;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: relative;
+        opacity: .2;
+        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 1));
+    }
+
+    .audioVisualizerText
+    {
+        color: white;
+        font-family: 'Roboto Condensed', monospace;
+    }
+
+    #audioVisualizerTitle
+    {
+        font-size: 10pt; /*clamp(6pt, 0.694vw, 10pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */ */
+        font-weight: 500;
+        position: relative;
+        left: 25px;
+        top: 15px;
+    }
+
+    #audioVisualizerText
+    {
+        font-size: 14pt;/*clamp(10pt, 0.972vw, 14pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((14pt * (96 / 72)) / screen width) * 100 or ((14 * 1.333) / 1920) * 100  */*/
+        font-weight: 300;
+        position: relative;
+        left: 25px;
+        top: 25px;
+    }
+
+    #audioVisualizerPlayButton
+    {
+        background-image: url("../images/playButton.png");
+        width: 60px;
+        height: 60px;
+        position: relative;
+        left: 400px;
+        top: -25px;
+        display: none;
+    }
+
+    #audioVisualizerPauseButton
+    {
+        background-image: url("../images/pauseButton.png");
+        width: 60px;
+        height: 60px;
+        position: relative;
+        left: 400px;
+        top: -25px;
+        display: block;
+    }
+
+    #audioVisualizerRepeatButton
+    {
+        background-image: url("../images/repeat.png");
+        width: 60px;
+        height: 60px;
+        position: relative;
+        left: 400px;
+        top: -25px;
+        display: none;
+    }
+
+    #entryGreetingText
+    {
+        position: absolute;
+        color: #FCBE5E;
+        font-family: 'Roboto', monospace;
+         font-size: clamp(16pt, 1.80556vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((26pt * (96 / 72)) / screen width) * 100 */
+        font-weight: 300;
+        letter-spacing: 1px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
+
+    #mainIframe
+    {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .bufferAnimation {
+      position: absolute;
+      width: 250px;
+      height: 75px;
+      display: flex;
+      justify-content: center; /* Horizontal */
+      align-items: center;     /* Vertical */
+      min-height: 100vh;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .bufferingCanvas {
+      width: 100%;
+      height: 100%;
+    }
+
+}

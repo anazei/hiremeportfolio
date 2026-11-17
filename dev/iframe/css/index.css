@@ -1,3 +1,8 @@
+html
+{
+    font-size: 26pt; /* rem base font size for index */
+}
+
 iframe
 {
     width: 100%;
@@ -56,7 +61,7 @@ body
 
 #audioVisualizerTitle
 {
-    font-size: 10pt;
+    font-size: 10pt; /*clamp(6pt, 0.694vw, 10pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */ */
     font-weight: 500;
     position: relative;
     left: 25px;
@@ -65,7 +70,7 @@ body
 
 #audioVisualizerText
 {
-    font-size: 14pt;
+    font-size: 14pt;/*clamp(10pt, 0.972vw, 14pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((14pt * (96 / 72)) / screen width) * 100 or ((14 * 1.333) / 1920) * 100  */*/
     font-weight: 300;
     position: relative;
     left: 25px;
@@ -110,7 +115,7 @@ body
     position: absolute;
     color: #FCBE5E;
     font-family: 'Roboto', monospace;
-    font-size: 26pt;
+     font-size: clamp(16pt, 1.80556vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((26pt * (96 / 72)) / screen width) * 100 */
     font-weight: 300;
     letter-spacing: 1px;
     display: flex;
@@ -129,10 +134,14 @@ body
 
 .bufferAnimation {
   position: absolute;
-  left: 800px;
-  top: 450px;
   width: 250px;
-  height: 75px;  
+  height: 75px;
+  display: flex;
+  justify-content: center; /* Horizontal */
+  align-items: center;     /* Vertical */
+  min-height: 100vh;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .bufferingCanvas {
