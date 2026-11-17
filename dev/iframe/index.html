@@ -7,149 +7,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://googleapis.com" rel="stylesheet">
-
-    <style>
-
-        iframe
-        {
-            width: 100%;
-            height: 100vh;
-            border: none;
-        }
-
-        body
-        {
-            margin: 0;
-            background-color: #000000;
-            overflow-y: hidden;
-            user-select: none;
-        }
-
-        #audioVisualizerWindowContainer
-        {
-            position: absolute;
-            left: 5px;
-            bottom: 200px;
-            width: 500px;
-            height: 80px;
-            scale: 0.75;
-            z-index: 2;
-            opacity: 0;
-        }
-
-        #audioVisualizerBinCanvas
-        {
-            margin-bottom: -5px;
-        }
-
-        #audioVisualizerTextContainer
-        {
-            position: absolute;
-            z-index: 1;
-        }
-
-        #audioVisualizerBackground
-        {
-            width: inherit;
-            height: inherit;
-            background-color: #2C3E48;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            position: relative;
-            opacity: .2;
-            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 1));
-        }
-
-        .audioVisualizerText
-        {
-            color: white;
-            font-family: 'Roboto Condensed', monospace;
-        }
-
-        #audioVisualizerTitle
-        {
-            font-size: 10pt;
-            font-weight: 500;
-            position: relative;
-            left: 25px;
-            top: 15px;
-        }
-
-        #audioVisualizerText
-        {
-            font-size: 14pt;
-            font-weight: 300;
-            position: relative;
-            left: 25px;
-            top: 25px;
-        }
-
-        #audioVisualizerPlayButton
-        {
-            background-image: url("images/playButton.png");
-            width: 60px;
-            height: 60px;
-            position: relative;
-            left: 400px;
-            top: -25px;
-            display: none;
-        }
-
-        #audioVisualizerPauseButton
-        {
-            background-image: url("images/pauseButton.png");
-            width: 60px;
-            height: 60px;
-            position: relative;
-            left: 400px;
-            top: -25px;
-            display: block;
-        }
-
-        #audioVisualizerRepeatButton
-        {
-            background-image: url("images/repeat.png");
-            width: 60px;
-            height: 60px;
-            position: relative;
-            left: 400px;
-            top: -25px;
-            display: none;
-        }
-
-        #entryGreetingText
-        {
-            position: absolute;
-            color: #FCBE5E;
-            font-family: 'Roboto', monospace;
-            font-size: 26pt;
-            font-weight: 300;
-            letter-spacing: 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-        }
-
-        #mainIframe
-        {
-            position: absolute;
-            z-index: 1;
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="css/index.css">
   </head>
   <body>
 
-    <div id="entryGreetingText">
-      Turn your screen to landscape<br><br>
-      This website is entirely Javascript driven and custom designed for Giftagram<br>
-      All original graphic designs and Javascript created by Kevin Lam<br><br>
-      Click anywhere to begin
+    <div id="bufferAnimation" class="bufferAnimation">
+      <canvas id="bufferingCanvas"></canvas>
     </div>
+
+    <div id="entryGreetingText"></div>
 
       <div id="audioVisualizerWindowContainer">
           <canvas id="audioVisualizerBinCanvas" width="500" height="250"></canvas>
@@ -171,63 +37,100 @@
   <script src="js/easeljs.min.js"></script>
   <script src="js/audiomanager.js"></script>
   <script src="js/audiovisualizer.js"></script>
+  <script src="js/bufferanimation.js"></script>
 
   <script>
 
+      //file URL, type of media
+      var preloadArray = new Array();
+          preloadArray.push(["audio/climatechange.mp3", "audio"]);
+          preloadArray.push(["audio/main.mp3", "audio"]);
+          preloadArray.push(["splash/video/cello.mp4", "video"]);
+          preloadArray.push(["splash/video/conductor.mp4", "video"]);
+          preloadArray.push(["splash/video/violins.mp4", "video"]);
+          preloadArray.push(["main/images/advancedMaskTransitions3.jpg", "image"]);
+          preloadArray.push(["main/images/AI4.jpg", "image"]);
+          preloadArray.push(["main/images/animatedAndividualComponents2.jpg", "image"]);
+          preloadArray.push(["main/images/audiovisualizer3.jpg", "image"]);
+          preloadArray.push(["main/images/background1.jpg", "image"]);
+          preloadArray.push(["main/images/background2.jpg", "image"]);
+          preloadArray.push(["main/images/bluebg.jpg", "image"]);
+          preloadArray.push(["main/images/drone4.jpg", "image"]);
+          preloadArray.push(["main/images/planningstoryboard1.jpg", "image"]);
+          preloadArray.push(["main/images/splashbackground.jpg", "image"]);
+          preloadArray.push(["main/images/ztransitions.jpg", "image"]);
+          preloadArray.push(["main/images/ztransitions2.jpg", "image"]);
+
       var alreadyClicked = false;
+      var preloadCounter = 0;
 
       function init()
       {
-          window.addEventListener("message", function(event){
+          //display a preload animation visible
+          var buffer = new BufferAnimation("bufferingCanvas");
+          buffer.startAnimation();
 
-              switch(event.data)
+          for(var i=0;i<preloadArray.length;i++)
+          {
+              switch(preloadArray[i][1])
               {
-                  //load main page after splash page is finished
-                  case "iframeClicked":
-
-                      if(currentAudioState == "playing")
-                      {
-                          music.fadeOut(currentAudioTrack, 2);
-                      }
-
-                      setTimeout(function(){
-
-                          loadNewSong("mainMusic", "audio/main.mp3");
-                          changeAudioTrackTitle("Somewhere But Not Here - Nicolai Patricio");
-                      }, 2000);
-
-                      document.getElementById("mainIframe").src = "main/main.html";
+                  case "audio":
+                    preloadAudio(preloadArray[i][0]);
                   break;
 
-                  case "moveAudioPlayer":
+                  case "video":
+                    preloadVideo(preloadArray[i][0]);
+                  break;
 
-                    gsap.to("#audioVisualizerWindowContainer", {
-                      y: "-= 75",
-                      duration: .5,
-                    });
+                  case "image":
+                    preloadImage(preloadArray[i][0]);
                   break;
               }
+          }
+
+          window.addEventListener("resize", function(event){
+              location.reload();
           });
 
-          window.addEventListener("click", function(){
+          //only allow experience to begin if in landscape mode
+          if(isLandscapeMode() == true)
+          {
+              window.addEventListener("message", function(event){
 
-              //first click to enter splash page
-              if(alreadyClicked == false)
-              {
-                  alreadyClicked = true;
+                  switch(event.data)
+                  {
+                      //load main page after splash page is finished
+                      case "iframeClicked":
 
-                  loadNewSong("splashMusic", "audio/climatechange.mp3");
+                          if(currentAudioState == "playing")
+                          {
+                              music.fadeOut(currentAudioTrack, 2);
+                          }
 
-                  fadeOutGreetingText();
+                          setTimeout(function(){
 
-                  //only load splash page after click to allow audio browser persmission to play
-                  var iframe = document.createElement("iframe");
-                      iframe.id = "mainIframe";
-                      iframe.src = "splash/splash.html";
+                              loadNewSong("mainMusic", "audio/main.mp3");
+                              changeAudioTrackTitle("Somewhere But Not Here - Nicolai Patricio");
+                          }, 2000);
 
-                  document.getElementById("iframeDiv").appendChild(iframe);
-              }
-          });
+                          document.getElementById("mainIframe").src = "main/main.html";
+                      break;
+
+                      case "moveAudioPlayer":
+
+                        gsap.to("#audioVisualizerWindowContainer", {
+                          y: "-= 75",
+                          duration: .5,
+                        });
+                      break;
+                  }
+              });
+
+          } else {
+
+              //if not in landscape mode, display "turn your screen into landscape mode to begin"
+              document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
+          }
       }
 
       //fade out "this contains audio, click anywhere to begin" text
@@ -253,6 +156,92 @@
               changeAudioTrackTitle("Climate Change - Hans Zimmer, Planet Earth III");
 
           }, 10500);
+      }
+
+      //on resize, just reload the entire website
+      //on resize, run this function to check if in landscape mode
+      //once in landscape mode, show the intro message
+      //if the screen width is lesser than the height, then it is in portrait mode
+      function isLandscapeMode()
+      {
+          var screenWidth = window.innerWidth;
+          var screenHeight = window.innerHeight;
+
+          if(screenWidth < screenHeight)
+          {
+              return false;
+          } else {
+              return true;
+          }
+      }
+
+      //preload all the big assets like video and audio and images
+      //display preloader animation
+      //only after the preloader is completed, then allow user to click to begin
+      function checkPreloader()
+      {
+          if(preloadCounter == preloadArray.length) //17 files to preload
+          {
+              //make preloader animation invisible
+              document.getElementById("bufferAnimation").style.display = "none";
+
+              //allow click to begin
+              window.addEventListener("click", function(){
+
+                  //first click to enter splash page
+                  if(alreadyClicked == false)
+                  {
+                      alreadyClicked = true;
+
+                      loadNewSong("splashMusic", "audio/climatechange.mp3");
+
+                      fadeOutGreetingText();
+
+                      //only load splash page after click to allow audio browser persmission to play
+                      var iframe = document.createElement("iframe");
+                          iframe.id = "mainIframe";
+                          iframe.src = "splash/splash.html";
+
+                      document.getElementById("iframeDiv").appendChild(iframe);
+                  }
+              });
+
+              //show click message
+              document.getElementById("entryGreetingText").innerHTML = "This website is entirely Javascript driven and custom designed for Giftagram<br>Click anywhere to begin";
+          }
+      }
+
+      function preloadAudio(audioURL)
+      {
+          var audio = new Audio(audioURL);
+
+          audio.onloadeddata = function(){
+              preloadCounter++
+              checkPreloader();
+          };
+      }
+
+      function preloadVideo(videoURL)
+      {
+          var video = document.createElement("video");
+              video.src = videoURL;
+              video.preload = "auto";
+
+          video.onloadeddata = function(){
+              preloadCounter++
+              checkPreloader();
+          };
+      }
+
+      function preloadImage(imageURL)
+      {
+          var image = new Image();
+              image.src = imageURL;
+
+          image.onload = function(){
+              preloadCounter++
+              checkPreloader();
+          }
       }
 
       init();

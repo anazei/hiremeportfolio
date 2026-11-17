@@ -108,7 +108,7 @@
       setTimeout(function(){
 
           //selectMask(crossfade, "images/blackbg.png");
-          selectMask(crossfade, "images/splashbackground.jpg");
+          selectMask(crossfade, "../main/images/splashbackground.jpg");
 
       }, 21250);
 
