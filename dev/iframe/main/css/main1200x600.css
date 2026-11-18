@@ -212,11 +212,11 @@
       #giftagramLogoContainer
       {
           position: absolute;
-          left: 0%;
-          top: 5%;
+          left: -15%;
+          top: 0%;
           scale: 0.8;
           z-index: 30;
-          scale: 0.7;
+          scale: 0.5;
       }
 
       #giftagramLogo
@@ -246,10 +246,11 @@
       #landingTextContainer
       {
           position: absolute;
-          left: 125px;
-          top: 300px;
+          left: -11.75%;
+          top: 32%;
           width: 1000px;
           z-index: 150;
+          scale: 0.65;
       }
 
       #landingTitle
@@ -295,7 +296,7 @@
 
       .slideNavText
       {
-          font-size: 24pt;
+          font-size: 20pt;
           letter-spacing: 2px;
           color: white;
           font-family: 'Roboto', monospace;
@@ -323,16 +324,16 @@
       {
           position: absolute;
           bottom: 40px;
-          left: 70px;
-          font-size: 20pt;
+          left: 3%;
+          font-size: 16pt;
       }
 
       #slideNavContainer
       {
           position: absolute;
-          left: 705px;
-          top: 65%;
-          font-size: 22pt;
+          left: 26%;
+          top: 70%;
+          font-size: 20pt;
       }
 
       #masterNavContainer
@@ -348,7 +349,7 @@
       {
           position: absolute;
           z-index: 150;
-          right: 150px;
+          right: 6%;
           top: 350px;
       }
 

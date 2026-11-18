@@ -562,6 +562,38 @@
 
     function createYouTubeVideos(URL)
     {
+        var youTubeWidth = 400;
+        var youTubeHeight = 225;
+        var positionTopSingleVideo = 36;
+        var positionTopDoubleVideo = 20;
+
+        if(window.screen.width <= 1200)
+        {
+            //0.85 scale
+            youTubeWidth = Math.round(400 * 0.75);
+            youTubeHeight = Math.round(225 * 0.75);
+            positionTopSingleVideo = 38;
+            positionTopDoubleVideo = 17;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            //.6 scale
+            youTubeWidth = Math.round(400 * 0.6);
+            youTubeHeight = Math.round(225 * 0.6);
+            positionTopSingleVideo = 38;
+            positionTopDoubleVideo = 20;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            //.5 scale
+            youTubeWidth = Math.round(400 * 0.6);
+            youTubeHeight = Math.round(225 * 0.6);
+            positionTopSingleVideo = 61;
+            positionTopDoubleVideo = 20;
+        }
+
         if(URL.indexOf(",") >= 0)
         {
             //if two videos in one slide
@@ -571,8 +603,8 @@
                 div.style.marginBottom = "35px";
 
             var iframe = document.createElement("iframe");
-                iframe.width = "400";
-                iframe.height = "225";
+                iframe.width = youTubeWidth;
+                iframe.height = youTubeHeight;
                 iframe.src = videos[0];
                 iframe.frameborder = "0";
                 iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
@@ -586,8 +618,8 @@
                 div.style.marginBottom = "35px";
 
             var iframe = document.createElement("iframe");
-                iframe.width = "400";
-                iframe.height = "225";
+                iframe.width = youTubeWidth;
+                iframe.height = youTubeHeight;
                 iframe.src = videos[1];
                 iframe.frameborder = "0";
                 iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
@@ -597,7 +629,7 @@
             document.getElementById("youtubeVideos").appendChild(div);
             div.appendChild(iframe);
 
-            document.getElementById("youtubeVideos").style.top = "200px";
+            document.getElementById("youtubeVideos").style.top = positionTopDoubleVideo + "%";
 
         } else {
             //one video in one slide
@@ -606,8 +638,8 @@
                 div.style.marginBottom = "35px";
 
             var iframe = document.createElement("iframe");
-                iframe.width = "400";
-                iframe.height = "225";
+                iframe.width = youTubeWidth;
+                iframe.height = youTubeHeight;
                 iframe.src = URL;
                 iframe.frameborder = "0";
                 iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
@@ -617,7 +649,7 @@
             document.getElementById("youtubeVideos").appendChild(div);
             div.appendChild(iframe);
 
-            document.getElementById("youtubeVideos").style.top = "350px";
+            document.getElementById("youtubeVideos").style.top = positionTopSingleVideo + "%";
         }
     }
 
