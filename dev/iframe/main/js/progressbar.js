@@ -45,6 +45,28 @@
   {
       startProgressBarRotatingText();
 
+      var progressBarScaleX = 1;
+      var progressBarScaleY = 1;
+
+      if(window.screen.width <= 1200)
+      {
+          //0.70 scale
+          progressBarScaleX = 0.85;
+          progressBarScaleY = 0.85;
+      }
+
+      if(window.screen.width <= 900)
+      {
+          progressBarScaleX = 0.6;
+          progressBarScaleY = 0.6;
+      }
+
+      if(window.screen.width <= 500)
+      {
+          progressBarScaleX = 0.5;
+          progressBarScaleY = 0.5;
+      }
+
       gsap.fromTo("#progressBarContainer",
       {
         width: 435,
@@ -53,8 +75,8 @@
         scaleY: 0
       },
       {
-        scaleX: 1,
-        scaleY: 1,
+        scaleX: progressBarScaleX,
+        scaleY: progressBarScaleY,
         duration: .35,
         transformOrigin: "50% 50%",
         onComplete: function(){

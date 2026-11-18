@@ -46,6 +46,28 @@
           document.getElementById("heroTitle1").appendChild(messageDiv);
       }
 
+      var heroTitleScaleX = 1;
+      var heroTitleScaleY = 1;
+
+      if(window.screen.width <= 1200)
+      {
+          //0.85 scale
+          heroTitleScaleX = 0.8;
+          heroTitleScaleY = 0.8;
+      }
+
+      if(window.screen.width <= 900)
+      {
+          heroTitleScaleX = 0.85;
+          heroTitleScaleY = 0.85;
+      }
+
+      if(window.screen.width <= 500)
+      {
+          heroTitleScaleX = 0.85;
+          heroTitleScaleY = 0.85;
+      }
+
       //hero window animates in
       gsap.fromTo("#heroTitleMasterContainer",
         {
@@ -58,8 +80,8 @@
         {
           width: 1050,
           height: 175,
-          scaleX: 1,
-          scaleY: 1,
+          scaleX: heroTitleScaleX,
+          scaleY: heroTitleScaleY,
           alpha: 1,
           duration: .35,
           transformOrigin: "50% 50%",

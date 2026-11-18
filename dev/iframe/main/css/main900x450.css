@@ -61,8 +61,8 @@
           border-radius: 5px;
           opacity: .65;
           position: absolute;
-          left: 300px;
-          top: 350px;
+          left: 15%;
+          top: 50%;
           z-index: 10;
       }
 
@@ -140,10 +140,11 @@
       #masterBufferContainer
       {
           position: absolute;
-          left: 50px;
-          bottom: 0%;
+          left: 3%;
+          bottom: -35%;
           z-index: 10;
           opacity: 0.35;
+          scale: 0.75;
       }
 
       .bufferBar
@@ -197,14 +198,14 @@
       {
           position: absolute;
           color: #FABC66;
-          font-size: 26pt;
+          font-size: clamp(12pt, 1.805vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */
           z-index: 30;
-
           text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
           display: inline-block;
           transform: translateZ(0);
           backface-visibility: hidden;
           will-change: transform, opacity;
+          width: 100%;
       }
 
       #giftagramLogoContainer

@@ -57,8 +57,8 @@
       border-radius: 5px;
       opacity: .65;
       position: absolute;
-      left: 300px;
-      top: 350px;
+      left: 15%;
+      top: 50%;
       z-index: 10;
   }
 
@@ -136,7 +136,7 @@
   #masterBufferContainer
   {
       position: absolute;
-      left: 50px;
+      left: 5%;
       bottom: 0%;
       z-index: 10;
       opacity: 0.35;
@@ -193,9 +193,8 @@
   {
       position: absolute;
       color: #FABC66;
-      font-size: 26pt;
+      font-size: clamp(10pt, 1.805vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */
       z-index: 30;
-
       text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
       display: inline-block;
       transform: translateZ(0);

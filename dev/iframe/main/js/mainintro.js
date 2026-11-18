@@ -1,5 +1,5 @@
   /*
-    This is the main page story key frames intro function 
+    This is the main page story key frames intro function
   */
 
   /////////////////////////////////Animation API Methods////////////////////////
@@ -330,7 +330,28 @@
       //keyframe
       setTimeout(function(){
 
-        createStoryCharactersRandom("RELATIONSHIPS", 745, screenHeight, "storyText4", function(messageDiv, i){
+        var xPosition = 745;
+        var yPosition = screenHeight;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = 525;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = 435;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = 380;
+            yPosition = screenHeight;
+        }
+
+        createStoryCharactersRandom("RELATIONSHIPS", xPosition, yPosition, "storyText4", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 y: -5,
@@ -353,7 +374,28 @@
       //keyframe
       setTimeout(function(){
 
-        createStoryCharactersRandom("REFERRALS", 745, screenHeight + 50, "storyText5", function(messageDiv, i){
+        var xPosition = 745;
+        var yPosition = screenHeight + 50;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = 525;
+            yPosition = screenHeight + 50;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = 435;
+            yPosition = screenHeight + 50;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = 380;
+            yPosition = screenHeight + 50;
+        }
+
+        createStoryCharactersRandom("REFERRALS", xPosition, yPosition, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 //y: 5,
@@ -376,7 +418,28 @@
       //keyframe
       setTimeout(function(){
 
-        createStoryCharactersRandom("AND REPEAT SALES", 745, screenHeight + 100, "storyText6", function(messageDiv, i){
+        var xPosition = 745;
+        var yPosition = screenHeight + 100;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = 525;
+            yPosition = screenHeight + 100;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = 435;
+            yPosition = screenHeight + 100;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = 380;
+            yPosition = screenHeight + 100;
+        }
+
+        createStoryCharactersRandom("AND REPEAT SALES", xPosition, yPosition, "storyText6", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 //y: 5,
@@ -417,23 +480,44 @@
       //keyframe
       setTimeout(function(){
 
-          createStoryCharactersRandom("I AM APPLYING AS A FRONT END DEVELOPER", window.innerWidth / 2, screenHeight, "storyText", function(messageDiv, i){
-              gsap.fromTo(messageDiv,
-                {
-                  y: 5,
-                  scale: 2,
-                  alpha: 0,
-                  filter: "blur(5px)",
-                },
-                {
-                  y: 0,
-                  scale: 1,
-                  filter: "blur(0px)",
-                duration: 1,
-                alpha: 1,
-                delay: i / 75,
-              });
-          });
+        var xPosition = window.innerWidth / 2;
+        var yPosition = screenHeight;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = window.innerWidth / 2 - 150;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = window.innerWidth / 2 - 300;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = window.innerWidth / 2 - 200;
+            yPosition = screenHeight;
+        }
+
+        createStoryCharactersRandom("I AM APPLYING AS A FRONT END DEVELOPER", xPosition, yPosition, "storyText", function(messageDiv, i){
+            gsap.fromTo(messageDiv,
+              {
+                y: 5,
+                scale: 2,
+                alpha: 0,
+                filter: "blur(5px)",
+              },
+              {
+                y: 0,
+                scale: 1,
+                filter: "blur(0px)",
+              duration: 1,
+              alpha: 1,
+              delay: i / 75,
+            });
+        });
 
       }, 11500);
 
@@ -530,7 +614,28 @@
       //keyframe
       setTimeout(function(){
 
-        createStoryCharactersRandom("THAT YOUR CLIENTS RELY ON", 825, screenHeight, "storyText5", function(messageDiv, i){
+        var xPosition = 825;
+        var yPosition = screenHeight;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = 575;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = 475;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = 420;
+            yPosition = screenHeight;
+        }
+
+        createStoryCharactersRandom("THAT YOUR CLIENTS RELY ON", xPosition, yPosition, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: 5,
@@ -733,6 +838,24 @@
       //keyframe
       setTimeout(function(){
 
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
+
         createStoryCharacters("INCLUDING A LARGE SCALE DAILY DATA INGEST PROCESS", 50, screenHeight, "storyText4", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
@@ -755,6 +878,24 @@
 
       //keyframe
       setTimeout(function(){
+
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
 
         createStoryCharacters("A REAL ESTATE VECTOR SEARCH API", 50, screenHeight + 50, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
@@ -779,6 +920,24 @@
       //keyframe
       setTimeout(function(){
 
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
+
         createStoryCharacters("A CUSTOM CALENDAR SCHEDULING SERVICE", 50, screenHeight + 100, "storyText6", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
@@ -802,6 +961,24 @@
       //keyframe
       setTimeout(function(){
 
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
+
         createStoryCharacters("HUBSPOT CRM INTEGRATION", 50, screenHeight + 150, "storyText", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
@@ -824,6 +1001,24 @@
 
       //keyframe
       setTimeout(function(){
+
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
 
         createStoryCharacters("AND SHIPPING CARRIER API INTEGRATIONS", 50, screenHeight + 200, "storyText2", function(messageDiv, i){
             gsap.fromTo(messageDiv,
@@ -1057,6 +1252,24 @@
       //keyframe
       setTimeout(function(){
 
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
+
         createStoryCharacters("GRAPHIC DESIGN ", 50, screenHeight + 50, "storyText2", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
@@ -1081,6 +1294,24 @@
 
       //keyframe
       setTimeout(function(){
+
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
 
         createStoryCharacters("COMPUTER SCIENCE ", 50, screenHeight + 100, "storyText3", function(messageDiv, i){
             gsap.fromTo(messageDiv,
@@ -1107,6 +1338,24 @@
       //keyframe
       setTimeout(function(){
 
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
+
         createStoryCharacters("COMPUTER GRAPHICS ", 50, screenHeight + 150, "storyText4", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
@@ -1131,6 +1380,24 @@
 
       //keyframe
       setTimeout(function(){
+
+        var xPosition = 0;
+        var yPosition = 0;
+
+        if(window.screen.width <= 1200)
+        {
+
+        }
+
+        if(window.screen.width <= 900)
+        {
+
+        }
+
+        if(window.screen.width <= 500)
+        {
+
+        }
 
         createStoryCharacters("WEB AND SOFTWARE DEVELOPMENT ", 50, screenHeight + 200, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
@@ -1328,7 +1595,28 @@
       //keyframe
       setTimeout(function(){
 
-        createStoryCharactersRandom("HIRE ME GIFTAGRAM AND LET ME HELP YOU MAKE IT HAPPEN", (window.innerWidth - 1150) / 2, screenHeight, "storyText5", function(messageDiv, i){
+        var xPosition = (window.innerWidth - 1150) / 2;
+        var yPosition = screenHeight;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = (window.innerWidth - 850) / 2;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = (window.innerWidth - 650) / 2;
+            yPosition = screenHeight;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = (window.innerWidth - 525) / 2;
+            yPosition = screenHeight;
+        }
+
+        createStoryCharactersRandom("HIRE ME GIFTAGRAM AND LET ME HELP YOU MAKE IT HAPPEN", xPosition, yPosition, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 //x: 0,
@@ -1353,7 +1641,28 @@
       //keyframe
       setTimeout(function(){
 
-        createStoryCharactersRandom("LET'S TALK AT (647) 741-0039", (window.innerWidth - 540) / 2, screenHeight + 50, "storyText6", function(messageDiv, i){
+        var xPosition = (window.innerWidth - 540) / 2;
+        var yPosition = screenHeight + 50;
+
+        if(window.screen.width <= 1200)
+        {
+            xPosition = (window.innerWidth - 400) / 2;
+            yPosition = screenHeight + 50;
+        }
+
+        if(window.screen.width <= 900)
+        {
+            xPosition = (window.innerWidth - 400) / 2;
+            yPosition = screenHeight + 50;
+        }
+
+        if(window.screen.width <= 500)
+        {
+            xPosition = (window.innerWidth - 350) / 2;
+            yPosition = screenHeight + 50;
+        }
+
+        createStoryCharactersRandom("LET'S TALK AT (647) 741-0039", xPosition, yPosition, "storyText6", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 //x: 0,
