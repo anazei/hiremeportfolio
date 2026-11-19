@@ -15,10 +15,6 @@
   </head>
   <body>
 
-    <div id="bufferAnimation" class="bufferAnimation">
-      <canvas id="bufferingCanvas"></canvas>
-    </div>
-
     <div id="entryGreetingText"></div>
 
       <div id="audioVisualizerWindowContainer">
@@ -45,15 +41,18 @@
   <script src="js/easeljs.min.js"></script>
   <script src="js/audiomanager.js"></script>
   <script src="js/audiovisualizer.js"></script>
-  <script src="js/bufferanimation.js"></script>
 
   <script>
 
       //file URL, type of media
       var preloadArray = new Array();
           preloadArray.push(["audio/climatechange.mp3", "audio"]);
-          preloadArray.push(["audio/main.mp3", "audio"]);
           preloadArray.push(["splash/video/finalcombined.mp4", "video"]);
+
+          preloadArray.push(["main/images/splashbackground.jpg", "image"]);
+
+          preloadArray.push(["audio/main.mp3", "audio"]);
+
           preloadArray.push(["main/images/advancedMaskTransitions3.jpg", "image"]);
           preloadArray.push(["main/images/AI4.jpg", "image"]);
           preloadArray.push(["main/images/animatedAndividualComponents2.jpg", "image"]);
@@ -63,7 +62,6 @@
           preloadArray.push(["main/images/bluebg.jpg", "image"]);
           preloadArray.push(["main/images/drone4.jpg", "image"]);
           preloadArray.push(["main/images/planningstoryboard1.jpg", "image"]);
-          preloadArray.push(["main/images/splashbackground.jpg", "image"]);
           preloadArray.push(["main/images/ztransitions.jpg", "image"]);
           preloadArray.push(["main/images/ztransitions2.jpg", "image"]);
 
@@ -72,11 +70,6 @@
 
       function init()
       {
-          //display a preload animation visible
-          var buffer = new BufferAnimation("bufferingCanvas");
-          buffer.startAnimation();
-          document.getElementById("bufferAnimation").style.visibility = "visible";
-
           for(var i=0;i<preloadArray.length;i++)
           {
               switch(preloadArray[i][1])
@@ -99,45 +92,42 @@
               location.reload();
           });
 
+          window.addEventListener("message", function(event){
+
+              switch(event.data)
+              {
+                  //load main page after splash page is finished
+                  case "iframeClicked":
+
+                      if(currentAudioState == "playing")
+                      {
+                          music.fadeOut(currentAudioTrack, 2);
+                      }
+
+                      setTimeout(function(){
+
+                          loadNewSong("mainMusic", "audio/main.mp3");
+                          changeAudioTrackTitle("Somewhere But Not Here - Nicolai Patricio");
+                      }, 2000);
+
+                      document.getElementById("mainIframe").src = "main/main.html";
+                  break;
+
+                  case "moveAudioPlayer":
+
+                    gsap.to("#audioVisualizerWindowContainer", {
+                      y: "-= 75",
+                      duration: .5,
+                    });
+                  break;
+              }
+          });
+
           //only allow experience to begin if in landscape mode
-          if(isLandscapeMode() == true)
+          if(isLandscapeMode() == false)
           {
-              window.addEventListener("message", function(event){
-
-                  switch(event.data)
-                  {
-                      //load main page after splash page is finished
-                      case "iframeClicked":
-
-                          if(currentAudioState == "playing")
-                          {
-                              music.fadeOut(currentAudioTrack, 2);
-                          }
-
-                          setTimeout(function(){
-
-                              loadNewSong("mainMusic", "audio/main.mp3");
-                              changeAudioTrackTitle("Somewhere But Not Here - Nicolai Patricio");
-                          }, 2000);
-
-                          document.getElementById("mainIframe").src = "main/main.html";
-                      break;
-
-                      case "moveAudioPlayer":
-
-                        gsap.to("#audioVisualizerWindowContainer", {
-                          y: "-= 75",
-                          duration: .5,
-                        });
-                      break;
-                  }
-              });
-
-          } else {
-
               //if not in landscape mode, display "turn your screen into landscape mode to begin"
               document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
-              document.getElementById("bufferAnimation").style.visibility = "hidden";
           }
       }
 
@@ -172,15 +162,7 @@
       //if the screen width is lesser than the height, then it is in portrait mode
       function isLandscapeMode()
       {
-          var screenWidth = window.innerWidth;
-          var screenHeight = window.innerHeight;
-
-          if(screenWidth < screenHeight)
-          {
-              return false;
-          } else {
-              return true;
-          }
+          return window.matchMedia("(orientation: landscape)").matches;
       }
 
       //preload all the big assets like video and audio and images
@@ -190,34 +172,39 @@
       {
           document.getElementById("entryGreetingText").innerHTML = "Loading assets: " + preloadCounter + "/" + preloadArray.length;
 
-          if(preloadCounter == preloadArray.length) //17 files to preload
+          if(preloadCounter >= preloadArray.length - 3) //two mp3 and mp4 file can be ignored
           {
-              //make preloader animation invisible
-              document.getElementById("bufferAnimation").style.visibility = "hidden";
 
-              //allow click to begin
-              window.addEventListener("click", function(){
+              if(isLandscapeMode() == true)
+              {
+                  //show click message
+                  document.getElementById("entryGreetingText").innerHTML = "This portfolio is entirely Javascript driven and custom designed for Giftagram<br>Click anywhere to begin";
 
-                  //first click to enter splash page
-                  if(alreadyClicked == false)
-                  {
-                      alreadyClicked = true;
+                  //allow click to begin
+                  window.addEventListener("click", function(){
 
-                      loadNewSong("splashMusic", "audio/climatechange.mp3");
+                      //first click to enter splash page
+                      if(alreadyClicked == false)
+                      {
+                          alreadyClicked = true;
 
-                      fadeOutGreetingText();
+                          loadNewSong("splashMusic", "audio/climatechange.mp3");
 
-                      //only load splash page after click to allow audio browser persmission to play
-                      var iframe = document.createElement("iframe");
-                          iframe.id = "mainIframe";
-                          iframe.src = "splash/splash.html";
+                          fadeOutGreetingText();
 
-                      document.getElementById("iframeDiv").appendChild(iframe);
-                  }
-              });
+                          //only load splash page after click to allow audio browser persmission to play
+                          var iframe = document.createElement("iframe");
+                              iframe.id = "mainIframe";
+                              iframe.src = "splash/splash.html";
 
-              //show click message
-              document.getElementById("entryGreetingText").innerHTML = "This portfolio is entirely Javascript driven and custom designed for Giftagram<br>Click anywhere to begin";
+                          document.getElementById("iframeDiv").appendChild(iframe);
+                      }
+                  });
+
+              } else {
+                  //if not in landscape mode, display "turn your screen into landscape mode to begin"
+                  document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
+              }
           }
       }
 
@@ -257,15 +244,10 @@
       //when page loads, position every element based on screen width/height
       function positionElements()
       {
-          var bufferAnimationDiv = document.getElementById("bufferAnimation");
-
           if(window.screen.width < 1200)
           {
-              bufferAnimationDiv.style.scale = 0.5;
-              bufferAnimationDiv.style.left = (window.screen.width / 2) - 50 + "px";
-              bufferAnimationDiv.style.top = (window.screen.height / 2) - 250 + "px";
-          }
 
+          }
       }
 
       async function robotoReady(){
@@ -302,6 +284,7 @@
       ])
       };
 
+      //loads fonts first
       robotoReady().then(function(){
 
         //positionElements();
