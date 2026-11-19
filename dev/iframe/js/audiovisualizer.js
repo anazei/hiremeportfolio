@@ -22,6 +22,8 @@
   var music = new AudioManager();
   var currentAudioTrack = "";
 
+  var unlock = false;
+
   function updateAnalyzer()
   {
       // Get current frequency bin values
@@ -388,6 +390,12 @@
 
   function loadNewSong(id, url)
   {
+      if(unlock == false)
+      {
+          unlock = true;
+          window.parent.music.unlock();
+      }
+
       music.load(id, url, false); //boolean is whether to loop
       playSong(id);
 
