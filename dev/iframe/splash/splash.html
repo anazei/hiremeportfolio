@@ -205,6 +205,7 @@
 
     function init()
     {
+
         document.getElementById("masterCode").style.visibility = "visible";
         alreadyClicked = true;
 
@@ -214,6 +215,17 @@
 
         }, 750);
 
+        //for iOS
+        document.addEventListener("click", function(){
+
+            if(clickLock == "allowed")
+            {
+                clickLock = "disallowed";
+                fadeOutSplashPage();
+            }
+        });
+
+        //for regular browsers
         window.addEventListener("click", function(){
 
             if(clickLock == "allowed")
@@ -263,6 +275,8 @@
       init();
 
     });
+
+
 
   </script>
 

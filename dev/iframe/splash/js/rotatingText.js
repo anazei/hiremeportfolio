@@ -230,7 +230,7 @@
           var messageDiv = document.createElement("span");
               messageDiv.innerHTML = message[i];
               messageDiv.style.marginRight = "4px";
-              messageDiv.style.filter = "blur(1px)";
+              messageDiv.style.filter = "blur(2px)";
               messageDiv.style.scale = 4;
               messageDiv.style.display = "inline-block";
               messageDiv.style.opacity = 0;
@@ -250,7 +250,7 @@
             scale: 1,
             opacity: 1,
             duration: .75,
-            delay: i / 50
+            delay: i / 25
           });
       }
   }

@@ -68,6 +68,21 @@
       var alreadyClicked = false;
       var preloadCounter = 0;
 
+      //when site first loads, wait for user to go into landscape mode
+      function resizeState1()
+      {
+          location.reload();
+      }
+
+      //only reload if not in landscape, this prevents youtube videos entering into full screen from triggering reload
+      function resizeState2()
+      {
+          if(isLandscapeMode() == false)
+          {
+              location.reload();
+          }
+      }
+
       function init()
       {
           for(var i=0;i<preloadArray.length;i++)
@@ -85,9 +100,7 @@
               }
           }
 
-          window.addEventListener("resize", function(event){
-              location.reload();
-          });
+          window.addEventListener("resize", resizeState1);
 
           window.addEventListener("message", function(event){
 
@@ -119,13 +132,6 @@
                   break;
               }
           });
-
-          //only allow experience to begin if in landscape mode
-          if(isLandscapeMode() == false)
-          {
-              //if not in landscape mode, display "turn your screen into landscape mode to begin"
-              document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
-          }
       }
 
       //fade out "this contains audio, click anywhere to begin" text
@@ -194,6 +200,10 @@
                               iframe.src = "splash/splash.html";
 
                           document.getElementById("iframeDiv").appendChild(iframe);
+
+                          window.removeEventListener("resize", resizeState1);
+
+                          window.addEventListener("resize", resizeState2);
                       }
                   });
 
