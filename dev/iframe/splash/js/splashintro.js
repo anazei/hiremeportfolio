@@ -59,7 +59,8 @@
           //selectMask(maskwall, "video/symphony2.mp4");
           //selectMask(maskwall, "video/cello.mp4");
           //selectMaskVideoSource(maskwall, "cello");
-          selectMaskVideoSource(maskwall, "combinedVideo");
+          //selectMaskVideoSource(maskwall, "combinedVideo");
+          selectMaskVideoSource(crossfade, "combinedVideo");
 
       }, 9500);
 
@@ -111,7 +112,6 @@
       //keyframe
       setTimeout(function(){
 
-          //selectMask(crossfade, "images/blackbg.png");
           selectMask(crossfade, "../main/images/splashbackground.jpg");
 
       }, 20250);

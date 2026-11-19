@@ -14,6 +14,12 @@
       originalContext.fillStyle = "#000000";
       originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
+  var bufferCanvas = createInvisibleCanvas("bufferCanvas", mainCanvas.width, mainCanvas.height); //buffer canvas to accommodate iOS Chrome rendering issues
+  var bufferContext = bufferCanvas.getContext("2d");
+
+  var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
+  var maskContext = maskCanvas.getContext("2d");
+
   var newImage = new Image(); //new incoming image
   var newVideo = document.getElementById("mainVideo");
   var newVideo2 = document.getElementById("mainVideo2");
@@ -50,7 +56,7 @@
       }
   }
 
-  //this function is only used when selecting a preloaded video that has been embedded in the HTML already to speed up rendering
+  //setup which ever mask is selected
   async function selectMaskVideoSource(mask, src)
   {
       if(currentMask !== mask)
@@ -82,7 +88,6 @@
       });
   }
 
-  //this function dynamically loads a .mp4 video on demand, causes slower rendering performance on some browsers
   async function setVideo(videoSrc)
   {
     return new Promise(function(resolve){
@@ -105,6 +110,7 @@
         //set the new incoming video
         currentVideo.src = videoSrc;
         currentVideo.load();
+        currentVideo.muted = true;
 
         currentVideo.addEventListener("canplay", function(){
 
@@ -114,64 +120,44 @@
     });
   }
 
-  //if video is preloaded in HTML page at load time, then just direct it to the video element instead of loading it - this will speed up rendering
   async function setVideoSource(videoID)
   {
-    return new Promise(function(resolve){
-
-        var currentVideo = document.getElementById(videoID);
+      var currentVideo = document.getElementById(videoID);
+          currentVideo.playsInline = true;
+          currentVideo.muted = true;
+          currentVideo.currentTime = 0;
 
         //set the new incoming video
         currentVideo.load();
-        currentVideo.play();
+        await currentVideo.play();
 
-        currentVideo.addEventListener("canplay", function(){
-
-            videoActive = true;
-            resolve(currentVideo);
-        });
-    });
+        videoActive = true;
+        return currentVideo;
   }
 
-  //setup which ever mask is selected
-  async function selectMaskVideoSource(mask, src)
-  {
-      if(currentMask !== mask)
-      {
-          currentMask = mask;
-
-          //setup mask
-          currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
-      }
-
-      keepCopyingVideo = true;
-
-      incomingVideo = await setVideoSource(src);
-      animateMask(mask);
-  }
-
-  //main masking animation transition command
+  //main masking animation transition command - this version of onMainLoop works with iOS Chrome for video transitions but has rendering issues with spotlight going 100% on height properly
   function onMainloop()
   {
-      mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+      bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
 
-      // 1) mask from mask canvas is drawn first
-      mainContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
+      bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
-      mainContext.globalCompositeOperation = "source-in";
-
-      // 2) then newImage will automatically get masked
+      // newImage or incoming video will automatically get masked
       if(videoActive == true)
       {
-          mainContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
+          bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
       } else {
-          mainContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
+          bufferContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
       }
 
-      mainContext.globalCompositeOperation = "destination-atop";
+      bufferContext.globalCompositeOperation = "destination-in";
 
-      // 3) originalImage gets drawn last with "destination-atop" set beforehand
-      mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out originalImage
+      // mask from mask canvas is drawn
+      bufferContext.drawImage(document.getElementById("maskCanvas"), 0, 0, mainCanvas.width, mainCanvas.height);
+
+      mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height);
+
+      mainContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height);
 
       if(runOnMainLoop == true)
       {
@@ -182,16 +168,20 @@
   //this copies the video to the main canvas continuously after masking in effect is completed
   function keepVideoCopying()
   {
-      mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+      bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
+
+      bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
       //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
-      mainContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height);
+      bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height);
+
+      mainContext.drawImage(bufferCanvas, 0, 0);
 
       //unload and stop copying video once it ends
       if(incomingVideo.ended == true)
       {
-          //keepCopyingVideo = false;
-          //incomingVideo.src = "";
+          keepCopyingVideo = false;
+          incomingVideo.src = "";
       }
 
       if(keepCopyingVideo == true)
@@ -265,6 +255,15 @@
   {
       mainCanvas.width = window.innerWidth;
       mainCanvas.height = window.innerHeight;
+
+      originalImage.width = window.innerWidth;
+      originalImage.height = window.innerHeight;
+
+      bufferCanvas.width = window.innerWidth;
+      bufferCanvas.height = window.innerHeight;
+
+      maskCanvas.width = window.innerWidth;
+      maskCanvas.height = window.innerHeight;
   }
 
   resizeCanvas();

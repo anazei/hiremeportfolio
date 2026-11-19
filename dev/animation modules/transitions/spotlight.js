@@ -48,7 +48,7 @@ var Spotlight = function(masterReference, mainCanvas)
     {
         gsap.to(gradient, {
           radius: 900,
-          duration: 1.5,
+          duration: 1.25,
           ease: "power2.out",
           onUpdate: setupMask
         });

@@ -25,23 +25,23 @@
   </head>
   <body>
 
-    <video id="mainVideo" style="display:none;">
+    <video id="mainVideo" style="display:none;" playsinline>
       <source src="" type="video/mp4">
     </video>
 
-    <video id="mainVideo2" style="display:none;">
+    <video id="mainVideo2" style="display:none;" playsinline>
       <source src="" type="video/mp4">
     </video>
 
-    <video id="cello" style="display:none;">
+    <video id="cello" style="display:none;" playsinline>
       <source src="video2/cello.mp4" type="video/mp4">
     </video>
 
-    <video id="violin" style="display:none;">
+    <video id="violin" style="display:none;" playsinline>
       <source src="video2/violins.mp4" type="video/mp4">
     </video>
 
-    <video id="conductor" style="display:none;">
+    <video id="conductor" style="display:none;" playsinline>
       <source src="video2/conductor.mp4" type="video/mp4">
     </video>
 
@@ -70,6 +70,12 @@
     var originalContext = originalImage.getContext("2d");
         originalContext.fillStyle = "#000000";
         originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+    var bufferCanvas = createInvisibleCanvas("bufferCanvas", mainCanvas.width, mainCanvas.height); //buffer canvas to accommodate iOS Chrome rendering issues
+    var bufferContext = bufferCanvas.getContext("2d");
+
+    var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
+    var maskContext = maskCanvas.getContext("2d");
 
     var newImage = new Image(); //new incoming image
     var newVideo = document.getElementById("mainVideo");
@@ -161,6 +167,7 @@
           //set the new incoming video
           currentVideo.src = videoSrc;
           currentVideo.load();
+          currentVideo.muted = true;
 
           currentVideo.addEventListener("canplay", function(){
 
@@ -172,44 +179,76 @@
 
     async function setVideoSource(videoID)
     {
-      return new Promise(function(resolve){
-
-          var currentVideo = document.getElementById(videoID);
+        var currentVideo = document.getElementById(videoID);
+            currentVideo.playsInline = true;
+            currentVideo.muted = true;
+            currentVideo.currentTime = 0;
 
           //set the new incoming video
           currentVideo.load();
-          currentVideo.play();
+          await currentVideo.play();
 
-          currentVideo.addEventListener("canplay", function(){
-
-              videoActive = true;
-              resolve(currentVideo);
-          });
-      });
+          videoActive = true;
+          return currentVideo;
     }
-
+/*
     //main masking animation transition command
     function onMainloop()
     {
-        mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+        bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
+
+        bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
         // 1) mask from mask canvas is drawn first
-        mainContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
+        bufferContext.drawImage(document.getElementById("maskCanvas"), 0, 0); //main canvas draws/copies animated buffer mask canvas first and sets "source in" composition
 
-        mainContext.globalCompositeOperation = "source-in";
+        bufferContext.globalCompositeOperation = "source-in";
 
         // 2) then newImage will automatically get masked
         if(videoActive == true)
         {
-            mainContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
+            bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
         } else {
-            mainContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
+            bufferContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
         }
 
-        mainContext.globalCompositeOperation = "destination-atop";
+        bufferContext.globalCompositeOperation = "destination-atop";
 
         // 3) originalImage gets drawn last with "destination-atop" set beforehand
-        mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out originalImage
+        bufferContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out originalImage
+
+        mainContext.drawImage(bufferCanvas, 0, 0);
+
+        if(runOnMainLoop == true)
+        {
+            requestAnimationFrame(onMainloop);
+        }
+    }
+*/
+
+    //main masking animation transition command - this version of onMainLoop works with iOS Chrome for video transitions but has rendering issues with spotlight going 100% on height properly
+    function onMainloop()
+    {
+        bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
+
+        bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        // newImage or incoming video will automatically get masked
+        if(videoActive == true)
+        {
+            bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
+        } else {
+            bufferContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
+        }
+
+        bufferContext.globalCompositeOperation = "destination-in";
+
+        // mask from mask canvas is drawn
+        bufferContext.drawImage(document.getElementById("maskCanvas"), 0, 0, mainCanvas.width, mainCanvas.height);
+
+        mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height);
+
+        mainContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height);
 
         if(runOnMainLoop == true)
         {
@@ -220,10 +259,14 @@
     //this copies the video to the main canvas continuously after masking in effect is completed
     function keepVideoCopying()
     {
-        mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+        bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
+
+        bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
         //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
-        mainContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height);
+        bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height);
+
+        mainContext.drawImage(bufferCanvas, 0, 0);
 
         //unload and stop copying video once it ends
         if(incomingVideo.ended == true)
@@ -303,6 +346,15 @@
     {
         mainCanvas.width = window.innerWidth;
         mainCanvas.height = window.innerHeight;
+
+        originalImage.width = window.innerWidth;
+        originalImage.height = window.innerHeight;
+
+        bufferCanvas.width = window.innerWidth;
+        bufferCanvas.height = window.innerHeight;
+
+        maskCanvas.width = window.innerWidth;
+        maskCanvas.height = window.innerHeight;
     }
 
     resizeCanvas();
@@ -318,11 +370,9 @@
 
       //selectMaskVideoSource(maskwall, "cello");
 
-      console.log("start video");
-
       setTimeout(function(){
 
-          selectMaskVideoSource(maskwall, "cello");
+          selectMaskVideoSource(crossfade, "cello");
 
       }, 9500- 8000);
 
@@ -330,7 +380,7 @@
       setTimeout(function(){
 
           //selectMask(maskwall, "video/violins.mp4");
-          selectMaskVideoSource(maskwall, "violin");
+          selectMaskVideoSource(crossfade, "violin");
 
       }, 13000- 8000);
 
@@ -340,7 +390,15 @@
           //selectMask(spotlight, "video/conductor.mp4");
           selectMaskVideoSource(spotlight, "conductor");
 
-      }, 16500- 8000);
+      }, 16000- 8000);
+
+      //keyframe
+      setTimeout(function(){
+
+          //selectMask(spotlight, "video/conductor.mp4");
+          selectMask(crossfade, "splashbackground.jpg");
+
+      }, 20500- 8000);
 
     })
 
