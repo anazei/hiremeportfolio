@@ -123,7 +123,12 @@
                       document.getElementById("mainIframe").src = "main/main.html";
                   break;
 
+                  //entering main landing page
                   case "moveAudioPlayer":
+
+                    //prevents youtube video full screen from reloading page
+                    window.removeEventListener("resize", resizeState1); //remove old listener first that reloads on any resize
+                    window.addEventListener("resize", resizeState2); //add new listener that is more discriminate on resizing only when not in landscape mode
 
                     gsap.to("#audioVisualizerWindowContainer", {
                       y: "-= 75",
@@ -200,10 +205,6 @@
                               iframe.src = "splash/splash.html";
 
                           document.getElementById("iframeDiv").appendChild(iframe);
-
-                          window.removeEventListener("resize", resizeState1);
-
-                          window.addEventListener("resize", resizeState2);
                       }
                   });
 
@@ -233,12 +234,12 @@
               }
 
               downloadedMedia.set(fileURL, URL.createObjectURL(blob));
-              console.log("Downloaded:", fileURL, blob.size, "bytes");
+              //console.log("Downloaded:", fileURL, blob.size, "bytes");
 
               preloadCounter++;
               checkPreloader();
           } catch (error) {
-              console.error("Media download failed:", fileURL, error);
+              //console.error("Media download failed:", fileURL, error);
           }
       }
 
