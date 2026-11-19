@@ -20,9 +20,15 @@ var Maskwall = function(masterReference, mainCanvas)
     var xPosition = -1;
     var yPosition = -1;
 
+    var runStageUpdate = false;
+
+    var howManyAcross = window.screen.width / 150;
+    var howManyDown = window.screen.height / 100;
+    var totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 1.25);
+
     function setupMask()
     {
-        for(var i=0;i<155;i++)
+        for(var i=0;i<totalRectsNeeded;i++)
         {
           xPosition++;
 
@@ -54,22 +60,23 @@ var Maskwall = function(masterReference, mainCanvas)
 
     function startAnimate()
     {
+        runStageUpdate = true;
+        redrawEasel();
+
         for(let i=0;i<boxArray.length;i++)
         {
             gsap.to(boxArray[i], {
               duration: .75,
               scaleX: 2,
               scaleY: 1.5,
-              delay: i / 300,
+              delay: i / 600,
               ease: "power1.inOut",
-              onUpdate: function(){
-                  stage.update();
-              },
               onComplete: function(){
 
                   if(i == boxArray.length - 1)
                   {
-                    resetMaskState();
+                      resetMaskState();
+                      runStageUpdate = false;
                   }
               }
             });
@@ -109,5 +116,15 @@ var Maskwall = function(masterReference, mainCanvas)
         }
 
         return tempCanvas;
+    }
+
+    //only redrawl EaselJS while animating
+    function redrawEasel()
+    {
+        if(runStageUpdate == true)
+        {
+            stage.update();
+            window.requestAnimationFrame(redrawEasel);
+        }
     }
 }

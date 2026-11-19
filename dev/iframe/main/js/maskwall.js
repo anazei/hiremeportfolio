@@ -22,9 +22,9 @@ var Maskwall = function(masterReference, mainCanvas)
 
     var runStageUpdate = false;
 
-    var howManyAcross = window.innerWidth / 150;
-    var howManyDown = window.innerHeight / 100;
-    var totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 1.2);
+    var howManyAcross = window.screen.width / 150;
+    var howManyDown = window.screen.height / 100;
+    var totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 1.25);
 
     function setupMask()
     {

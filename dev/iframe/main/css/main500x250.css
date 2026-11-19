@@ -1,5 +1,5 @@
 /* Short landscape screens, typically phones */
-@media (orientation: landscape) and (max-height: 500px) and (min-height: 250px) {
+@media (max-width: 500px) and (min-height: 250px) {
     /* Reduce vertical gaps, headings, and top/bottom padding */
 
       body
@@ -209,17 +209,18 @@
           transform: translateZ(0);
           backface-visibility: hidden;
           will-change: transform, opacity;
-          width: 150%;
+          width: 100%;
+          scale: 0.75;
       }
 
       #giftagramLogoContainer
       {
           position: absolute;
-          left: -47%;
-          top: -5%;
+          left: -63%;
+          top: -12%;
           scale: 0.8;
           z-index: 30;
-          scale: 0.4;
+          scale: 0.25;
           width: 175%
       }
 
@@ -250,11 +251,11 @@
       #landingTextContainer
       {
           position: absolute;
-          left: -49.25%;
-          top: 60%;
+          left: -67.25%;
+          top: 28%;
           width: 1000px;
           z-index: 150;
-          scale: 0.45;
+          scale: 0.3;
       }
 
       #landingTitle
@@ -300,7 +301,7 @@
 
       .slideNavText
       {
-          font-size: 10pt;
+          font-size: 8pt;
           letter-spacing: 2px;
           color: white;
           font-family: 'Roboto', monospace;
@@ -327,18 +328,19 @@
       #navContainer
       {
           position: absolute;
-          bottom: -65%;
-          left: 5%;
+          bottom: 4%;
+          left: -29%;
           font-size: 10pt;
-          width: 165%;
+          width: 800px;
+          scale: 0.6;
       }
 
       #slideNavContainer
       {
           position: absolute;
-          left: 45%;
-          top: 127%;
-          font-size: 10pt;
+          left: 16%;
+          top: 78%;
+          font-size: 8pt;
       }
 
       #masterNavContainer

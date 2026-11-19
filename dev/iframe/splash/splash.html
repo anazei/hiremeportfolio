@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/splash.css">
     <link rel="stylesheet" href="css/splash500x250.css">
     <link rel="stylesheet" href="css/splash900x450.css">
@@ -189,6 +189,7 @@
     </video>
 
   </body>
+
   <script src="../js/gsap.min.js"></script>
   <script src="../js/easeljs.min.js"></script>
   <script src="js/snow.js"></script>
@@ -227,7 +228,19 @@
         });
     }
 
-    init();
+    async function robotoReady(){
+      await Promise.all([
+        document.fonts.load('300 16px "Roboto"'),
+        document.fonts.load('400 16px "Roboto"'),
+        document.fonts.load('500 16px "Roboto"'),
+    ])
+    };
+
+    robotoReady().then(function(){
+      
+      init();
+
+    });
 
   </script>
 

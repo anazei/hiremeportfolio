@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/main500x250.css">
     <link rel="stylesheet" href="css/main900x450.css">
@@ -229,7 +229,7 @@
   <script>
 
     var allowRollingGridEffect = true;
-    var screenHeight = Math.round(window.innerHeight / 2);
+    var screenHeight = Math.round(window.screen.height / 2);
 
     gsap.registerPlugin(SplitText);
 
@@ -582,7 +582,7 @@
             youTubeWidth = Math.round(400 * 0.6);
             youTubeHeight = Math.round(225 * 0.6);
             positionTopSingleVideo = 38;
-            positionTopDoubleVideo = 20;
+            positionTopDoubleVideo = 11;
         }
 
         if(window.screen.width <= 500)
@@ -590,8 +590,8 @@
             //.5 scale
             youTubeWidth = Math.round(400 * 0.6);
             youTubeHeight = Math.round(225 * 0.6);
-            positionTopSingleVideo = 61;
-            positionTopDoubleVideo = 20;
+            positionTopSingleVideo = 38;
+            positionTopDoubleVideo = 11;
         }
 
         if(URL.indexOf(",") >= 0)
@@ -663,18 +663,32 @@
         }
     }
 
-    //startMainPage();
-    beginTellStory();
-/*
-    displayDownloadCVPage();
-    navListeners();
-    gsap.to("#masterNavContainer", {
-      alpha: 1,
-      duration: 1,
-      delay: .5,
+    async function robotoReady(){
+      await Promise.all([
+        document.fonts.load('300 16px "Roboto"'),
+        document.fonts.load('400 16px "Roboto"'),
+        document.fonts.load('500 16px "Roboto"'),
+    ])
+    };
+
+    robotoReady().then(function(){
+
+        startMainPage();
+        //beginTellStory();
+    /*
+        displayDownloadCVPage();
+        navListeners();
+        gsap.to("#masterNavContainer", {
+          alpha: 1,
+          duration: 1,
+          delay: .5,
+        });
+    */
+        //stopRandomRollingGridEffect(); //stop rotating rolling grid when in gallery mode
+
     });
-*/
-    //stopRandomRollingGridEffect(); //stop rotating rolling grid when in gallery mode
+
+
 
 
 

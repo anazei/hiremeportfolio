@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/index500x250.css">
     <link rel="stylesheet" href="css/index900x450.css">
@@ -36,6 +36,10 @@
       <div id="iframeDiv"></div>
 
   </body>
+
+  <script>
+
+  </script>
 
   <script src="js/gsap.min.js"></script>
   <script src="js/easeljs.min.js"></script>
@@ -73,6 +77,7 @@
           //display a preload animation visible
           var buffer = new BufferAnimation("bufferingCanvas");
           buffer.startAnimation();
+          document.getElementById("bufferAnimation").style.visibility = "visible";
 
           for(var i=0;i<preloadArray.length;i++)
           {
@@ -134,6 +139,7 @@
 
               //if not in landscape mode, display "turn your screen into landscape mode to begin"
               document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
+              document.getElementById("bufferAnimation").style.visibility = "hidden";
           }
       }
 
@@ -187,7 +193,7 @@
           if(preloadCounter == preloadArray.length) //17 files to preload
           {
               //make preloader animation invisible
-              document.getElementById("bufferAnimation").style.display = "none";
+              document.getElementById("bufferAnimation").style.visibility = "hidden";
 
               //allow click to begin
               window.addEventListener("click", function(){
@@ -262,8 +268,20 @@
 
       }
 
-      //positionElements();
-      init();
+      async function robotoReady(){
+        await Promise.all([
+          document.fonts.load('300 16px "Roboto"'),
+          document.fonts.load('400 16px "Roboto"'),
+          document.fonts.load('500 16px "Roboto"'),
+      ])
+      };
+
+      robotoReady().then(function(){
+
+        //positionElements();
+        init();
+
+      });
 
   </script>
 

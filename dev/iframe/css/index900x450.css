@@ -147,6 +147,7 @@
       left: 50%;
       transform: translateX(-50%);
       scale: 0.75;
+      visibility: hidden;
     }
 
     .bufferingCanvas {

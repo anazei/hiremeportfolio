@@ -18,7 +18,7 @@
       }
 
       backgroundRotationTextDiv.innerHTML = randomCharacters;
-      backgroundRotationTextDiv.style.textShadow = "0px 0px 10px rgba(255, 255, 255, 1)";
+      //backgroundRotationTextDiv.style.textShadow = "0px 0px 10px rgba(255, 255, 255, 1)";
   }
 
   //fade in rotational background text
@@ -32,7 +32,7 @@
 
               generateRotatingBackgroundText(length);
 
-          }, 25);
+          }, 50);
 
           gsap.to(backgroundRotationTextDiv, {
             opacity: 0.4,
@@ -140,8 +140,8 @@
           var messageDiv = document.createElement("span");
               messageDiv.innerHTML = message[i];
               messageDiv.style.marginRight = "4px";
-              messageDiv.style.filter = "blur(10px)";
-              messageDiv.style.scale = 7;
+              messageDiv.style.filter = "blur(1px)";
+              messageDiv.style.scale = 4;
               messageDiv.style.display = "inline-block";
 
               messageDiv.style.opacity = 0;

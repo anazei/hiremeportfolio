@@ -222,7 +222,16 @@
       //keyframe
       setTimeout(function(){
 
-          createStoryCharacters("I CAN HELP YOU CRAFT UNFORGETTABLE STORIES", 50, screenHeight, "storyText", function(messageDiv, i){
+          var xPosition = 50;
+          var yPosition = screenHeight;
+
+          if(window.screen.width <= 500)
+          {
+              xPosition = -15;
+              yPosition = screenHeight;
+          }
+
+          createStoryCharacters("I CAN HELP YOU CRAFT UNFORGETTABLE STORIES", xPosition, yPosition, "storyText", function(messageDiv, i){
               gsap.fromTo(messageDiv,
                 {
                   y: 5,
@@ -380,19 +389,19 @@
         if(window.screen.width <= 1200)
         {
             xPosition = 525;
-            yPosition = screenHeight + 50;
+            yPosition = screenHeight + 25;
         }
 
         if(window.screen.width <= 900)
         {
             xPosition = 435;
-            yPosition = screenHeight + 50;
+            yPosition = screenHeight + 25;
         }
 
         if(window.screen.width <= 500)
         {
             xPosition = 380;
-            yPosition = screenHeight + 50;
+            yPosition = screenHeight + 25;
         }
 
         createStoryCharactersRandom("REFERRALS", xPosition, yPosition, "storyText5", function(messageDiv, i){
@@ -424,19 +433,19 @@
         if(window.screen.width <= 1200)
         {
             xPosition = 525;
-            yPosition = screenHeight + 100;
+            yPosition = screenHeight + 50;
         }
 
         if(window.screen.width <= 900)
         {
             xPosition = 435;
-            yPosition = screenHeight + 100;
+            yPosition = screenHeight + 50;
         }
 
         if(window.screen.width <= 500)
         {
             xPosition = 380;
-            yPosition = screenHeight + 100;
+            yPosition = screenHeight + 50;
         }
 
         createStoryCharactersRandom("AND REPEAT SALES", xPosition, yPosition, "storyText6", function(messageDiv, i){
@@ -838,25 +847,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight;
         }
 
-        createStoryCharacters("INCLUDING A LARGE SCALE DAILY DATA INGEST PROCESS", 50, screenHeight, "storyText4", function(messageDiv, i){
+        createStoryCharacters("INCLUDING A LARGE SCALE DAILY DATA INGEST PROCESS", xPosition, yPosition, "storyText4", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: 50,
@@ -879,25 +891,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 50;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 25;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 25;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 25;
         }
 
-        createStoryCharacters("A REAL ESTATE VECTOR SEARCH API", 50, screenHeight + 50, "storyText5", function(messageDiv, i){
+        createStoryCharacters("A REAL ESTATE VECTOR SEARCH API", xPosition, yPosition, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: 50,
@@ -920,25 +935,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 100;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 50;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 50;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 50;
         }
 
-        createStoryCharacters("A CUSTOM CALENDAR SCHEDULING SERVICE", 50, screenHeight + 100, "storyText6", function(messageDiv, i){
+        createStoryCharacters("A CUSTOM CALENDAR SCHEDULING SERVICE", xPosition, yPosition, "storyText6", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: 50,
@@ -961,25 +979,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 150;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 75;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 75;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 75;
         }
 
-        createStoryCharacters("HUBSPOT CRM INTEGRATION", 50, screenHeight + 150, "storyText", function(messageDiv, i){
+        createStoryCharacters("HUBSPOT CRM INTEGRATION", xPosition, yPosition, "storyText", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: 50,
@@ -1002,25 +1023,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 200;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 100;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 100;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 100;
         }
 
-        createStoryCharacters("AND SHIPPING CARRIER API INTEGRATIONS", 50, screenHeight + 200, "storyText2", function(messageDiv, i){
+        createStoryCharacters("AND SHIPPING CARRIER API INTEGRATIONS", xPosition, yPosition, "storyText2", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: 50,
@@ -1252,25 +1276,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 50;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 25;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 25;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 25;
         }
 
-        createStoryCharacters("GRAPHIC DESIGN ", 50, screenHeight + 50, "storyText2", function(messageDiv, i){
+        createStoryCharacters("GRAPHIC DESIGN ", xPosition, yPosition, "storyText2", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: -15,
@@ -1295,25 +1322,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 100;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 50;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 50;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 50;
         }
 
-        createStoryCharacters("COMPUTER SCIENCE ", 50, screenHeight + 100, "storyText3", function(messageDiv, i){
+        createStoryCharacters("COMPUTER SCIENCE ", xPosition, yPosition, "storyText3", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: -15,
@@ -1338,25 +1368,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 150;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 75;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 75;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 75;
         }
 
-        createStoryCharacters("COMPUTER GRAPHICS ", 50, screenHeight + 150, "storyText4", function(messageDiv, i){
+        createStoryCharacters("COMPUTER GRAPHICS ", xPosition, yPosition, "storyText4", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: -15,
@@ -1381,25 +1414,28 @@
       //keyframe
       setTimeout(function(){
 
-        var xPosition = 0;
-        var yPosition = 0;
+        var xPosition = 50;
+        var yPosition = screenHeight + 200;
 
         if(window.screen.width <= 1200)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 100;
         }
 
         if(window.screen.width <= 900)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 100;
         }
 
         if(window.screen.width <= 500)
         {
-
+            xPosition = 50;
+            yPosition = screenHeight + 100;
         }
 
-        createStoryCharacters("WEB AND SOFTWARE DEVELOPMENT ", 50, screenHeight + 200, "storyText5", function(messageDiv, i){
+        createStoryCharacters("WEB AND SOFTWARE DEVELOPMENT ", xPosition, yPosition, "storyText5", function(messageDiv, i){
             gsap.fromTo(messageDiv,
               {
                 x: -15,

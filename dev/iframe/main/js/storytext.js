@@ -21,11 +21,28 @@
       storyTextDiv.style.left = x + "px";
       storyTextDiv.style.top = y + "px";
 
+      var marginRightValue = 3;
+
+      if(window.screen.width <= 1200)
+      {
+          marginRightValue = 3;
+      }
+
+      if(window.screen.width <= 900)
+      {
+          marginRightValue = 2;
+      }
+
+      if(window.screen.width <= 500)
+      {
+          marginRightValue = 1;
+      }
+
       for(var i=0;i<message.length;i++)
       {
           var messageDiv = document.createElement("span");
               messageDiv.innerHTML = message[i];
-              messageDiv.style.marginRight = "3px";
+              messageDiv.style.marginRight = marginRightValue + "px";
               messageDiv.style.display = "inline-block";
 
           storyTextArray.push(messageDiv);
@@ -57,11 +74,28 @@
       storyTextDiv.style.left = x + "px";
       storyTextDiv.style.top = y + "px";
 
+      var marginRightValue = 3;
+
+      if(window.screen.width <= 1200)
+      {
+          marginRightValue = 3;
+      }
+
+      if(window.screen.width <= 900)
+      {
+          marginRightValue = 2;
+      }
+
+      if(window.screen.width <= 500)
+      {
+          marginRightValue = 1;
+      }
+
       for(var i=0;i<message.length;i++)
       {
           var messageDiv = document.createElement("span");
               messageDiv.innerHTML = message[i];
-              messageDiv.style.marginRight = "3px";
+              messageDiv.style.marginRight = marginRightValue + "px";
               messageDiv.style.display = "inline-block";
 
           storyTextArray.push(messageDiv);
