@@ -15,7 +15,7 @@
   </head>
   <body>
 
-    <div id="entryGreetingText"></div>
+      <div id="entryGreetingText"></div>
 
       <div id="audioVisualizerWindowContainer">
           <canvas id="audioVisualizerBinCanvas" width="500" height="250"></canvas>
@@ -75,11 +75,8 @@
               switch(preloadArray[i][1])
               {
                   case "audio":
-                    preloadAudio(preloadArray[i][0]);
-                  break;
-
                   case "video":
-                    preloadVideo(preloadArray[i][0]);
+                    preloadMedia(preloadArray[i][0]);
                   break;
 
                   case "image":
@@ -172,9 +169,8 @@
       {
           document.getElementById("entryGreetingText").innerHTML = "Loading assets: " + preloadCounter + "/" + preloadArray.length;
 
-          if(preloadCounter >= preloadArray.length - 3) //two mp3 and mp4 file can be ignored
+          if(preloadCounter >= preloadArray.length) //two mp3 and mp4 file can be ignored
           {
-
               if(isLandscapeMode() == true)
               {
                   //show click message
@@ -205,6 +201,34 @@
                   //if not in landscape mode, display "turn your screen into landscape mode to begin"
                   document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
               }
+          }
+      }
+
+      const downloadedMedia = new Map();
+
+      async function preloadMedia(fileURL) {
+          try {
+              const response = await fetch(fileURL);
+
+              // These static files should return a full response (200).
+              // A partial response (206) could contain only part of the file.
+              if (response.status !== 200) {
+                  throw new Error(`HTTP ${response.status}`);
+              }
+
+              const blob = await response.blob();
+
+              if (blob.size === 0) {
+                  throw new Error("Empty file");
+              }
+
+              downloadedMedia.set(fileURL, URL.createObjectURL(blob));
+              console.log("Downloaded:", fileURL, blob.size, "bytes");
+
+              preloadCounter++;
+              checkPreloader();
+          } catch (error) {
+              console.error("Media download failed:", fileURL, error);
           }
       }
 
