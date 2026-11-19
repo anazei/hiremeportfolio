@@ -50,6 +50,23 @@
       }
   }
 
+  //this function is only used when selecting a preloaded video that has been embedded in the HTML already to speed up rendering
+  async function selectMaskVideoSource(mask, src)
+  {
+      if(currentMask !== mask)
+      {
+          currentMask = mask;
+
+          //setup mask
+          currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
+      }
+
+      keepCopyingVideo = true;
+
+      incomingVideo = await setVideoSource(src);
+      animateMask(mask);
+  }
+
   async function setImage(imageSrc)
   {
       return new Promise(function(resolve){
@@ -65,6 +82,7 @@
       });
   }
 
+  //this function dynamically loads a .mp4 video on demand, causes slower rendering performance on some browsers
   async function setVideo(videoSrc)
   {
     return new Promise(function(resolve){
@@ -94,6 +112,42 @@
             resolve(currentVideo);
         });
     });
+  }
+
+  //if video is preloaded in HTML page at load time, then just direct it to the video element instead of loading it - this will speed up rendering
+  async function setVideoSource(videoID)
+  {
+    return new Promise(function(resolve){
+
+        var currentVideo = document.getElementById(videoID);
+
+        //set the new incoming video
+        currentVideo.load();
+        currentVideo.play();
+
+        currentVideo.addEventListener("canplay", function(){
+
+            videoActive = true;
+            resolve(currentVideo);
+        });
+    });
+  }
+
+  //setup which ever mask is selected
+  async function selectMaskVideoSource(mask, src)
+  {
+      if(currentMask !== mask)
+      {
+          currentMask = mask;
+
+          //setup mask
+          currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
+      }
+
+      keepCopyingVideo = true;
+
+      incomingVideo = await setVideoSource(src);
+      animateMask(mask);
   }
 
   //main masking animation transition command
