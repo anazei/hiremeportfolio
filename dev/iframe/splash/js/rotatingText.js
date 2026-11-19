@@ -1,3 +1,51 @@
+  var array38 = [
+  "MKDGFVUWOHWWSJYBWFERYAEXTKLIGUUVYXTLMP",
+  "SQFDPWBJJUOGHCUBKNOICBEMOQIZZOUXRWUGQU",
+  "PUDRNDTNXQNIQANWAWCHIBBJSZXWXHQHKGBTHN",
+  "MLBDTFXLLLWYEQXOOQIAQXAIRFFAWSOVCSSEOJ",
+  "GDKYKQUJGZHBVJTYUZKHLRKAOQARPXCYFOZAGD",
+  "VQKIWCDHWSKIWNCUQEFTZHGXDYSGYSTKWMWLUR",
+  "HLMQEBRDGANGVOHMAUNOMCMGHFSLUOVUMERKGX",
+  "SMXSHOAOZLKPUSUXGKGMXMVTEVNPCPYXZHGEBT",
+  "GOAATIBSFIBZHEKWKOPDVRSMYYMNDBOIXVBVJA",
+  "HUIWJVPCQHVQLZGBACEEDGREXYNGYJNPKVEKDT"];
+
+  var array48 = [
+  "QQGXTESTWLHZPSOGONHXGMYEOOWDWVSAEDLYJFVEHJMCTFCH",
+  "SNFEAZFLNLOJNDCXEVGKMQABJKVNDWSLOTBQEQDQWHSAULUQ",
+  "ETFKOJUMOEUBCKMTIEGWWPIZSDZRSIFHXVDJIXDGQKXSGEQM",
+  "JFOLYRQHBJCOSBAJIPGUIJLZCCJNHBGBRIQLNVYWIGZSRLZH",
+  "KXQBPOTHFSZFBYIFTQJLEGCKCEPAXMQKZXLPGOHXJJCFIDXZ",
+  "FJTTTMBXMNSFKIGBPJTRGLCSJNREMBAIKQLCSKICDHZUQBER",
+  "GWVXMBTHOMIUXWRRRRYKWJWEVAUXUIXOZXJCIZQNJYIAXOWP",
+  "FWFMGGOHVHHZLUXVJRJQOBUCFFRJLZNORTZGFLPXEJJQKLCT",
+  "HJBLUFGVYURENDEVPJCXVZMOEDVZOJPSJVIIWUQZAZWFCGHM",
+  "ZZTMKDSJIDDRAOEWLJUDZOYQVZGVMSWHPSMRABXVUFYPLOEM"];
+
+  var array50 = [
+  "VFDUSAAVSKIBEFOYPARTFTFFSPYYGEBFHNAQYTLZRXREUIXZEJ",
+  "TDOOCZHENXGLTECUJKOWPOAWTWSJUNULJUZPOKSTYIHSJPIRGA",
+  "BVTPPMPSLMQIWZXBGKXNYSQSFOERULNSBLNWQRBAGNQFKXNZTN",
+  "BZHOUQGRDLDMTWYNGNAWVFIITXAHIWIKCMFOMKPTRORWGMILXR",
+  "GVBHFQVFPDNTOEFGKOGDGWQWNXUBGOVVILMVKGAFHFMDIOGQGP",
+  "ZMJRVHTCEIDOCJGMZZFBAIOXWFZVDDZKIUNATJMIVJHTSJTWPX",
+  "YJJEUPWUZHHASGFWMELKGNRTETXPNQVXLLYQUYMSVZSNYWZHYS",
+  "VFYWQGSJYJIRNOUYXTMPPFYBBFWHLNCYYGONOFUPWFHXHYHGLO",
+  "YEMDHARDIFWLJVKSTZBSAAZJPVWBCHLAIXXJPGONVHIKXPCPSJ",
+  "WXFXOJSUYPAPSUZDKUMPVVOLFNKTBWJOQGTUDXZSBCMKIQQUHT"];
+
+  var array55 = [
+  "INFSSZBFGHICPQHDGWNBEDFTJSQPYKGLNJZZTPFFVHLVDXTEDDVQYYX",
+  "OWNUWPPYDRICEELHGXZHZVXAWBZVPVRPTMNEIVZHPSGEAKVMQABENML",
+  "BKQAATHRVSISDENDWXQOHSTWXYLBCNNTSEDLCEPVJTFJMFUEMLNYXSM",
+  "TUXPECUJUOTWQMVYBKNIWFDUPREXTTGEWMEIVUKJEULWRMXDCYAEJLH",
+  "LATOEKPERCPKLGSNMCEXKNFDLZFBKSOFQWAWECPIACRSFJSJAPYTWBK",
+  "HTQECXCPQROAARKKXPYPRGQXRWPGLVBBMZHSJWPXAQUGTXLUQNRQKTP",
+  "OTOCVOBDVIHPNYSNXZBYVVZLJJNTLUUQJEPXPOYYSPQBCUCKZJKWENE",
+  "VDJHXAVFZTILFITTYGQCNCEHPHHZPXYXVCFBJSIEAYSQHCOJUZSZLTI",
+  "UMNFSUBYFOFBKCJWQWKHYNTXZZOPFQQPETNFAWTXGEEIYZWSWQLXCZK",
+  "ZXLMQAPIVABRJVQWHYYZQAKCTHPTZTNRYPHXNMXWPKXAFMVTWAJRAOY"];
+
   var characterArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I",
   "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
   "W", "X", "Y", "Z"];
@@ -5,7 +53,30 @@
   var rotatingTextAnimationState = false; //starts as false
   var rotatingBackgroundTextInterval;
   var foregroundRotatingMessageArray = new Array();
-  var backgroundRotationTextDiv = document.getElementById("backgroundRotationText")
+  var backgroundRotationTextDiv = document.getElementById("backgroundRotationText");
+
+  //pre generate random text instead of real time random generation to create the precomputed array38/48/50/55
+  function generateTenLines(textLength)
+  {
+      for(var i=0;i<10;i++)
+      {
+          var randomCharacters = "";
+
+          for(var j=0;j<textLength;j++)
+          {
+              randomCharacters += characterArray[Math.floor(Math.random() * characterArray.length)];
+          }
+
+          console.log(randomCharacters);
+      }
+  }
+
+  var randomTextCounter = 0;
+  function displayRandomBackgroundText(array)
+  {
+      backgroundRotationTextDiv.innerHTML = array[randomTextCounter % array.length];
+      randomTextCounter++;
+  }
 
   //continuously random rotating background text
   function generateRotatingBackgroundText(textLength)
@@ -30,9 +101,28 @@
 
           rotatingBackgroundTextInterval = setInterval(function(){
 
-              generateRotatingBackgroundText(length);
+              //generateRotatingBackgroundText(length);
 
-          }, 50);
+              switch(length)
+              {
+                  case 38:
+                    displayRandomBackgroundText(array38);
+                  break;
+
+                  case 48:
+                    displayRandomBackgroundText(array48);
+                  break;
+
+                  case 50:
+                    displayRandomBackgroundText(array50);
+                  break;
+
+                  case 55:
+                    displayRandomBackgroundText(array55);
+                  break;
+              }
+
+          }, 25);
 
           gsap.to(backgroundRotationTextDiv, {
             opacity: 0.4,
