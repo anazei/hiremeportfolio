@@ -233,7 +233,6 @@
               messageDiv.style.filter = "blur(1px)";
               messageDiv.style.scale = 4;
               messageDiv.style.display = "inline-block";
-
               messageDiv.style.opacity = 0;
               targetDiv.style.opacity = 1;
 
@@ -250,18 +249,8 @@
             filter: "blur(0px)",
             scale: 1,
             opacity: 1,
-            duration: 1,
-            delay: i / 50,
-            onComplete: function()
-            {
-                completeCounter++;
-
-                if(completeCounter == foregroundRotatingMessageArray.length)
-                {
-                    //stop rotational background text animation
-                    //stopAnimateBackgroundRotatingText();
-                }
-            }
+            duration: .75,
+            delay: i / 50
           });
       }
   }
