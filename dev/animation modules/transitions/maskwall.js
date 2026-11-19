@@ -22,9 +22,13 @@ var Maskwall = function(masterReference, mainCanvas)
 
     var runStageUpdate = false;
 
+    var howManyAcross = window.screen.width / 150;
+    var howManyDown = window.screen.height / 100;
+    var totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 4);
+
     function setupMask()
     {
-        for(var i=0;i<155;i++)
+        for(var i=0;i<totalRectsNeeded;i++)
         {
           xPosition++;
 
@@ -35,7 +39,7 @@ var Maskwall = function(masterReference, mainCanvas)
           && i !== 0)
           {
             xPosition = 0;
-            yPosition += 50; //tighten up the spacing so it can achieve the roll down effect
+            yPosition += 25; //tighten up the spacing so it can achieve the roll down effect
           }
 
           roundRect.x = xPosition * 300;
@@ -66,7 +70,7 @@ var Maskwall = function(masterReference, mainCanvas)
               scaleX: 2,
               scaleY: 1,
               delay: i / 800,
-              ease: "power1.inOut",
+              //ease: "power1.inOut",
               onComplete: function(){
 
                   if(i == boxArray.length - 1)

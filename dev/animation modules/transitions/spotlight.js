@@ -48,15 +48,15 @@ var Spotlight = function(masterReference, mainCanvas)
     {
         gsap.to(gradient, {
           radius: 900,
-          duration: 1,
-          //ease: "power2.in",
+          duration: 1.5,
+          ease: "power2.out",
           onUpdate: setupMask
         });
 
         gsap.to(rectangle, {
           alpha: 1,
           duration: 2,
-          delay: .5,
+          delay: 1.5,
           onUpdate: setupMask,
           onComplete: resetMaskState,
         });

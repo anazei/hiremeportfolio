@@ -8,7 +8,7 @@
 
       body {
         margin: 0;
-        background-color: #FFFFFF;
+        background-color: #000000;
         overflow-x: hidden;
       }
 
@@ -34,15 +34,15 @@
     </video>
 
     <video id="cello" style="display:none;">
-      <source src="video/cello.mp4" type="video/mp4">
+      <source src="video2/cello.mp4" type="video/mp4">
     </video>
 
     <video id="violin" style="display:none;">
-      <source src="video/violins.mp4" type="video/mp4">
+      <source src="video2/violins.mp4" type="video/mp4">
     </video>
 
     <video id="conductor" style="display:none;">
-      <source src="video/conductor.mp4" type="video/mp4">
+      <source src="video2/conductor.mp4" type="video/mp4">
     </video>
 
     <canvas id="mainCanvas" class="mainCanvas" width="1920" height="1080"></canvas>
@@ -316,7 +316,31 @@
 
       //selectMask(maskwall, "video/symphony2.mp4");
 
-      selectMaskVideoSource(maskwall, "cello");
+      //selectMaskVideoSource(maskwall, "cello");
+
+      console.log("start video");
+
+      setTimeout(function(){
+
+          selectMaskVideoSource(maskwall, "cello");
+
+      }, 9500- 8000);
+
+      //keyframe
+      setTimeout(function(){
+
+          //selectMask(maskwall, "video/violins.mp4");
+          selectMaskVideoSource(maskwall, "violin");
+
+      }, 13000- 8000);
+
+      //keyframe
+      setTimeout(function(){
+
+          //selectMask(spotlight, "video/conductor.mp4");
+          selectMaskVideoSource(spotlight, "conductor");
+
+      }, 16500- 8000);
 
     })
 

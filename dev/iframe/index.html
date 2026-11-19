@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Condensed:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/index500x250.css">
     <link rel="stylesheet" href="css/index900x450.css">
@@ -53,9 +53,7 @@
       var preloadArray = new Array();
           preloadArray.push(["audio/climatechange.mp3", "audio"]);
           preloadArray.push(["audio/main.mp3", "audio"]);
-          preloadArray.push(["splash/video/cello.mp4", "video"]);
-          preloadArray.push(["splash/video/conductor.mp4", "video"]);
-          preloadArray.push(["splash/video/violins.mp4", "video"]);
+          preloadArray.push(["splash/video/finalcombined.mp4", "video"]);
           preloadArray.push(["main/images/advancedMaskTransitions3.jpg", "image"]);
           preloadArray.push(["main/images/AI4.jpg", "image"]);
           preloadArray.push(["main/images/animatedAndividualComponents2.jpg", "image"]);
@@ -190,6 +188,8 @@
       //only after the preloader is completed, then allow user to click to begin
       function checkPreloader()
       {
+          document.getElementById("entryGreetingText").innerHTML = "Loading assets: " + preloadCounter + "/" + preloadArray.length;
+
           if(preloadCounter == preloadArray.length) //17 files to preload
           {
               //make preloader animation invisible
@@ -271,8 +271,34 @@
       async function robotoReady(){
         await Promise.all([
           document.fonts.load('300 16px "Roboto"'),
+          document.fonts.load('300 19px "Roboto"'),
+          document.fonts.load('300 20px "Roboto"'),
+          document.fonts.load('300 50px "Roboto"'),
+
           document.fonts.load('400 16px "Roboto"'),
+          document.fonts.load('400 19px "Roboto"'),
+          document.fonts.load('400 20px "Roboto"'),
+          document.fonts.load('400 50px "Roboto"'),
+
           document.fonts.load('500 16px "Roboto"'),
+          document.fonts.load('500 19px "Roboto"'),
+          document.fonts.load('500 20px "Roboto"'),
+          document.fonts.load('500 50px "Roboto"'),
+
+          document.fonts.load('300 16px "Roboto Condensed"'),
+          document.fonts.load('300 19px "Roboto Condensed"'),
+          document.fonts.load('300 20px "Roboto Condensed"'),
+          document.fonts.load('300 50px "Roboto Condensed"'),
+
+          document.fonts.load('400 16px "Roboto Condensed"'),
+          document.fonts.load('400 19px "Roboto Condensed"'),
+          document.fonts.load('400 20px "Roboto Condensed"'),
+          document.fonts.load('400 50px "Roboto Condensed"'),
+
+          document.fonts.load('500 16px "Roboto Condensed"'),
+          document.fonts.load('500 19px "Roboto Condensed"'),
+          document.fonts.load('500 20px "Roboto Condensed"'),
+          document.fonts.load('500 50px "Roboto Condensed"'),
       ])
       };
 

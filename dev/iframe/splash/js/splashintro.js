@@ -58,7 +58,8 @@
           //selectMask(spotlight, "images/splashbackground.jpg");
           //selectMask(maskwall, "video/symphony2.mp4");
           //selectMask(maskwall, "video/cello.mp4");
-          selectMaskVideoSource(maskwall, "cello");
+          //selectMaskVideoSource(maskwall, "cello");
+          selectMaskVideoSource(maskwall, "combinedVideo");
 
       }, 9500);
 
@@ -73,7 +74,7 @@
       setTimeout(function(){
 
           //selectMask(maskwall, "video/violins.mp4");
-          selectMaskVideoSource(maskwall, "violin");
+          //selectMaskVideoSource(maskwall, "violin");
 
       }, 13000);
 
@@ -88,7 +89,7 @@
       setTimeout(function(){
 
           //selectMask(spotlight, "video/conductor.mp4");
-          selectMaskVideoSource(spotlight, "conductor");
+          //selectMaskVideoSource(spotlight, "conductor");
 
       }, 16500);
 
@@ -113,7 +114,7 @@
           //selectMask(crossfade, "images/blackbg.png");
           selectMask(crossfade, "../main/images/splashbackground.jpg");
 
-      }, 21250);
+      }, 20250);
 
       //keyframe
       setTimeout(function(){
