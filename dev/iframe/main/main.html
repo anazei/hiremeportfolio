@@ -228,6 +228,115 @@
   <script src="js/navigation.js"></script>
   <script>
 
+
+    var youtubePlayers = new Map();
+
+
+    // Automatically find and register YouTube videos
+    function detectYouTubeVideos()
+    {
+      var iframes = document.querySelectorAll(
+          'iframe[src*="youtube.com/embed/"],' +
+          'iframe[src*="youtube-nocookie.com/embed/"]'
+      );
+
+      iframes.forEach(function(iframe)
+      {
+          if (youtubePlayers.has(iframe))
+          {
+              return;
+          }
+
+          // Automatically enable the YouTube API
+          var url = new URL(iframe.src);
+
+          url.searchParams.set("enablejsapi", "1");
+          url.searchParams.set("origin", window.location.origin);
+
+          if (iframe.src !== url.href)
+          {
+              iframe.src = url.href;
+          }
+
+          // Register the player
+          var player = new YT.Player(iframe, {
+
+              events: {
+
+                  "onReady": function(event)
+                  {
+                      console.log("YouTube player ready");
+                  },
+
+                  "onStateChange": onPlayerStateChange
+
+              }
+
+          });
+
+          youtubePlayers.set(iframe, player);
+      });
+    }
+
+
+    // Detect changes in YouTube video playback
+    function onPlayerStateChange(event)
+    {
+      switch(event.data)
+      {
+          case YT.PlayerState.PLAYING:
+
+              console.log("Video playing");
+              window.parent.postMessage("pauseAudio", "*");
+              break;
+
+          case YT.PlayerState.PAUSED:
+
+              console.log("Video paused");
+              break;
+
+          case YT.PlayerState.ENDED:
+
+              console.log("Video ended");
+              break;
+
+          case YT.PlayerState.BUFFERING:
+
+              console.log("Video buffering");
+              break;
+      }
+    }
+
+
+    // Called when the YouTube API finishes loading
+    function onYouTubeIframeAPIReady()
+    {
+      // Detect any existing videos
+      detectYouTubeVideos();
+
+      // Watch for dynamically inserted videos
+      var observer = new MutationObserver(function()
+      {
+          detectYouTubeVideos();
+      });
+
+      observer.observe(document.documentElement, {
+
+          childList: true,
+          subtree: true
+
+      });
+    }
+
+
+    // Load YouTube API
+    var script = document.createElement("script");
+
+    script.src = "https://www.youtube.com/iframe_api";
+
+    document.head.appendChild(script);
+
+
     var allowRollingGridEffect = true;
     var screenHeight = Math.round(window.screen.height / 2);
 
@@ -445,10 +554,10 @@
         landBackgroundArray.push("images/audiovisualizer3.jpg");
         landBackgroundArray.push("images/drone4.jpg");
 
-        youTubeVideoArray.push("https://www.youtube.com/embed/ebwK2_mYQJw?si=q8xtFPgHUEknFsxO,https://www.youtube.com/embed/YBR1JsYLgm4?si=4MCof1U7vdzonxWL");
-        youTubeVideoArray.push("https://www.youtube.com/embed/luKWLUVWaOw?si=Nv6yjBkHIL2wBttA");
-        youTubeVideoArray.push("https://www.youtube.com/embed/KVNEMDnTGQw?si=D0LraFa2OboZF6WT");
-        youTubeVideoArray.push("https://www.youtube.com/embed/ABtN03Dv3v8?si=Il0-PWxmXEQG2CTZ");
+        youTubeVideoArray.push("https://www.youtube.com/embed/ebwK2_mYQJw?si=q8xtFPgHUEknFsxO&enablejsapi=1,https://www.youtube.com/embed/YBR1JsYLgm4?si=4MCof1U7vdzonxWL&enablejsapi=1");
+        youTubeVideoArray.push("https://www.youtube.com/embed/luKWLUVWaOw?si=Nv6yjBkHIL2wBttA&enablejsapi=1");
+        youTubeVideoArray.push("https://www.youtube.com/embed/KVNEMDnTGQw?si=D0LraFa2OboZF6WT&enablejsapi=1");
+        youTubeVideoArray.push("https://www.youtube.com/embed/ABtN03Dv3v8?si=Il0-PWxmXEQG2CTZ&enablejsapi=1");
 
         displayMainLandingText();
 
@@ -485,8 +594,8 @@
         landBackgroundArray.push("images/AI4.jpg");
 
         youTubeVideoArray.push("");
-        youTubeVideoArray.push("https://www.youtube.com/embed/65-sgi_AIPo?si=20x_Ukf2QwJ6SWy8");
-        youTubeVideoArray.push("https://www.youtube.com/embed/a5Pgz0u5ywc?si=QZM7yi2cAAQkw-WL");
+        youTubeVideoArray.push("https://www.youtube.com/embed/65-sgi_AIPo?si=20x_Ukf2QwJ6SWy8&enablejsapi=1");
+        youTubeVideoArray.push("https://www.youtube.com/embed/a5Pgz0u5ywc?si=QZM7yi2cAAQkw-WL&enablejsapi=1");
         youTubeVideoArray.push("");
 
         displayMainLandingText();

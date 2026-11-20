@@ -347,37 +347,51 @@
           case "playing":
 
               currentAudioState = "paused";
-
               music.stop(currentAudioTrack);
-
-              document.getElementById("audioVisualizerPlayButton").style.display = "block";
-              document.getElementById("audioVisualizerPauseButton").style.display = "none";
-              document.getElementById("audioVisualizerRepeatButton").style.display = "none";
-
+              displayPauseAudioState();
           break;
 
           case "paused":
 
               currentAudioState = "playing";
-
               music.play(currentAudioTrack);
-
-              document.getElementById("audioVisualizerPlayButton").style.display = "none";
-              document.getElementById("audioVisualizerPauseButton").style.display = "block";
-              document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+              displayPlayAudioState();
           break;
 
           case "finished":
 
               currentAudioState = "playing";
-
               music.restart(currentAudioTrack);
-
-              document.getElementById("audioVisualizerPlayButton").style.display = "none";
-              document.getElementById("audioVisualizerPauseButton").style.display = "block";
-              document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+              displayPlayAudioState();
           break;
       }
+  }
+
+  function displayPauseAudioState()
+  {
+      document.getElementById("audioVisualizerPlayButton").style.display = "block";
+      document.getElementById("audioVisualizerPauseButton").style.display = "none";
+      document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+  }
+
+  function displayPlayAudioState()
+  {
+      document.getElementById("audioVisualizerPlayButton").style.display = "none";
+      document.getElementById("audioVisualizerPauseButton").style.display = "block";
+      document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+  }
+
+  function displayRestartAudioState()
+  {
+      document.getElementById("audioVisualizerPlayButton").style.display = "none";
+      document.getElementById("audioVisualizerPauseButton").style.display = "none";
+      document.getElementById("audioVisualizerRepeatButton").style.display = "block";
+  }
+
+  function pauseSong()
+  {
+      currentAudioState = "playing";      
+      playPauseAudio();
   }
 
   function playSong(name)
@@ -400,19 +414,13 @@
       playSong(id);
 
       currentAudioState = "playing";
-
       //display play button every time a new song is loaded, in case it's in pause or finished mode
-      document.getElementById("audioVisualizerPlayButton").style.display = "none";
-      document.getElementById("audioVisualizerPauseButton").style.display = "block";
-      document.getElementById("audioVisualizerRepeatButton").style.display = "none";
+      displayPlayAudioState();
 
       music.onEnded(id, function(id) {
 
           currentAudioState = "finished";
-
-          document.getElementById("audioVisualizerPlayButton").style.display = "none";
-          document.getElementById("audioVisualizerPauseButton").style.display = "none";
-          document.getElementById("audioVisualizerRepeatButton").style.display = "block";
+          displayRestartAudioState()
       });
   }
 
