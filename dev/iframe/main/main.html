@@ -8,9 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Condensed:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/main500x250.css">
-    <link rel="stylesheet" href="css/main900x450.css">
-    <link rel="stylesheet" href="css/main1200x600.css">
   </head>
 
   <body>
@@ -29,12 +26,14 @@
     <canvas id="mainCanvas" class="mainCanvas" width="1920" height="1080"></canvas>
     <!-- end transitions background -->
 
+    <!-- begin master container -->
+    <div id="masterContainer">
+
     <!-- begin progress bar animation -->
     <div id="progressBarContainer">
       <div id="progress"></div>
       <div id="progressBorder"></div>
       <div id="scrambleTextProgressBar"></div>
-
 
         <!-- begin hero title -->
         <div id="heroTitleMasterContainer">
@@ -55,9 +54,7 @@
 
     <!-- begin buffer animation -->
     <div id="masterBufferContainer">
-
       <div id="bufferBarsContainer"></div>
-
       <div id="bufferBarText">
         <div id="bufferBarText1" class="bufferBarText">Brainstorming...</div>
         <div id="bufferBarText2" class="bufferBarText">Formal planning...</div>
@@ -173,13 +170,13 @@
     <!-- end giftagram logo -->
 
     <!-- begin cycling video buffers for transition effect -->
-    <video id="mainVideo" style="display:none;">
+    <!-- <video id="mainVideo" style="display:none;">
       <source src="" type="video/mp4">
     </video>
 
     <video id="mainVideo2" style="display:none;">
       <source src="" type="video/mp4">
-    </video>
+    </video> -->
     <!-- end cycling video buffers for transition effect -->
 
     <!-- begin navigation container -->
@@ -206,6 +203,11 @@
     <!-- end navigation container -->
 
     <div id="youtubeVideos"></div>
+
+    </div>
+    <!-- end master container -->
+
+
 
   </body>
 
@@ -772,6 +774,42 @@
         }
     }
 
+    function positionElements()
+    {
+        //original resolution is 1920x993
+        //first scale it the innerWidth and check if the newheight is less than the innerHeight
+        //if newHeight is equal or less than innerHeight, keep the innerWidth and newHeight
+        //center mastercontainer by the y axis: (innerHeight - newheight) / 2
+
+        //if the newHeight is greater than innerHeight, then scale it by innerHeight and keep the newWidth
+        //center mastercontainer by the x axis: (innerWidth - newWidth) / 2
+
+        var masterContainer = document.getElementById("masterContainer");
+
+        var BASE_WIDTH = 1920;
+        var BASE_HEIGHT = 993;
+
+        var DOCUMENT_WIDTH = document.documentElement.clientWidth;
+        var DOCUMENT_HEGIHT = document.documentElement.clientHeight;
+
+        //start by using width as base
+        var newHeight = Math.round((BASE_HEIGHT * DOCUMENT_WIDTH) / BASE_WIDTH);
+
+        //if the scaled down height exceeds the screen height
+        if(newHeight > DOCUMENT_HEGIHT)
+        {
+            //then use height as base
+            var newWidth = Math.round((BASE_WIDTH * DOCUMENT_HEGIHT) / BASE_HEIGHT);
+            masterContainer.style.left = Math.round((DOCUMENT_WIDTH - newWidth) / 2) + "px";
+            masterContainer.style.scale = DOCUMENT_HEGIHT / BASE_HEIGHT;
+
+        } else {
+            //but if using width as base because scale down height is smaller than screen height
+            masterContainer.style.top = Math.round((DOCUMENT_HEGIHT - newHeight) / 2) + "px";
+            masterContainer.style.scale = DOCUMENT_WIDTH / BASE_WIDTH;
+        }
+    }
+
     async function robotoReady(){
       await Promise.all([
         document.fonts.load('300 16px "Roboto"'),
@@ -808,6 +846,7 @@
 
     robotoReady().then(function(){
 
+        positionElements();
         startMainPage();
         //beginTellStory();
     /*

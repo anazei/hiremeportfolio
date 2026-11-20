@@ -8,26 +8,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Condensed:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/index500x250.css">
-    <link rel="stylesheet" href="css/index900x450.css">
-    <link rel="stylesheet" href="css/index1200x600.css">
     <link rel="icon" type="image/png" href="favicon.png">
   </head>
   <body>
 
-      <div id="entryGreetingText"></div>
+      <!-- begin master container -->
+      <div id="masterContainer">
 
-      <div id="audioVisualizerWindowContainer">
-          <canvas id="audioVisualizerBinCanvas" width="500" height="250"></canvas>
-          <div id="audioVisualizerTextContainer">
-              <div id="audioVisualizerTitle" class="audioVisualizerText">NOW PLAYING:</div>
-              <div id="audioVisualizerText" class="audioVisualizerText"></div>
-              <div id="audioVisualizerPlayButton"></div>
-              <div id="audioVisualizerPauseButton"></div>
-              <div id="audioVisualizerRepeatButton"></div>
+          <div id="entryGreetingText"></div>
+
+          <div id="audioVisualizerWindowContainer">
+              <canvas id="audioVisualizerBinCanvas" width="500" height="250"></canvas>
+              <div id="audioVisualizerTextContainer">
+                  <div id="audioVisualizerTitle" class="audioVisualizerText">NOW PLAYING:</div>
+                  <div id="audioVisualizerText" class="audioVisualizerText"></div>
+                  <div id="audioVisualizerPlayButton"></div>
+                  <div id="audioVisualizerPauseButton"></div>
+                  <div id="audioVisualizerRepeatButton"></div>
+              </div>
+              <div id="audioVisualizerBackground"></div>
           </div>
-          <div id="audioVisualizerBackground"></div>
+
       </div>
+      <!-- end master container -->
 
       <div id="iframeDiv"></div>
 
@@ -48,11 +51,8 @@
       var preloadArray = new Array();
           preloadArray.push(["audio/climatechange.mp3", "audio"]);
           preloadArray.push(["splash/video/finalcombined.mp4", "video"]);
-
           preloadArray.push(["main/images/splashbackground.jpg", "image"]);
-
           preloadArray.push(["audio/main.mp3", "audio"]);
-
           preloadArray.push(["main/images/advancedMaskTransitions3.jpg", "image"]);
           preloadArray.push(["main/images/AI4.jpg", "image"]);
           preloadArray.push(["main/images/animatedAndividualComponents2.jpg", "image"]);
@@ -282,12 +282,39 @@
           }
       }
 
-      //when page loads, position every element based on screen width/height
       function positionElements()
       {
-          if(window.screen.width < 1200)
-          {
+          //original resolution is 1920x993
+          //first scale it the innerWidth and check if the newheight is less than the innerHeight
+          //if newHeight is equal or less than innerHeight, keep the innerWidth and newHeight
+          //center mastercontainer by the y axis: (innerHeight - newheight) / 2
 
+          //if the newHeight is greater than innerHeight, then scale it by innerHeight and keep the newWidth
+          //center mastercontainer by the x axis: (innerWidth - newWidth) / 2
+
+          var masterContainer = document.getElementById("masterContainer");
+
+          var BASE_WIDTH = 1920;
+          var BASE_HEIGHT = 993;
+
+          var DOCUMENT_WIDTH = document.documentElement.clientWidth;
+          var DOCUMENT_HEGIHT = document.documentElement.clientHeight;
+
+          //start by using width as base
+          var newHeight = Math.round((BASE_HEIGHT * DOCUMENT_WIDTH) / BASE_WIDTH);
+
+          //if the scaled down height exceeds the screen height
+          if(newHeight > DOCUMENT_HEGIHT)
+          {
+              //then use height as base
+              var newWidth = Math.round((BASE_WIDTH * DOCUMENT_HEGIHT) / BASE_HEIGHT);
+              masterContainer.style.left = Math.round((DOCUMENT_WIDTH - newWidth) / 2) + "px";
+              masterContainer.style.scale = DOCUMENT_HEGIHT / BASE_HEIGHT;
+
+          } else {
+              //but if using width as base because scale down height is smaller than screen height
+              masterContainer.style.top = Math.round((DOCUMENT_HEGIHT - newHeight) / 2) + "px";
+              masterContainer.style.scale = DOCUMENT_WIDTH / BASE_WIDTH;
           }
       }
 
@@ -328,7 +355,7 @@
       //loads fonts first
       robotoReady().then(function(){
 
-        //positionElements();
+        positionElements();
         init();
 
       });
