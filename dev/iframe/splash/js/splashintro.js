@@ -82,13 +82,6 @@
       //keyframe
       setTimeout(function(){
 
-          startAnimateBackgroundRotatingText(50);
-
-      }, 18000);
-
-      //keyframe
-      setTimeout(function(){
-
           //selectMask(spotlight, "video/conductor.mp4");
           //selectMaskVideoSource(spotlight, "conductor");
 
@@ -97,24 +90,31 @@
       //keyframe
       setTimeout(function(){
 
-          //animate in hello giftagram logo and subtitle
-          animateInLogo();
+          startAnimateBackgroundRotatingText(50);
 
-      }, 21500);
+      }, 18000);
 
       //keyframe
       setTimeout(function(){
 
           createRotatingMessageString("click  anywhere  to  launch  my  portfolio  experience");
 
-      }, 19750);
+      }, 19500);
+
+      //keyframe
+      setTimeout(function(){
+
+          //animate in hello giftagram logo and subtitle
+          animateInLogo();
+
+      }, 20500);
 
       //keyframe
       setTimeout(function(){
 
           selectMask(crossfade, "../main/images/splashbackground.jpg");
 
-      }, 20250);
+      }, 21000);
 
       //keyframe
       setTimeout(function(){

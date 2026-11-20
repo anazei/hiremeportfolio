@@ -145,6 +145,14 @@ iframe
     display: none;
 }
 
+#audioVisualizerPlayButton,
+#audioVisualizerPauseButton,
+#audioVisualizerRepeatButton
+{
+    pointer-events: auto;
+    cursor: pointer;
+}
+
 #entryGreetingText
 {
     position: absolute;

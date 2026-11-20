@@ -664,11 +664,16 @@
     {
         clearYouTubeVideos();
 
-        var youtubeVideo = youTubeVideoArray[landingTextCounter % landTextTitleArray.length];
-        if(youtubeVideo !== "")
-        {
-            createYouTubeVideos(youtubeVideo);
-        }
+        //delay 1.5 second so animation can complete without being interfered by youtube video creation
+        setTimeout(function(){
+
+            var youtubeVideo = youTubeVideoArray[landingTextCounter % landTextTitleArray.length];
+            if(youtubeVideo !== "")
+            {
+                createYouTubeVideos(youtubeVideo);
+            }
+
+        }, 1500);
     }
 
     function createYouTubeVideos(URL)
