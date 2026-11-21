@@ -112,17 +112,14 @@
       //keyframe
       setTimeout(function(){
 
-          selectMask(crossfade, "../main/images/splashbackground.jpg");
+          selectMask(crossfade, "../main/images/splashbackground4.jpg");
 
       }, 21000);
 
       //keyframe
       setTimeout(function(){
 
-          //animate out rolling source code
-          animateOutMasterSourceCode();
-
-      }, 22500);
+      }, 27500);
 
       //keyframe
       setTimeout(function(){
@@ -141,32 +138,22 @@
 
   function fadeOutSplashPage()
   {
-      explodeOutForegroundText();
+      //animate out rolling source code
+      animateOutMasterSourceCode();
 
-      var particleShooterStartX = Math.round(window.screen.width * .39);
-      var particleShooterStartY = Math.round(window.screen.height * 0.48);
+      //keyframe
+      setTimeout(function(){
 
-      if(window.screen.width <= 1200)
-      {
-          particleShooterStartX = Math.round(window.screen.width * .37);
-          particleShooterStartY = Math.round(window.screen.height * 0.55);
-      }
+          explodeOutForegroundText();
 
-      if(window.screen.width <= 900)
-      {
-          particleShooterStartX = Math.round(window.screen.width * .45);
-          particleShooterStartY = Math.round(window.screen.height * .55);
-      }
+          var particleShooterStartX = 775;
+          var particleShooterStartY = 500;
 
-      if(window.screen.width <= 500)
-      {
-          particleShooterStartX = Math.round(window.screen.width * .5);
-          particleShooterStartY = Math.round(window.screen.height * .55);
-      }
+          startParticleEmitter(particleShooterStartX, particleShooterStartY, particleShooterStartX + 800, particleShooterStartY);
 
-      startParticleEmitter(particleShooterStartX, particleShooterStartY, particleShooterStartX + 800, particleShooterStartY);
+          fadeOutSnowfall(3);
 
-      fadeOutSnowfall(3);
+      }, 1000);
 
       //keyframe
       setTimeout(function(){
@@ -176,7 +163,7 @@
           startAnimateBackgroundRotatingText(55);
           animateOutLogo();
 
-      }, 1000);
+      }, 2000);
 
       //keyframe
       setTimeout(function(){

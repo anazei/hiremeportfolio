@@ -194,6 +194,15 @@
       /* border-radius: 5px; */
   }
 
+  #storyTextContainer
+  {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 993px;
+  }
+
   #storyText,
   #storyText2,
   #storyText3,
@@ -203,7 +212,7 @@
   {
       position: absolute;
       color: #FABC66;
-      font-size: clamp(10pt, 1.805vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */
+      font-size: 26pt;
       z-index: 30;
       text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
       display: inline-block;
