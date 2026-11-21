@@ -140,6 +140,7 @@
   {
       //animate out rolling source code
       animateOutMasterSourceCode();
+      startAnimateBackgroundRotatingText(55);
 
       //keyframe
       setTimeout(function(){
@@ -153,17 +154,16 @@
 
           fadeOutSnowfall(3);
 
-      }, 1000);
+      }, 250);
 
       //keyframe
       setTimeout(function(){
 
           selectMask(crossfade, "images/blackbg.png");
 
-          startAnimateBackgroundRotatingText(55);
           animateOutLogo();
 
-      }, 2000);
+      }, 1000);
 
       //keyframe
       setTimeout(function(){

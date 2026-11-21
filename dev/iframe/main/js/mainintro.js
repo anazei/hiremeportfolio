@@ -106,7 +106,7 @@
       //keyframe
       setTimeout(function(){
 
-          selectMask(crossfade, "images/background1.jpg");
+          selectMask(maskwall, "images/background1.jpg");
 
       }, 2000);
 
@@ -1366,6 +1366,13 @@
       //keyframe
       setTimeout(function(){
 
+          selectMaskVideoSource(crossfade, "pianoVideo");
+
+      }, 76000);
+
+      //keyframe
+      setTimeout(function(){
+
           fadeOutAllStoryText("storyText2", false);
 
       }, 77000);
@@ -1443,6 +1450,13 @@
       //keyframe
       setTimeout(function(){
 
+          selectMask(maskwall, "images/splashbackground.jpg");
+
+      }, 83250);
+
+      //keyframe
+      setTimeout(function(){
+
         var xPosition = 400;
         var yPosition = 500;
 
@@ -1498,9 +1512,6 @@
 
       //keyframe
       setTimeout(function(){
-
-          //change background to main background with mask wall
-          selectMask(maskwall, "images/splashbackground.jpg");
 
           initGiftagramLogo();
           animateInLogo();

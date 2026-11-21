@@ -363,3 +363,10 @@
       right: 150px;
       top: 350px;
   }
+
+  #landingTextContainer,
+  #youtubeVideos,
+  #youtubeVideos iframe
+  {
+      pointer-events: auto;
+  }
