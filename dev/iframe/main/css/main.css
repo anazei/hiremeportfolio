@@ -329,6 +329,7 @@
   .handCursor
   {
       cursor: pointer;
+      pointer-events: auto;
   }
 
   #navContainer
