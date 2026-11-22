@@ -149,8 +149,15 @@
 
           var particleShooterStartX = 775;
           var particleShooterStartY = 500;
+          var particleShooterEndX = 1575;
 
-          startParticleEmitter(particleShooterStartX, particleShooterStartY, particleShooterStartX + 800, particleShooterStartY);
+          if(document.documentElement.clientHeight < 500)
+          {
+              particleShooterStartX = 175;
+              particleShooterEndX = 1375;
+          }
+
+          startParticleEmitter(particleShooterStartX, particleShooterStartY, particleShooterEndX, particleShooterStartY);
 
           fadeOutSnowfall(3);
 

@@ -229,7 +229,14 @@
       {
           var messageDiv = document.createElement("span");
               messageDiv.innerHTML = message[i];
-              messageDiv.style.marginRight = "4px";
+
+              if(window.screen.height < 500)
+              {
+                  messageDiv.style.marginRight = "6px";  
+              } else {
+                  messageDiv.style.marginRight = "4px";
+              }
+
               messageDiv.style.filter = "blur(2px)";
               messageDiv.style.scale = 4;
               messageDiv.style.display = "inline-block";

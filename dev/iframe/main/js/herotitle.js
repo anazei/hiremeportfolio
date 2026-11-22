@@ -20,7 +20,14 @@
               messageDiv2.style.opacity = 0;
               messageDiv2.style.color = "white";
               messageDiv2.style.position = "relative";
-              messageDiv2.style.top = "-30px";
+
+              if(window.screen.height < 500)
+              {
+                  messageDiv2.style.top = "-50px";
+              } else {
+                  messageDiv2.style.top = "-30px";
+              }
+
               messageDiv2.style.backgroundBlendMode = "screen";
 
           heroTitleArray2.push(messageDiv2);
@@ -46,42 +53,29 @@
           document.getElementById("heroTitle1").appendChild(messageDiv);
       }
 
-      var heroTitleScaleX = 1;
-      var heroTitleScaleY = 1;
+      var heroWidth = 1050;
+      var heroHeight = 175
 
-      if(window.screen.width <= 1200)
+      if(window.screen.height < 500)
       {
-          //0.85 scale
-          heroTitleScaleX = 0.8;
-          heroTitleScaleY = 0.8;
-      }
-
-      if(window.screen.width <= 900)
-      {
-          heroTitleScaleX = 0.85;
-          heroTitleScaleY = 0.85;
-      }
-
-      if(window.screen.width <= 500)
-      {
-          heroTitleScaleX = 0.85;
-          heroTitleScaleY = 0.85;
+          heroWidth = 1700;
+          heroHeight = 275;
       }
 
       //hero window animates in
       gsap.fromTo("#heroTitleMasterContainer",
         {
           width: 0,
-          height: 175,
+          height: heroHeight,
           scaleX: 1,
           scaleY: 0,
           alpha: 0,
         },
         {
-          width: 1050,
-          height: 175,
-          scaleX: heroTitleScaleX,
-          scaleY: heroTitleScaleY,
+          width: heroWidth,
+          height: heroHeight,
+          scaleX: 1,
+          scaleY: 1,
           alpha: 1,
           duration: .35,
           transformOrigin: "50% 50%",
@@ -128,6 +122,14 @@
 
       for(var i=0;i<message.length;i++)
       {
+
+          var heroYPosition = 35;
+
+          if(window.screen.height < 500)
+          {
+              heroYPosition = 85;
+          }
+
           messageDiv2 = document.createElement("span");
               messageDiv2.innerHTML = message[i];
               messageDiv2.style.marginRight = "4px";
@@ -137,7 +139,7 @@
               messageDiv2.style.opacity = 0;
               messageDiv2.style.color = "white";
               messageDiv2.style.position = "relative";
-              messageDiv2.style.top = "35px";
+              messageDiv2.style.top = heroYPosition + "px";
               messageDiv2.style.backgroundBlendMode = "screen";
 
           heroTitleArray3.push(messageDiv2);

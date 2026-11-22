@@ -1,170 +1,173 @@
-html
-{
-    font-size: 26pt; /* rem base font size for index */
-}
+@media (min-height: 501px) {
 
-html,
-body
-{
+    html
+    {
+        font-size: 26pt; /* rem base font size for index */
+    }
 
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #000000;
-    user-select: none;
-}
+    html,
+    body
+    {
 
-iframe
-{
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #000000;
+        user-select: none;
+    }
 
-#mainIframe
-{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+    iframe
+    {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
 
-#iframeDiv
-{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
+    #mainIframe
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
 
-#masterContainer
-{
-    position: absolute;
-    width: 1920px;
-    height: 993px;
-    transform-origin: top left;
-    overflow: hidden;
-    z-index: 10;
-    pointer-events: none;
-}
+    #iframeDiv
+    {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
 
-#audioVisualizerWindowContainer
-{
-    position: absolute;
-    left: 0%;
-    bottom: 21%;
-    width: 500px;
-    height: 80px;
-    scale: 0.75;
-    z-index: 2;
-    opacity: 0;
-}
+    #masterContainer
+    {
+        position: absolute;
+        width: 1920px;
+        height: 993px;
+        transform-origin: top left;
+        overflow: hidden;
+        z-index: 10;
+        pointer-events: none;
+    }
 
-#audioVisualizerBinCanvas
-{
-    margin-bottom: -5px;
-}
+    #audioVisualizerWindowContainer
+    {
+        position: absolute;
+        left: 0%;
+        bottom: 21%;
+        width: 500px;
+        height: 80px;
+        scale: 0.75;
+        z-index: 2;
+        opacity: 0;
+    }
 
-#audioVisualizerTextContainer
-{
-    position: absolute;
-    z-index: 1;
-}
+    #audioVisualizerBinCanvas
+    {
+        margin-bottom: -5px;
+    }
 
-#audioVisualizerBackground
-{
-    width: inherit;
-    height: inherit;
-    background-color: #2C3E48;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    position: relative;
-    opacity: .2;
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 1));
-}
+    #audioVisualizerTextContainer
+    {
+        position: absolute;
+        z-index: 1;
+    }
 
-.audioVisualizerText
-{
-    color: white;
-    font-family: 'Roboto Condensed', monospace;
-}
+    #audioVisualizerBackground
+    {
+        width: inherit;
+        height: inherit;
+        background-color: #2C3E48;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: relative;
+        opacity: .2;
+        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 1));
+    }
 
-#audioVisualizerTitle
-{
-    font-size: 10pt; /*clamp(6pt, 0.694vw, 10pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */ */
-    font-weight: 500;
-    position: relative;
-    left: 25px;
-    top: 15px;
-}
+    .audioVisualizerText
+    {
+        color: white;
+        font-family: 'Roboto Condensed', monospace;
+    }
 
-#audioVisualizerText
-{
-    font-size: 14pt;/*clamp(10pt, 0.972vw, 14pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((14pt * (96 / 72)) / screen width) * 100 or ((14 * 1.333) / 1920) * 100  */*/
-    font-weight: 300;
-    position: relative;
-    left: 25px;
-    top: 25px;
-}
+    #audioVisualizerTitle
+    {
+        font-size: 10pt; /*clamp(6pt, 0.694vw, 10pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */ */
+        font-weight: 500;
+        position: relative;
+        left: 25px;
+        top: 15px;
+    }
 
-#audioVisualizerPlayButton
-{
-    background-image: url("../images/playButton.png");
-    width: 60px;
-    height: 60px;
-    position: relative;
-    left: 400px;
-    top: -25px;
-    display: none;
-}
+    #audioVisualizerText
+    {
+        font-size: 14pt;/*clamp(10pt, 0.972vw, 14pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((14pt * (96 / 72)) / screen width) * 100 or ((14 * 1.333) / 1920) * 100  */*/
+        font-weight: 300;
+        position: relative;
+        left: 25px;
+        top: 25px;
+    }
 
-#audioVisualizerPauseButton
-{
-    background-image: url("../images/pauseButton.png");
-    width: 60px;
-    height: 60px;
-    position: relative;
-    left: 400px;
-    top: -25px;
-    display: block;
-}
+    #audioVisualizerPlayButton
+    {
+        background-image: url("../images/playButton.png");
+        width: 60px;
+        height: 60px;
+        position: relative;
+        left: 400px;
+        top: -25px;
+        display: none;
+    }
 
-#audioVisualizerRepeatButton
-{
-    background-image: url("../images/repeat.png");
-    width: 60px;
-    height: 60px;
-    position: relative;
-    left: 400px;
-    top: -25px;
-    display: none;
-}
+    #audioVisualizerPauseButton
+    {
+        background-image: url("../images/pauseButton.png");
+        width: 60px;
+        height: 60px;
+        position: relative;
+        left: 400px;
+        top: -25px;
+        display: block;
+    }
 
-#audioVisualizerPlayButton,
-#audioVisualizerPauseButton,
-#audioVisualizerRepeatButton
-{
-    pointer-events: auto;
-    cursor: pointer;
-}
+    #audioVisualizerRepeatButton
+    {
+        background-image: url("../images/repeat.png");
+        width: 60px;
+        height: 60px;
+        position: relative;
+        left: 400px;
+        top: -25px;
+        display: none;
+    }
 
-#entryGreetingText
-{
-    position: absolute;
-    color: #FCBE5E;
-    font-family: 'Roboto', monospace;
-    font-size: clamp(16pt, 1.80556vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((26pt * (96 / 72)) / screen width) * 100 */
-    font-weight: 300;
-    letter-spacing: 1px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    text-align: center;
+    #audioVisualizerPlayButton,
+    #audioVisualizerPauseButton,
+    #audioVisualizerRepeatButton
+    {
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    #entryGreetingText
+    {
+        position: absolute;
+        color: #FCBE5E;
+        font-family: 'Roboto', monospace;
+        font-size: clamp(16pt, 1.80556vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((26pt * (96 / 72)) / screen width) * 100 */
+        font-weight: 300;
+        letter-spacing: 1px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
 }

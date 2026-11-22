@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Condensed:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index500.css">
     <link rel="icon" type="image/png" href="favicon.png">
   </head>
   <body>
@@ -286,6 +287,37 @@
           }
       }
 
+      var wakeLock = null;
+
+      async function keepScreenAwake()
+      {
+          try
+          {
+              if ("wakeLock" in navigator)
+              {
+                  wakeLock = await navigator.wakeLock.request("screen");
+                  console.log("Screen wake lock activated");
+              }
+          }
+          catch(error)
+          {
+              console.log("Wake lock failed:", error);
+          }
+      }
+
+      //detect for mobile devices from https://www.sitepoint.com/navigator-useragent-mobiles-including-ipad/
+      function detectMobile()
+      {
+          var result = (navigator.userAgent.match(/(iphone)|(ipod)|(ipad)|(android)|(blackberry)|(windows phone)|(symbian)/i));
+
+          if(result !== null)
+          {
+              return "mobile";
+          } else {
+              return "desktop";
+          }
+      }
+
       function positionElements()
       {
           //original resolution is 1920x993
@@ -319,6 +351,11 @@
               //but if using width as base because scale down height is smaller than screen height
               masterContainer.style.top = Math.round((DOCUMENT_HEGIHT - newHeight) / 2) + "px";
               masterContainer.style.scale = DOCUMENT_WIDTH / BASE_WIDTH;
+          }
+
+          if(document.documentElement.clientHeight < 400)
+          {
+              document.getElementById("audioVisualizerBinCanvas").width = "900";
           }
       }
 
@@ -362,6 +399,13 @@
         positionElements();
         init();
 
+        if(detectMobile() == true)
+        {
+            //keep mobile screen from dimming every 5 seconds
+            setInterval(function(){
+                keepScreenAwake();
+            }, 5000);
+        }
       });
 
   </script>

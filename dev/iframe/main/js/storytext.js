@@ -23,19 +23,9 @@
 
       var marginRightValue = 3;
 
-      if(window.screen.width <= 1200)
+      if(window.screen.height < 500)
       {
-          marginRightValue = 3;
-      }
-
-      if(window.screen.width <= 900)
-      {
-          marginRightValue = 2;
-      }
-
-      if(window.screen.width <= 500)
-      {
-          marginRightValue = 1;
+          marginRightValue = 6;
       }
 
       for(var i=0;i<message.length;i++)
@@ -76,19 +66,9 @@
 
       var marginRightValue = 3;
 
-      if(window.screen.width <= 1200)
+      if(window.screen.height < 500)
       {
-          marginRightValue = 3;
-      }
-
-      if(window.screen.width <= 900)
-      {
-          marginRightValue = 2;
-      }
-
-      if(window.screen.width <= 500)
-      {
-          marginRightValue = 1;
+          marginRightValue = 6;
       }
 
       for(var i=0;i<message.length;i++)

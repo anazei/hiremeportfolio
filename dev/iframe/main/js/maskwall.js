@@ -26,6 +26,11 @@ var Maskwall = function(masterReference, mainCanvas)
     var howManyDown = window.screen.height / 100;
     var totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 1.5);
 
+    if(document.documentElement.clientHeight < 500)
+    {
+        totalRectsNeeded = Math.ceil(howManyAcross * howManyDown * 2.25);
+    }
+
     function setupMask()
     {
         for(var i=0;i<totalRectsNeeded;i++)
@@ -33,6 +38,7 @@ var Maskwall = function(masterReference, mainCanvas)
           xPosition++;
 
           var roundRect = new createjs.Shape();
+
           roundRect.graphics.beginFill("red").drawRoundRect(0, 0, 150, 100, 25, 25, 25, 25);
 
           if(i % 7 == 0
