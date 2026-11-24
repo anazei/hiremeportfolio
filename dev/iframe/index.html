@@ -200,33 +200,38 @@
               if(isLandscapeMode() == true)
               {
                   //show click message
-                  document.getElementById("entryGreetingText").innerHTML = "This portfolio is entirely Javascript driven and custom designed for Giftagram<br>Click anywhere to begin";
+                  document.getElementById("entryGreetingText").innerHTML = "This portfolio is entirely Javascript driven, plays audio<br>and custom designed for Giftagram<br>Click anywhere to begin";
 
-                  //allow click to begin
-                  window.addEventListener("click", function(){
+                  //for iOS
+                  document.addEventListener("touchstart", beginWebsite);
 
-                      //first click to enter splash page
-                      if(alreadyClicked == false)
-                      {
-                          alreadyClicked = true;
-
-                          loadNewSong("splashMusic", "audio/climatechange.mp3");
-
-                          fadeOutGreetingText();
-
-                          //only load splash page after click to allow audio browser persmission to play
-                          var iframe = document.createElement("iframe");
-                              iframe.id = "mainIframe";
-                              iframe.src = "splash/splash.html";
-
-                          document.getElementById("iframeDiv").appendChild(iframe);
-                      }
-                  });
+                  //for all other browsers
+                  window.addEventListener("click", beginWebsite);
 
               } else {
                   //if not in landscape mode, display "turn your screen into landscape mode to begin"
                   document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
               }
+          }
+      }
+
+      function beginWebsite()
+      {
+          //first click to enter splash page
+          if(alreadyClicked == false)
+          {
+              alreadyClicked = true;
+
+              loadNewSong("splashMusic", "audio/climatechange.mp3");
+
+              fadeOutGreetingText();
+
+              //only load splash page after click to allow audio browser persmission to play
+              var iframe = document.createElement("iframe");
+                  iframe.id = "mainIframe";
+                  iframe.src = "splash/splash.html";
+
+              document.getElementById("iframeDiv").appendChild(iframe);
           }
       }
 
@@ -407,7 +412,7 @@
         setInterval(function(){
             keepScreenAwake();
         }, 5000);
-        
+
       });
 
   </script>

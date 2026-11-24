@@ -129,9 +129,10 @@
       left: 50px;
       top: 50px;
       font-family: 'Roboto', monospace;
-      font-size: 36pt;
+      font-size: clamp(26pt, 2.5vw, 36pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */
       font-weight: 300;
       letter-spacing: 6px;
+      width: 1300px;
   }
 
   #heroTitleContainer2
@@ -140,9 +141,10 @@
       left: 400px;
       top: 60px;
       font-family: 'Roboto', monospace;
-      font-size: 48pt;
+      font-size: clamp(38pt, 3.33vw, 48pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((10pt * (96 / 72)) / screen width) * 100 or ((10 * 1.333) / 1920) * 100  */
       font-weight: 300;
       letter-spacing: 6px;
+      width: 1100px;
   }
 
   #masterBufferContainer

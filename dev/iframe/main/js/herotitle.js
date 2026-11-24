@@ -58,8 +58,8 @@
 
       if(window.screen.height < 500)
       {
-          heroWidth = 1700;
-          heroHeight = 275;
+          heroWidth = 0; //1700
+          heroHeight = 0; //275
       }
 
       //hero window animates in
