@@ -134,13 +134,15 @@
       //keyframe
       setTimeout(function(){
 
-        //this breaks iOS Chrome's rendering engine only for some reason, just don't run it if iOS Chrome is detected
-        if(isIOSChrome() == false)
-        {
-            createHeroTitle1("gift  giving  isn't  just  about  giving  things . . .");
-        }
+        createHeroTitle1("gift  giving  isn't  just  about  giving  things . . .");
 
       }, 5250);
+
+      setTimeout(function(){
+
+        createHeroTitle2("it's  the  thought  that  counts");
+
+      }, 6250);
 
       //keyframe
       setTimeout(function(){

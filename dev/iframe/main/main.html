@@ -322,18 +322,6 @@
       });
     }
 
-    function isIOS()
-    {
-        return /iPad|iPhone|iPod/i.test(navigator.userAgent) ||
-               (navigator.platform === "MacIntel" &&
-                navigator.maxTouchPoints > 1);
-    }
-
-    function isIOSChrome()
-    {
-        return isIOS() && /CriOS/i.test(navigator.userAgent);
-    }
-
     // Load YouTube API
     var script = document.createElement("script");
     script.src = "https://www.youtube.com/iframe_api";

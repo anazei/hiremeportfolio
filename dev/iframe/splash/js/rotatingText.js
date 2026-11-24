@@ -232,7 +232,23 @@
 
               if(window.screen.height < 500)
               {
-                  messageDiv.style.marginRight = "6px";  
+                  messageDiv.style.marginRight = "6px";
+
+                  if(message.length <= 50)
+                  {
+                      messageDiv.style.marginRight = "6px";
+                  }
+
+                  if(message.length <= 48)
+                  {
+                      messageDiv.style.marginRight = "12px";
+                  }
+
+                  if(message.length <= 38)
+                  {
+                      messageDiv.style.marginRight = "20px";
+                  }
+
               } else {
                   messageDiv.style.marginRight = "4px";
               }
