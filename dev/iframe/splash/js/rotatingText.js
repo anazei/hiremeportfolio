@@ -250,7 +250,23 @@
                   }
 
               } else {
+
                   messageDiv.style.marginRight = "4px";
+
+                  if(message.length <= 50)
+                  {
+                      messageDiv.style.marginRight = "3px";
+                  }
+
+                  if(message.length <= 48)
+                  {
+                      messageDiv.style.marginRight = "6px";
+                  }
+
+                  if(message.length <= 38)
+                  {
+                      messageDiv.style.marginRight = "10px";
+                  }
               }
 
               messageDiv.style.filter = "blur(2px)";
