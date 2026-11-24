@@ -74,7 +74,7 @@
   var randomTextCounter = 0;
   function displayRandomBackgroundText(array)
   {
-      backgroundRotationTextDiv.innerHTML = array[randomTextCounter % array.length];
+      backgroundRotationTextDiv.innerHTML = array[randomTextCounter % 10];
       randomTextCounter++;
   }
 
@@ -101,8 +101,6 @@
 
           rotatingBackgroundTextInterval = setInterval(function(){
 
-              //generateRotatingBackgroundText(length);
-
               switch(length)
               {
                   case 38:
@@ -122,7 +120,7 @@
                   break;
               }
 
-          }, 25);
+          }, 50);
 
           gsap.to(backgroundRotationTextDiv, {
             opacity: 0.4,
@@ -140,8 +138,12 @@
             opacity: 0,
             duration: 0.5,
             onComplete: function(){
-              rotatingTextAnimationState = false;
-              clearInterval(rotatingBackgroundTextInterval);
+
+              setTimeout(function(){
+                  rotatingTextAnimationState = false;
+                  clearInterval(rotatingBackgroundTextInterval);
+              }, 1500);
+
             }
           });
       }
@@ -269,7 +271,7 @@
                   }
               }
 
-              messageDiv.style.filter = "blur(2px)";
+              messageDiv.style.filter = "blur(3px)";
               messageDiv.style.scale = 4;
               messageDiv.style.display = "inline-block";
               messageDiv.style.opacity = 0;
@@ -285,6 +287,7 @@
       {
           //gsap fade in each letter randomly
           gsap.to(foregroundRotatingMessageArray[i], {
+            z: 0,
             filter: "blur(0px)",
             scale: 1,
             opacity: 1,

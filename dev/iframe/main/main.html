@@ -765,22 +765,22 @@
         var BASE_HEIGHT = 993;
 
         var DOCUMENT_WIDTH = document.documentElement.clientWidth;
-        var DOCUMENT_HEGIHT = document.documentElement.clientHeight;
+        var DOCUMENT_HEIGHT = document.documentElement.clientHeight;
 
         //start by using width as base
         var newHeight = Math.round((BASE_HEIGHT * DOCUMENT_WIDTH) / BASE_WIDTH);
 
         //if the scaled down height exceeds the screen height
-        if(newHeight > DOCUMENT_HEGIHT)
+        if(newHeight > DOCUMENT_HEIGHT)
         {
             //then use height as base
-            var newWidth = Math.round((BASE_WIDTH * DOCUMENT_HEGIHT) / BASE_HEIGHT);
+            var newWidth = Math.round((BASE_WIDTH * DOCUMENT_HEIGHT) / BASE_HEIGHT);
             masterContainer.style.left = Math.round((DOCUMENT_WIDTH - newWidth) / 2) + "px";
-            masterContainer.style.scale = DOCUMENT_HEGIHT / BASE_HEIGHT;
+            masterContainer.style.scale = DOCUMENT_HEIGHT / BASE_HEIGHT;
 
         } else {
             //but if using width as base because scale down height is smaller than screen height
-            masterContainer.style.top = Math.round((DOCUMENT_HEGIHT - newHeight) / 2) + "px";
+            masterContainer.style.top = Math.round((DOCUMENT_HEIGHT - newHeight) / 2) + "px";
             masterContainer.style.scale = DOCUMENT_WIDTH / BASE_WIDTH;
         }
 

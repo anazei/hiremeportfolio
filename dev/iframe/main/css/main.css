@@ -362,7 +362,7 @@
     #youtubeVideos
     {
         position: absolute;
-        z-index: 150;
+        z-index: 2000;
         right: 150px;
         top: 350px;
     }
