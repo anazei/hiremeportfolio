@@ -273,7 +273,6 @@
       });
     }
 
-
     // Detect changes in YouTube video playback
     function onPlayerStateChange(event)
     {
@@ -323,14 +322,22 @@
       });
     }
 
+    function isIOS()
+    {
+        return /iPad|iPhone|iPod/i.test(navigator.userAgent) ||
+               (navigator.platform === "MacIntel" &&
+                navigator.maxTouchPoints > 1);
+    }
+
+    function isIOSChrome()
+    {
+        return isIOS() && /CriOS/i.test(navigator.userAgent);
+    }
 
     // Load YouTube API
     var script = document.createElement("script");
-
     script.src = "https://www.youtube.com/iframe_api";
-
     document.head.appendChild(script);
-
 
     var allowRollingGridEffect = true;
     var screenHeight = Math.round(window.screen.height / 2);
@@ -790,7 +797,7 @@
         }
 
         var navContainer = document.getElementById("navContainer");
-        navContainer.style.left = Math.round((document.documentElement.clientWidth - navContainer.getBoundingClientRect().width) / 2)  + "px";        
+        navContainer.style.left = Math.round((document.documentElement.clientWidth - navContainer.getBoundingClientRect().width) / 2)  + "px";
     }
 
     async function robotoReady(){

@@ -134,7 +134,11 @@
       //keyframe
       setTimeout(function(){
 
-          createHeroTitle1("gift  giving  isn't  just  about  giving  things . . .");
+        //this breaks iOS Chrome's rendering engine only for some reason, just don't run it if iOS Chrome is detected
+        if(isIOSChrome() == false)
+        {
+            createHeroTitle1("gift  giving  isn't  just  about  giving  things . . .");
+        }
 
       }, 5250);
 
