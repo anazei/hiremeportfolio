@@ -1,293 +1,1174 @@
-  var mainCanvas = document.getElementById("mainCanvas");
-  var mainContext = mainCanvas.getContext("2d");
+/* Background transitions:
+   Smooth masks and frame-driven video playback.
+*/
 
-  var crossfade = new Crossfade(this, mainCanvas);
-  var maskwall = new Maskwall(this, mainCanvas);
-  var spotlight = new Spotlight(this, mainCanvas);
+var mainCanvas = document.getElementById('mainCanvas');
+var mainContext = mainCanvas.getContext('2d');
 
-  var currentMask;
+var crossfade = new Crossfade(this, mainCanvas);
+var maskwall = new Maskwall(this, mainCanvas);
+var spotlight = new Spotlight(this, mainCanvas);
 
-  var runOnMainLoop = false;
+var currentMask;
 
-  var originalImage = createInvisibleCanvas("blankCanvas", mainCanvas.width, mainCanvas.height); //current image on display at start
-  var originalContext = originalImage.getContext("2d");
-      originalContext.fillStyle = "#000000";
-      originalContext.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+var runOnMainLoop = false;
 
-  var bufferCanvas = createInvisibleCanvas("bufferCanvas", mainCanvas.width, mainCanvas.height); //buffer canvas to accommodate iOS Chrome rendering issues
-  var bufferContext = bufferCanvas.getContext("2d");
+var videoActive = false;
+var keepCopyingVideo = false;
 
-  var maskCanvas = createInvisibleCanvas("maskCanvas", mainCanvas.width, mainCanvas.height);
-  var maskContext = maskCanvas.getContext("2d");
+var incomingVideo;
+var oppositeToggle = true;
 
-  var newImage = new Image(); //new incoming image
-  var newVideo = document.getElementById("mainVideo");
-  var newVideo2 = document.getElementById("mainVideo2");
+var newImage = new Image();
 
-  var videoActive = false; //is transition masking a video?
-  var keepCopyingVideo = false;
-  var incomingVideo;
-  var oppositeToggle = true; //toggle back and forth between two video tags
+var newVideo = document.getElementById('mainVideo');
+var newVideo2 = document.getElementById('mainVideo2');
 
-  //setup which ever mask is selected
-  async function selectMask(mask, src)
-  {
-      if(currentMask !== mask)
-      {
-          currentMask = mask;
 
-          //setup mask
-          currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
-      }
+// ======================================================
+// PERFORMANCE CONFIGURATION
+// ======================================================
 
-      if(src.indexOf(".mp4") >= 0)
-      {
-          keepCopyingVideo = true;
+var backgroundConfig = {
 
-          incomingVideo = await setVideo(src);
-          animateMask(mask);
+    // Draw video directly to the main canvas after
+    // the masking transition has completed.
+    //
+    // Set to false to restore buffered video drawing.
 
-      } else {
+    directVideoDrawing: true,
 
-          keepCopyingVideo = false;
+    // Only redraw the video when a new video frame
+    // becomes available.
+    //
+    // Automatically falls back to requestAnimationFrame
+    // on older browsers.
 
-          newImage = await setImage(src);
-          animateMask(mask);
-      }
-  }
+    useVideoFrameCallback: true
 
-  //setup which ever mask is selected
-  async function selectMaskVideoSource(mask, src)
-  {
-      if(currentMask !== mask)
-      {
-          currentMask = mask;
+};
 
-          //setup mask
-          currentMask.setupMask(); //method to call mask object but only once at the start of every new transition
-      }
 
-      keepCopyingVideo = true;
+// ======================================================
+// INITIALIZE CANVASES
+// ======================================================
 
-      incomingVideo = await setVideoSource(src);
-      animateMask(mask);
-  }
+var blankCanvas = createInvisibleCanvas(
+    'blankCanvas',
+    mainCanvas.width,
+    mainCanvas.height
+);
 
-  async function setImage(imageSrc)
-  {
-      return new Promise(function(resolve){
+var originalImage = blankCanvas;
 
-          //set the new incoming image
-          var image = new Image();
-              image.src = imageSrc;
+var originalContext = blankCanvas.getContext('2d');
 
-          image.onload = function()
-          {
-              resolve(image);
-          }
-      });
-  }
+originalContext.fillStyle = '#000';
 
-  async function setVideo(videoSrc)
-  {
-    return new Promise(function(resolve){
+originalContext.fillRect(
+    0,
+    0,
+    blankCanvas.width,
+    blankCanvas.height
+);
 
-        var currentVideo;
 
-        //if video1 already exists
-        if(oppositeToggle == true)
+var bufferCanvas = createInvisibleCanvas(
+    'bufferCanvas',
+    mainCanvas.width,
+    mainCanvas.height
+);
+
+var bufferContext = bufferCanvas.getContext('2d');
+
+
+var maskCanvas = createInvisibleCanvas(
+    'maskCanvas',
+    mainCanvas.width,
+    mainCanvas.height
+);
+
+var maskContext = maskCanvas.getContext('2d');
+
+
+var coveredImageVideoWidth = 0;
+var coveredImageVideoHeight = 0;
+
+
+// ======================================================
+// ANIMATION CALLBACK MANAGEMENT
+// ======================================================
+
+var maskRAF = null;
+
+var videoRAF = null;
+
+var videoCallback = null;
+
+var copyingVideo = null;
+
+var copyGeneration = 0;
+
+var selectionGeneration = 0;
+
+
+// ======================================================
+// SOURCE VALIDATION
+// ======================================================
+
+function isVideo(source)
+{
+    return source && source.tagName === 'VIDEO';
+}
+
+
+function drawable(source)
+{
+    return source && (
+        !isVideo(source) ||
+        source.readyState >= 2
+    );
+}
+
+
+// ======================================================
+// DRAW IMAGE OR VIDEO COVERING THE CANVAS
+// ======================================================
+
+function drawCovered(ctx, source)
+{
+    if (drawable(source))
+    {
+        ctx.drawImage(
+            source,
+            0,
+            0,
+            coveredImageVideoWidth,
+            coveredImageVideoHeight
+        );
+    }
+}
+
+
+// ======================================================
+// SETUP SELECTED MASK
+// ======================================================
+
+function setupSelectedMask(mask)
+{
+    if (currentMask !== mask)
+    {
+        currentMask = mask;
+
+        currentMask.setupMask();
+    }
+}
+
+
+// ======================================================
+// SELECT MASK FOR IMAGE OR VIDEO SOURCE
+// ======================================================
+
+async function selectMask(mask, src)
+{
+    var generation = ++selectionGeneration;
+
+    var isMovie = /\.mp4(?:[?#]|$)/i.test(src);
+
+    var source = isMovie
+        ? await setVideo(src)
+        : await setImage(src);
+
+
+    // Ignore outdated asynchronous loading operations.
+
+    if (generation !== selectionGeneration)
+    {
+        return;
+    }
+
+
+    setupSelectedMask(mask);
+
+    videoActive = isMovie;
+
+
+    if (isMovie)
+    {
+        incomingVideo = source;
+    }
+    else
+    {
+        newImage = source;
+    }
+
+
+    animateMask(mask);
+}
+
+
+// ======================================================
+// SELECT MASK FOR AN EXISTING VIDEO ELEMENT
+// ======================================================
+
+async function selectMaskVideoSource(mask, src)
+{
+    var generation = ++selectionGeneration;
+
+    var source = await setVideoSource(src);
+
+
+    if (generation !== selectionGeneration)
+    {
+        return;
+    }
+
+
+    setupSelectedMask(mask);
+
+    incomingVideo = source;
+
+    videoActive = true;
+
+    animateMask(mask);
+}
+
+
+// ======================================================
+// LOAD IMAGE
+// ======================================================
+
+function setImage(src)
+{
+    return new Promise(function(resolve, reject)
+    {
+        var image = new Image();
+
+
+        // Register events before setting the source.
+
+        image.onload = function()
         {
-            oppositeToggle = false;
-            //new video is assigned to video2 instead
-            currentVideo = mainVideo2;
-        } else {
+            resolve(image);
+        };
 
-            oppositeToggle = true;
-            //else, assign new video to video1
-            currentVideo = mainVideo;
+
+        image.onerror = reject;
+
+
+        image.src = src;
+    });
+}
+
+
+// ======================================================
+// LOAD VIDEO
+//
+// Alternate between the two existing HTML video tags.
+// ======================================================
+
+function setVideo(src)
+{
+    var video = oppositeToggle
+        ? newVideo2
+        : newVideo;
+
+
+    oppositeToggle = !oppositeToggle;
+
+
+    // Do not overwrite the currently displayed video
+    // when the other video tag is available.
+
+    if (video === originalImage)
+    {
+        video = video === newVideo
+            ? newVideo2
+            : newVideo;
+    }
+
+
+    return new Promise(function(resolve, reject)
+    {
+
+        function cleanup()
+        {
+            video.removeEventListener(
+                'canplay',
+                ready
+            );
+
+            video.removeEventListener(
+                'error',
+                failed
+            );
         }
 
-        //set the new incoming video
-        currentVideo.src = videoSrc;
-        currentVideo.load();
-        currentVideo.muted = true;
 
-        currentVideo.addEventListener("canplay", function(){
+        function ready()
+        {
+            cleanup();
 
-            videoActive = true;
-            resolve(currentVideo);
-        });
+            resolve(video);
+        }
+
+
+        function failed()
+        {
+            cleanup();
+
+            reject(
+                video.error ||
+                new Error('Video load failed')
+            );
+        }
+
+
+        // Remove listeners after loading completes.
+
+        video.addEventListener(
+            'canplay',
+            ready
+        );
+
+        video.addEventListener(
+            'error',
+            failed
+        );
+
+
+        video.muted = true;
+
+        video.playsInline = true;
+
+        video.src = src;
+
+        video.load();
+
     });
-  }
+}
 
-  async function setVideoSource(videoID)
-  {
-      var currentVideo = document.getElementById(videoID);
-          currentVideo.playsInline = true;
-          currentVideo.muted = true;
-          currentVideo.currentTime = 0;
 
-        //set the new incoming video
-        currentVideo.load();
-        await currentVideo.play();
+// ======================================================
+// LOAD EXISTING VIDEO ELEMENT
+// ======================================================
 
-        videoActive = true;
-        return currentVideo;
-  }
+async function setVideoSource(videoID)
+{
+    var video = document.getElementById(videoID);
 
-  //main masking animation transition command - this version of onMainLoop works with iOS Chrome for video transitions but has rendering issues with spotlight going 100% on height properly
-  function onMainloop()
-  {
-      bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
+    video.playsInline = true;
 
-      bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+    video.muted = true;
 
-      // newImage or incoming video will automatically get masked
-      if(videoActive == true)
-      {
-          bufferContext.drawImage(incomingVideo, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight); //draw out newVideo
-      } else {
-          bufferContext.drawImage(newImage, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight); //draw out newImage
-      }
+    video.load();
 
-      bufferContext.globalCompositeOperation = "destination-in";
+    await video.play();
 
-      // mask from mask canvas is drawn
-      bufferContext.drawImage(document.getElementById("maskCanvas"), 0, 0, mainCanvas.width, mainCanvas.height);
+    return video;
+}
 
-      mainContext.drawImage(originalImage, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight);
 
-      mainContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height);
+// ======================================================
+// RENDER MASK FRAME
+//
+// Preserve the existing compositing sequence for
+// compatibility with iOS Safari and Chrome.
+//
+// Mask transitions continue rendering at the display
+// refresh rate, normally 60 FPS.
+// ======================================================
 
-      if(runOnMainLoop == true)
-      {
-          requestAnimationFrame(onMainloop);          
-      }
-  }
+function renderMaskFrame()
+{
 
-  //this copies the video to the main canvas continuously after masking in effect is completed
-  function keepVideoCopying()
-  {
-      bufferContext.globalCompositeOperation = "source-over"; //this resets the blend mode to source over without leaving it in destination-atop
+    // Reset blend mode.
 
-      bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+    bufferContext.globalCompositeOperation =
+        'source-over';
 
-      //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
-      bufferContext.drawImage(incomingVideo, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight);
 
-      mainContext.drawImage(bufferCanvas, 0, 0);
+    // Clear the intermediate buffer.
 
-      //unload and stop copying video once it ends
-      if(incomingVideo.ended == true)
-      {
-          keepCopyingVideo = false;
-          incomingVideo.src = "";
-      }
+    bufferContext.clearRect(
+        0,
+        0,
+        mainCanvas.width,
+        mainCanvas.height
+    );
 
-      if(keepCopyingVideo == true)
-      {
-          requestAnimationFrame(keepVideoCopying);
-      }
-  }
 
-  //animate the specific mask
-  function animateMask(mask)
-  {
-      //allow main loop to run
-      runOnMainLoop = true;
+    // Draw the incoming video or image.
 
-      if(videoActive == true)
-      {
-          incomingVideo.play();
-      }
+    drawCovered(
+        bufferContext,
+        videoActive
+            ? incomingVideo
+            : newImage
+    );
 
-      //start on main loop
-      onMainloop();
 
-      //run mask animation
-      mask.startAnimate(); //method to call mask object
-  }
+    // Apply the mask to the incoming source.
 
-  //when masking animation is complete, reset for next mask setup
-  function onMaskComplete()
-  {
-      //stop on main loop when done
-      runOnMainLoop = false;
+    bufferContext.globalCompositeOperation =
+        'destination-in';
 
-      if(videoActive == true)
-      {
-          videoActive = false;
 
-          originalImage = incomingVideo; //current video on display
+    // Use the existing canvas reference rather than
+    // repeatedly calling document.getElementById().
 
-          //keep video copying to main canvas or it will disappear
-          keepVideoCopying();
+    bufferContext.drawImage(
+        maskCanvas,
+        0,
+        0,
+        mainCanvas.width,
+        mainCanvas.height
+    );
 
-      } else {
 
-          //set permanent image state
-          originalImage = newImage; //current image on display
-      }
-  }
+    // Restore normal compositing on the main canvas.
 
-  //creates invisible canvas for buffering
-  function createInvisibleCanvas(id, width, height)
-  {
-      var tempCanvas;
+    mainContext.globalCompositeOperation =
+        'source-over';
 
-      if(document.getElementById(id) !== null)
-      {
-          tempCanvas = document.getElementById(id);
-      } else {
 
-          tempCanvas = document.createElement("canvas");
-          tempCanvas.width = width;
-          tempCanvas.height = height;
-          tempCanvas.id = id;
-          tempCanvas.style.display = "none";
-          document.body.appendChild(tempCanvas);
-      }
+    // Draw the previous background.
 
-      return tempCanvas;
-  }
+    drawCovered(
+        mainContext,
+        originalImage
+    );
 
-  var coveredImageVideoWidth = 0;
-  var coveredImageVideoHeight = 0;
 
-  function resizeCanvas()
-  {
-      mainCanvas.width = window.innerWidth;
-      mainCanvas.height = window.innerHeight;
+    // Composite the newly masked background.
 
-      originalImage.width = window.innerWidth;
-      originalImage.height = window.innerHeight;
+    mainContext.drawImage(
+        bufferCanvas,
+        0,
+        0
+    );
 
-      bufferCanvas.width = window.innerWidth;
-      bufferCanvas.height = window.innerHeight;
+}
 
-      maskCanvas.width = window.innerWidth;
-      maskCanvas.height = window.innerHeight;
 
-      var BASE_WIDTH = 1280;
-      var BASE_HEIGHT = 720;
+// ======================================================
+// MAIN MASK ANIMATION LOOP
+//
+// Always use requestAnimationFrame during animated
+// masking so the GSAP transitions remain smooth.
+// ======================================================
 
-      var DOCUMENT_WIDTH = document.documentElement.clientWidth;
-      var DOCUMENT_HEIGHT = document.documentElement.clientHeight;
+function onMainloop()
+{
+    if (!runOnMainLoop)
+    {
+        return;
+    }
 
-      coveredImageVideoWidth = DOCUMENT_WIDTH;
-      coveredImageVideoHeight = Math.round((BASE_HEIGHT * DOCUMENT_WIDTH) / BASE_WIDTH);
 
-      if(coveredImageVideoHeight < DOCUMENT_HEIGHT)
-      {
-          coveredImageVideoHeight = DOCUMENT_HEIGHT;
-          coveredImageVideoWidth = Math.round((BASE_WIDTH * DOCUMENT_HEIGHT) / BASE_HEIGHT);
-      }
-  }
+    // Prevent duplicate scheduled animation callbacks.
 
-  resizeCanvas();
+    if (maskRAF !== null)
+    {
+        cancelAnimationFrame(maskRAF);
+    }
 
-  //selectMask can run crossfade, spotlight or maskwall as inputs at any time to change transitions
-  //selectMask(crossfade, "background.png");
-  //selectMask(spotlight, "background.png");
-  //selectMask(maskwall, "background.png");
-  //selectMask(maskwall, "video/symphony2.mp4");
+
+    renderMaskFrame();
+
+
+    maskRAF = requestAnimationFrame(function()
+    {
+        maskRAF = null;
+
+        onMainloop();
+    });
+
+}
+
+
+// ======================================================
+// STOP VIDEO COPYING
+//
+// Cancel pending callbacks before changing videos or
+// starting another masking transition.
+// ======================================================
+
+function stopVideoCopying()
+{
+    keepCopyingVideo = false;
+
+
+    // Invalidate callbacks belonging to previous videos.
+
+    ++copyGeneration;
+
+
+    // Cancel regular animation frame callback.
+
+    if (videoRAF !== null)
+    {
+        cancelAnimationFrame(videoRAF);
+    }
+
+
+    // Cancel video frame callback if supported.
+
+    if (copyingVideo)
+    {
+        if (
+            videoCallback !== null &&
+            typeof copyingVideo.cancelVideoFrameCallback
+                === 'function'
+        )
+        {
+            copyingVideo.cancelVideoFrameCallback(
+                videoCallback
+            );
+        }
+
+
+        copyingVideo.removeEventListener(
+            'ended',
+            onVideoEnded
+        );
+    }
+
+
+    videoRAF = null;
+
+    videoCallback = null;
+
+    copyingVideo = null;
+}
+
+
+// ======================================================
+// OPTIMIZED VIDEO FRAME DRAWING
+//
+// After masking is complete, there is no need to draw
+// the video into a buffer canvas before drawing it
+// to the main canvas.
+//
+// This reduces two drawImage calls and one clearRect
+// call to just one drawImage call.
+// ======================================================
+
+function drawVideoFrame(video)
+{
+
+    if (!drawable(video))
+    {
+        return;
+    }
+
+
+    mainContext.globalCompositeOperation =
+        'source-over';
+
+
+    // ==============================================
+    // FAST DIRECT VIDEO DRAWING
+    // ==============================================
+
+    if (backgroundConfig.directVideoDrawing)
+    {
+
+        drawCovered(
+            mainContext,
+            video
+        );
+
+    }
+
+
+    // ==============================================
+    // BACKWARDS COMPATIBLE BUFFERED DRAWING
+    // ==============================================
+
+    else
+    {
+
+        bufferContext.globalCompositeOperation =
+            'source-over';
+
+
+        bufferContext.clearRect(
+            0,
+            0,
+            bufferCanvas.width,
+            bufferCanvas.height
+        );
+
+
+        drawCovered(
+            bufferContext,
+            video
+        );
+
+
+        mainContext.drawImage(
+            bufferCanvas,
+            0,
+            0
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// VIDEO PLAYBACK COMPLETED
+//
+// Preserve the final video frame so it can be used
+// as the background of the next masking transition.
+// ======================================================
+
+function onVideoEnded()
+{
+
+    var video = copyingVideo;
+
+
+    if (!video)
+    {
+        return;
+    }
+
+
+    // Display the final frame.
+
+    drawVideoFrame(video);
+
+
+    // Preserve the final video frame in a canvas.
+
+    if (
+        originalImage === video &&
+        drawable(video)
+    )
+    {
+
+        var still = document.createElement('canvas');
+
+
+        still.width =
+            video.videoWidth || mainCanvas.width;
+
+
+        still.height =
+            video.videoHeight || mainCanvas.height;
+
+
+        still.getContext('2d').drawImage(
+            video,
+            0,
+            0,
+            still.width,
+            still.height
+        );
+
+
+        originalImage = still;
+
+    }
+
+
+    // Stop all video rendering callbacks.
+
+    stopVideoCopying();
+
+
+    // Retain the video source.
+    // The next setVideo() can safely reuse the element.
+
+}
+
+
+// ======================================================
+// OPTIMIZED VIDEO PLAYBACK LOOP
+//
+// Uses requestVideoFrameCallback whenever available.
+//
+// 24 FPS video = approximately 24 canvas redraws/sec.
+//
+// Older browsers automatically fall back to
+// requestAnimationFrame.
+// ======================================================
+
+function keepVideoCopying()
+{
+
+    var video = copyingVideo;
+
+
+    // Make sure video playback should still be rendered.
+
+    if (
+        !keepCopyingVideo ||
+        !video ||
+        runOnMainLoop
+    )
+    {
+        return;
+    }
+
+
+    // Do not schedule duplicate callbacks.
+
+    if (
+        videoRAF !== null ||
+        videoCallback !== null
+    )
+    {
+        return;
+    }
+
+
+    // Stop rendering when the video has finished.
+
+    if (video.ended)
+    {
+        onVideoEnded();
+
+        return;
+    }
+
+
+    // Draw current video frame.
+
+    drawVideoFrame(video);
+
+
+    var generation = copyGeneration;
+
+
+    // Callback for the next available frame.
+
+    function nextFrame()
+    {
+
+        // Ignore callbacks from previous video sources.
+
+        if (generation !== copyGeneration)
+        {
+            return;
+        }
+
+
+        videoRAF = null;
+
+        videoCallback = null;
+
+
+        keepVideoCopying();
+
+    }
+
+
+    // ==============================================
+    // MODERN BROWSER VIDEO FRAME CALLBACK
+    // ==============================================
+
+    if (
+        backgroundConfig.useVideoFrameCallback &&
+
+        typeof video.requestVideoFrameCallback
+            === 'function'
+    )
+    {
+
+        videoCallback =
+            video.requestVideoFrameCallback(
+                nextFrame
+            );
+
+    }
+
+
+    // ==============================================
+    // OLDER BROWSER FALLBACK
+    // ==============================================
+
+    else
+    {
+
+        videoRAF =
+            requestAnimationFrame(
+                nextFrame
+            );
+
+    }
+
+}
+
+
+// ======================================================
+// START MASK TRANSITION
+// ======================================================
+
+function animateMask(mask)
+{
+
+    // Stop any previous video copying loop.
+
+    stopVideoCopying();
+
+
+    // Cancel any previous mask rendering callback.
+
+    if (maskRAF !== null)
+    {
+        cancelAnimationFrame(maskRAF);
+    }
+
+
+    maskRAF = null;
+
+
+    // Enable 60 FPS mask compositing.
+
+    runOnMainLoop = true;
+
+
+    // Start incoming video playback if necessary.
+
+    if (videoActive)
+    {
+
+        var playback = incomingVideo.play();
+
+
+        if (playback && playback.catch)
+        {
+
+            playback.catch(function(e)
+            {
+
+                console.warn(
+                    'Background playback:',
+                    e
+                );
+
+            });
+
+        }
+
+    }
+
+
+    // Start canvas rendering.
+
+    onMainloop();
+
+
+    // Start GSAP mask animation.
+
+    mask.startAnimate();
+
+}
+
+
+// ======================================================
+// MASK TRANSITION COMPLETED
+//
+// Switch from display-refresh-rate rendering to
+// video-frame-rate rendering.
+// ======================================================
+
+function onMaskComplete()
+{
+
+    if (!runOnMainLoop)
+    {
+        return;
+    }
+
+
+    // Stop the continuous mask rendering loop.
+
+    runOnMainLoop = false;
+
+
+    if (maskRAF !== null)
+    {
+        cancelAnimationFrame(maskRAF);
+    }
+
+
+    maskRAF = null;
+
+
+    // Remember previous background source.
+
+    var previous = originalImage;
+
+    var wasVideo = videoActive;
+
+
+    // Establish the new permanent background.
+
+    originalImage = wasVideo
+        ? incomingVideo
+        : newImage;
+
+
+    videoActive = false;
+
+
+    // Present the completed, fully unmasked background.
+
+    drawCovered(
+        mainContext,
+        originalImage
+    );
+
+
+    // Stop decoding the previous video once it is
+    // no longer needed.
+
+    if (
+        isVideo(previous) &&
+        previous !== originalImage
+    )
+    {
+
+        previous.pause();
+
+    }
+
+
+    // ==============================================
+    // VIDEO BACKGROUND
+    // ==============================================
+
+    if (wasVideo)
+    {
+
+        stopVideoCopying();
+
+
+        copyingVideo = incomingVideo;
+
+
+        keepCopyingVideo = true;
+
+
+        // Listen for playback completion separately,
+        // because requestVideoFrameCallback may stop
+        // firing when there are no more video frames.
+
+        copyingVideo.addEventListener(
+            'ended',
+            onVideoEnded
+        );
+
+
+        // Start optimized video-only rendering.
+
+        keepVideoCopying();
+
+    }
+
+
+    // ==============================================
+    // STATIC IMAGE BACKGROUND
+    // ==============================================
+    //
+    // No continuous rendering is required.
+    // The image remains on the main canvas.
+
+}
+
+
+// ======================================================
+// CREATE INVISIBLE BUFFER CANVAS
+// ======================================================
+
+function createInvisibleCanvas(id, width, height)
+{
+
+    var canvas = document.getElementById(id);
+
+
+    if (!canvas)
+    {
+
+        canvas = document.createElement('canvas');
+
+        canvas.id = id;
+
+        canvas.width = width;
+
+        canvas.height = height;
+
+        canvas.style.display = 'none';
+
+
+        document.body.appendChild(canvas);
+
+    }
+
+
+    return canvas;
+
+}
+
+
+// ======================================================
+// RESIZE ALL CANVASES
+// ======================================================
+
+function resizeCanvas()
+{
+
+    var w = window.innerWidth;
+
+    var h = window.innerHeight;
+
+
+    // Only resize when dimensions actually change.
+    //
+    // Assigning canvas.width or canvas.height clears
+    // the canvas and resets its context state.
+
+
+    if (
+        mainCanvas.width !== w ||
+        mainCanvas.height !== h
+    )
+    {
+
+        mainCanvas.width = w;
+
+        mainCanvas.height = h;
+
+    }
+
+
+    if (
+        bufferCanvas.width !== w ||
+        bufferCanvas.height !== h
+    )
+    {
+
+        bufferCanvas.width = w;
+
+        bufferCanvas.height = h;
+
+    }
+
+
+    if (
+        maskCanvas.width !== w ||
+        maskCanvas.height !== h
+    )
+    {
+
+        maskCanvas.width = w;
+
+        maskCanvas.height = h;
+
+    }
+
+
+    // Resize only the original blank canvas.
+    //
+    // Never modify the dimensions of an actual image
+    // or video being used as the current background.
+
+    if (
+        blankCanvas.width !== w ||
+        blankCanvas.height !== h
+    )
+    {
+
+        blankCanvas.width = w;
+
+        blankCanvas.height = h;
+
+
+        originalContext.fillStyle = '#000';
+
+
+        originalContext.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+    }
+
+
+    // ==============================================
+    // CALCULATE COVER DIMENSIONS
+    //
+    // Original image and video aspect ratio: 1280x720.
+    // ==============================================
+
+    var dw =
+        document.documentElement.clientWidth || w;
+
+    var dh =
+        document.documentElement.clientHeight || h;
+
+
+    var scale = Math.max(
+        dw / 1280,
+        dh / 720
+    );
+
+
+    coveredImageVideoWidth =
+        Math.ceil(1280 * scale);
+
+
+    coveredImageVideoHeight =
+        Math.ceil(720 * scale);
+
+
+    // Redraw immediately after resizing.
+
+    if (runOnMainLoop)
+    {
+
+        renderMaskFrame();
+
+    }
+    else
+    {
+
+        drawCovered(
+            mainContext,
+            originalImage
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// INITIALIZATION
+// ======================================================
+
+resizeCanvas();
+
+
+// Existing callers can continue calling resizeCanvas()
+// when resizing or changing device orientation.
+
+
+// ======================================================
+// EXAMPLE USAGE
+// ======================================================
+
+// selectMask(crossfade, "background.png");
+
+// selectMask(spotlight, "background.png");
+
+// selectMask(maskwall, "background.png");
+
+// selectMask(maskwall, "video/symphony2.mp4");

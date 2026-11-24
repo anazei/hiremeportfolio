@@ -275,6 +275,9 @@
               messageDiv.style.scale = 4;
               messageDiv.style.display = "inline-block";
               messageDiv.style.opacity = 0;
+              messageDiv.style.willChange = "transform, filter";
+              messageDiv.style.backfaceVisibility = "hidden";
+              messageDiv.style.transform = "translateZ(0)";
               targetDiv.style.opacity = 1;
 
           foregroundRotatingMessageArray.push(messageDiv);
@@ -287,6 +290,7 @@
       {
           //gsap fade in each letter randomly
           gsap.to(foregroundRotatingMessageArray[i], {
+            force3D: true,
             z: 0,
             filter: "blur(0px)",
             scale: 1,
