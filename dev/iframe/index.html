@@ -135,10 +135,14 @@
                     window.removeEventListener("resize", resizeState1); //remove old listener first that reloads on any resize
                     window.addEventListener("resize", resizeState2); //add new listener that is more discriminate on resizing only when not in landscape mode
 
-                    gsap.to("#audioVisualizerWindowContainer", {
-                      y: "-= 75",
-                      duration: .5,
-                    });
+                    if(window.screen.height > 500)
+                    {
+                        gsap.to("#audioVisualizerWindowContainer", {
+                          y: "-= 75",
+                          duration: .5,
+                        });
+                    }
+
                   break;
 
                   case "pauseAudio":
@@ -399,13 +403,11 @@
         positionElements();
         init();
 
-        if(detectMobile() == true)
-        {
-            //keep mobile screen from dimming every 5 seconds
-            setInterval(function(){
-                keepScreenAwake();
-            }, 5000);
-        }
+        //keep mobile screen from dimming every 5 seconds
+        setInterval(function(){
+            keepScreenAwake();
+        }, 5000);
+        
       });
 
   </script>

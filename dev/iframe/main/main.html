@@ -673,34 +673,16 @@
     {
         var youTubeWidth = 400;
         var youTubeHeight = 225;
-        var positionTopSingleVideo = 36;
-        var positionTopDoubleVideo = 20;
+        var positionTopSingleVideo = "36%";
+        var positionTopDoubleVideo = "20%";
 
-        if(window.screen.width <= 1200)
-        {
-            //0.85 scale
-            youTubeWidth = Math.round(400 * 0.75);
-            youTubeHeight = Math.round(225 * 0.75);
-            positionTopSingleVideo = 38;
-            positionTopDoubleVideo = 17;
-        }
-
-        if(window.screen.width <= 900)
-        {
-            //.6 scale
-            youTubeWidth = Math.round(400 * 0.6);
-            youTubeHeight = Math.round(225 * 0.6);
-            positionTopSingleVideo = 38;
-            positionTopDoubleVideo = 11;
-        }
-
-        if(window.screen.width <= 500)
+        if(window.screen.height <= 500)
         {
             //.5 scale
-            youTubeWidth = Math.round(400 * 0.6);
-            youTubeHeight = Math.round(225 * 0.6);
-            positionTopSingleVideo = 38;
-            positionTopDoubleVideo = 11;
+            youTubeWidth = Math.round(400);
+            youTubeHeight = Math.round(225);
+            positionTopSingleVideo = "350px";
+            positionTopDoubleVideo = "250px";
         }
 
         if(URL.indexOf(",") >= 0)
@@ -738,7 +720,7 @@
             document.getElementById("youtubeVideos").appendChild(div);
             div.appendChild(iframe);
 
-            document.getElementById("youtubeVideos").style.top = positionTopDoubleVideo + "%";
+            document.getElementById("youtubeVideos").style.top = positionTopDoubleVideo;
 
         } else {
             //one video in one slide
@@ -758,7 +740,7 @@
             document.getElementById("youtubeVideos").appendChild(div);
             div.appendChild(iframe);
 
-            document.getElementById("youtubeVideos").style.top = positionTopSingleVideo + "%";
+            document.getElementById("youtubeVideos").style.top = positionTopSingleVideo;
         }
     }
 
@@ -806,6 +788,9 @@
             masterContainer.style.top = Math.round((DOCUMENT_HEGIHT - newHeight) / 2) + "px";
             masterContainer.style.scale = DOCUMENT_WIDTH / BASE_WIDTH;
         }
+
+        var navContainer = document.getElementById("navContainer");
+        navContainer.style.left = Math.round((document.documentElement.clientWidth - navContainer.getBoundingClientRect().width) / 2)  + "px";        
     }
 
     async function robotoReady(){

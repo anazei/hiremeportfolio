@@ -145,9 +145,9 @@
       // newImage or incoming video will automatically get masked
       if(videoActive == true)
       {
-          bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newVideo
+          bufferContext.drawImage(incomingVideo, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight); //draw out newVideo
       } else {
-          bufferContext.drawImage(newImage, 0, 0, mainCanvas.width, mainCanvas.height); //draw out newImage
+          bufferContext.drawImage(newImage, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight); //draw out newImage
       }
 
       bufferContext.globalCompositeOperation = "destination-in";
@@ -155,13 +155,13 @@
       // mask from mask canvas is drawn
       bufferContext.drawImage(document.getElementById("maskCanvas"), 0, 0, mainCanvas.width, mainCanvas.height);
 
-      mainContext.drawImage(originalImage, 0, 0, mainCanvas.width, mainCanvas.height);
+      mainContext.drawImage(originalImage, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight);
 
       mainContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height);
 
       if(runOnMainLoop == true)
       {
-          requestAnimationFrame(onMainloop);
+          requestAnimationFrame(onMainloop);          
       }
   }
 
@@ -173,7 +173,7 @@
       bufferContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
       //continually copy video to orignalImage canvas by keeping runOnMainLoop = true;
-      bufferContext.drawImage(incomingVideo, 0, 0, mainCanvas.width, mainCanvas.height);
+      bufferContext.drawImage(incomingVideo, 0, 0, coveredImageVideoWidth, coveredImageVideoHeight);
 
       mainContext.drawImage(bufferCanvas, 0, 0);
 
@@ -251,6 +251,9 @@
       return tempCanvas;
   }
 
+  var coveredImageVideoWidth = 0;
+  var coveredImageVideoHeight = 0;
+
   function resizeCanvas()
   {
       mainCanvas.width = window.innerWidth;
@@ -264,6 +267,21 @@
 
       maskCanvas.width = window.innerWidth;
       maskCanvas.height = window.innerHeight;
+
+      var BASE_WIDTH = 1280;
+      var BASE_HEIGHT = 720;
+
+      var DOCUMENT_WIDTH = document.documentElement.clientWidth;
+      var DOCUMENT_HEIGHT = document.documentElement.clientHeight;
+
+      coveredImageVideoWidth = DOCUMENT_WIDTH;
+      coveredImageVideoHeight = Math.round((BASE_HEIGHT * DOCUMENT_WIDTH) / BASE_WIDTH);
+
+      if(coveredImageVideoHeight < DOCUMENT_HEIGHT)
+      {
+          coveredImageVideoHeight = DOCUMENT_HEIGHT;
+          coveredImageVideoWidth = Math.round((BASE_WIDTH * DOCUMENT_HEIGHT) / BASE_HEIGHT);
+      }
   }
 
   resizeCanvas();

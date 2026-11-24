@@ -274,6 +274,7 @@
       font-weight: 300;
       z-index: 30;
       position: absolute;
+      top: -125px;
   }
 
   #landingText
@@ -284,7 +285,10 @@
       font-weight: 300;
       z-index: 30;
       position: absolute;
-      top: 100px;
+      top: 30px;
+      left: 200px;
+      scale: 1.5;
+
   }
 
   .colorGold
@@ -338,15 +342,15 @@
   {
       position: absolute;
       bottom: 40px;
-      left: 70px;
-      font-size: 20pt;
+      left: 0px;
+      font-size: 28pt;
   }
 
   #slideNavContainer
   {
       position: absolute;
       left: 705px;
-      top: 65%;
+      top: 700px;
       font-size: 22pt;
   }
 
@@ -373,4 +377,40 @@
   {
       pointer-events: auto;
   }
+}
+
+@media (max-height: 360px) {
+
+}
+
+@media (max-height: 375px) {
+
+}
+
+@media (max-height: 390px) {
+
+}
+
+@media (max-height: 393px) {
+
+}
+
+@media (max-height: 412px) {
+
+}
+
+@media (max-height: 414px) {
+
+}
+
+@media (max-height: 427px) {
+
+}
+
+@media (max-height: 430px) {
+
+}
+
+@media (max-height: 440px) {
+
 }
