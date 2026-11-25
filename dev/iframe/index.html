@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/index500.css">
     <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="prefetch" href="main/main.html">
   </head>
   <body>
 
@@ -50,25 +51,27 @@
 
       //file URL, type of media
       var preloadArray = new Array();
+      var preloadArray2 = new Array();
           preloadArray.push(["audio/climatechange.mp3", "audio"]);
           preloadArray.push(["splash/video/finalcombined.mp4", "video"]);
           preloadArray.push(["main/images/splashbackground4.jpg", "image"]);
-          preloadArray.push(["audio/main.mp3", "audio"]);
-          preloadArray.push(["main/video/piano.mp4", "video"]);
-          preloadArray.push(["main/images/splashbackground3.jpg", "image"]);
-          preloadArray.push(["main/images/splashbackground2.jpg", "image"]);
-          preloadArray.push(["main/images/splashbackground.jpg", "image"]);
-          preloadArray.push(["main/images/advancedMaskTransitions3.jpg", "image"]);
-          preloadArray.push(["main/images/AI4.jpg", "image"]);
-          preloadArray.push(["main/images/animatedAndividualComponents2.jpg", "image"]);
-          preloadArray.push(["main/images/audiovisualizer3.jpg", "image"]);
-          preloadArray.push(["main/images/background1.jpg", "image"]);
-          preloadArray.push(["main/images/background2.jpg", "image"]);
-          preloadArray.push(["main/images/bluebg.jpg", "image"]);
-          preloadArray.push(["main/images/drone4.jpg", "image"]);
-          preloadArray.push(["main/images/planningstoryboard1.jpg", "image"]);
-          preloadArray.push(["main/images/ztransitions.jpg", "image"]);
-          preloadArray.push(["main/images/ztransitions2.jpg", "image"]);
+
+          preloadArray2.push(["audio/main.mp3", "audio"]);
+          preloadArray2.push(["main/video/piano.mp4", "video"]);
+          preloadArray2.push(["main/images/splashbackground3.jpg", "image"]);
+          preloadArray2.push(["main/images/splashbackground2.jpg", "image"]);
+          preloadArray2.push(["main/images/splashbackground.jpg", "image"]);
+          preloadArray2.push(["main/images/advancedMaskTransitions3.jpg", "image"]);
+          preloadArray2.push(["main/images/AI4.jpg", "image"]);
+          preloadArray2.push(["main/images/animatedAndividualComponents2.jpg", "image"]);
+          preloadArray2.push(["main/images/audiovisualizer3.jpg", "image"]);
+          preloadArray2.push(["main/images/background1.jpg", "image"]);
+          preloadArray2.push(["main/images/background2.jpg", "image"]);
+          preloadArray2.push(["main/images/bluebg.jpg", "image"]);
+          preloadArray2.push(["main/images/drone4.jpg", "image"]);
+          preloadArray2.push(["main/images/planningstoryboard1.jpg", "image"]);
+          preloadArray2.push(["main/images/ztransitions.jpg", "image"]);
+          preloadArray2.push(["main/images/ztransitions2.jpg", "image"]);
 
       var alreadyClicked = false;
       var preloadCounter = 0;
@@ -90,21 +93,6 @@
 
       function init()
       {
-          for(var i=0;i<preloadArray.length;i++)
-          {
-              switch(preloadArray[i][1])
-              {
-                  case "audio":
-                  case "video":
-                    preloadMedia(preloadArray[i][0]);
-                  break;
-
-                  case "image":
-                    preloadImage(preloadArray[i][0]);
-                  break;
-              }
-          }
-
           window.addEventListener("resize", resizeState1);
 
           window.addEventListener("message", function(event){
@@ -121,7 +109,7 @@
 
                       setTimeout(function(){
 
-                          loadNewSong("mainMusic", "audio/main.mp3");
+                          loadNewSong("mainMusic", downloadedMedia.get("audio/main.mp3") || "audio/main.mp3");
                           changeAudioTrackTitle("Somewhere But Not Here - Nicolai Patricio");
                       }, 2000);
 
@@ -195,8 +183,8 @@
       {
           document.getElementById("entryGreetingText").innerHTML = "Loading assets: " + preloadCounter + "/" + preloadArray.length;
 
-          if(preloadCounter >= preloadArray.length) //two mp3 and mp4 file can be ignored
-          {
+          //if(preloadCounter >= preloadArray.length - 2)
+          //{
               if(isLandscapeMode() == true)
               {
                   //show click message
@@ -212,7 +200,7 @@
                   //if not in landscape mode, display "turn your screen into landscape mode to begin"
                   document.getElementById("entryGreetingText").innerHTML = "Please rotate your screen to landscape mode";
               }
-          }
+          //}
       }
 
       function beginWebsite()
@@ -222,7 +210,7 @@
           {
               alreadyClicked = true;
 
-              loadNewSong("splashMusic", "audio/climatechange.mp3");
+              loadNewSong("splashMusic", downloadedMedia.get("audio/climatechange.mp3") || "audio/climatechange.mp3");
 
               fadeOutGreetingText();
 
@@ -254,35 +242,13 @@
               }
 
               downloadedMedia.set(fileURL, URL.createObjectURL(blob));
-              //console.log("Downloaded:", fileURL, blob.size, "bytes");
+              console.log("Downloaded:", fileURL, blob.size, "bytes");
 
               preloadCounter++;
               checkPreloader();
           } catch (error) {
-              //console.error("Media download failed:", fileURL, error);
+              console.error("Media download failed:", fileURL, error);
           }
-      }
-
-      function preloadAudio(audioURL)
-      {
-          var audio = new Audio(audioURL);
-
-          audio.onloadeddata = function(){
-              preloadCounter++
-              checkPreloader();
-          };
-      }
-
-      function preloadVideo(videoURL)
-      {
-          var video = document.createElement("video");
-              video.src = videoURL;
-              video.preload = "auto";
-
-          video.onloadeddata = function(){
-              preloadCounter++
-              checkPreloader();
-          };
       }
 
       function preloadImage(imageURL)
@@ -327,6 +293,20 @@
           }
       }
 
+      async function prefetchPage(url)
+      {
+          const response = await fetch(url, {
+              cache: "force-cache"
+          });
+
+          if (!response.ok)
+              throw new Error("Prefetch failed");
+
+          await response.text();
+
+          console.log("Page downloaded:", url);
+      }
+
       function positionElements()
       {
           //original resolution is 1920x993
@@ -353,11 +333,13 @@
           {
               //then use height as base
               var newWidth = Math.round((BASE_WIDTH * DOCUMENT_HEIGHT) / BASE_HEIGHT);
+              masterContainer.style.top = "0px";
               masterContainer.style.left = Math.round((DOCUMENT_WIDTH - newWidth) / 2) + "px";
               masterContainer.style.scale = DOCUMENT_HEIGHT / BASE_HEIGHT;
 
           } else {
               //but if using width as base because scale down height is smaller than screen height
+              masterContainer.style.left = "0px";
               masterContainer.style.top = Math.round((DOCUMENT_HEIGHT - newHeight) / 2) + "px";
               masterContainer.style.scale = DOCUMENT_WIDTH / BASE_WIDTH;
           }
@@ -369,8 +351,50 @@
 
           if(isLandscapeMode() == false)
           {
-              document.getElementById("entryGreetingText").style.fontSize = "64pt";
+            if(document.documentElement.clientHeight < 400)
+            {
+                resizeAudioVisualizer(900, 250);
+            } else {
+                resizeAudioVisualizer(500, 250);
+            }
           }
+      }
+
+      function preloadImmediately()
+      {
+          //highest priority preload
+          for(var i=0;i<preloadArray.length;i++)
+          {
+              switch(preloadArray[i][1])
+              {
+                  case "audio":
+                  case "video":
+                    preloadMedia(preloadArray[i][0]);
+                  break;
+
+                  case "image":
+                    preloadImage(preloadArray[i][0]);
+                  break;
+              }
+          }
+
+          //lower priority preload
+          for(var i=0;i<preloadArray2.length;i++)
+          {
+              switch(preloadArray2[i][1])
+              {
+                  case "audio":
+                  case "video":
+                    preloadMedia(preloadArray2[i][0]);
+                  break;
+
+                  case "image":
+                    preloadImage(preloadArray2[i][0]);
+                  break;
+              }
+          }
+
+          prefetchPage("main/main.html");
       }
 
       async function robotoReady(){
@@ -419,6 +443,8 @@
         }, 5000);
 
       });
+
+      preloadImmediately();
 
   </script>
 

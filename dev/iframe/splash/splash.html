@@ -222,6 +222,36 @@
         }, 750);
 
         //for iOS
+        document.addEventListener("touchend", function(){
+
+            if(clickLock == "allowed")
+            {
+                clickLock = "disallowed";
+                fadeOutSplashPage();
+            }
+        });
+
+        //for iOS
+        document.addEventListener("pointerup", function(){
+
+            if(clickLock == "allowed")
+            {
+                clickLock = "disallowed";
+                fadeOutSplashPage();
+            }
+        });
+
+        //for iOS
+        document.addEventListener("pointerdown", function(){
+
+            if(clickLock == "allowed")
+            {
+                clickLock = "disallowed";
+                fadeOutSplashPage();
+            }
+        });
+
+        //for iOS
         document.addEventListener("touchstart", function(){
 
             if(clickLock == "allowed")

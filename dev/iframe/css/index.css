@@ -160,7 +160,7 @@
         position: absolute;
         color: #FCBE5E;
         font-family: 'Roboto', monospace;
-        font-size: clamp(16pt, 1.80556vw, 26pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((26pt * (96 / 72)) / screen width) * 100 */
+        font-size: clamp(40pt, 2.77vw, 40pt); /*1 inch as 72 points or 96 pixels, so base VW is determined by ((26pt * (96 / 72)) / screen width) * 100 */
         font-weight: 300;
         letter-spacing: 1px;
         display: flex;
